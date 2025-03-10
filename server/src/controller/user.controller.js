@@ -142,7 +142,7 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const generateRefreshAccessToken = async (req, res) => {
-  const refreshToken = req.cookie("refreshToken");     // gpt suggested to req.cookies.refreshToken instead, will check later
+  const refreshToken = req.cookie("refreshToken"); // gpt suggested to req.cookies.refreshToken instead, will check later
   if (!refreshToken) throw errorResponse(res, "Invalid refresh token");
 
   const decodedRefreshToken = await jwt.verify(
@@ -179,13 +179,58 @@ const getMyProfile = async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).select("-password -refreshToken");
 
-  if (!user) {
+  const userDetails = await User.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(id) } },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "subscribeTo",
+        as: "subscriber",
+      },
+    },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "subscriber",
+        as: "subscribedTo",
+      },
+    },
+    {
+      $addFields: {
+        subscriberCount: { $size: "$subscriber" },
+        subscribedToCount: { $size: "$subscribedTo" },
+        isSubscribed: {
+          $gt: [
+            {
+              $size: {
+                $filter: {
+                  input: "$subscriber",
+                  as: "sub",
+                  cond: { $eq: ["$$sub.subscriber", req.user._id] },
+                },
+              },
+            },
+            0,
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        password: 0,
+        refreshToken: 0,
+      },
+    },
+  ]);
+
+  if (!userDetails) {
     return errorResponse(res, "User not found", 404);
   }
 
-  return successResponse(res, "user profile", user, 200);
+  return successResponse(res, "user profile", userDetails, 200);
 });
 
 const updateMyProfile = asyncHandler(async (req, res) => {
@@ -237,15 +282,48 @@ const subscribeUser = asyncHandler(async (req, res) => {
   return successResponse(res, "User subscribed", newSubscription, 200);
 });
 
-const getMySubscriber = asyncHandler(async(req, res) => {
-  console.log("🔍 Request received in getMySubscriber");
-  console.log("👉 User ID from req.user:", req.user?._id);
-  console.log("👉 Request Params:", req.params);
-  console.log("👉 Request Query:", req.query);
-  console.log("👉 Request Body:", req.body);
+const getMySubscriber = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
 
-  return successResponse(res, "subscriber fetched successfully", {}, 200);
-})
+  const subscription = await Subscription.aggregate([
+    { $match: { subscribeTo: userId } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "subscribeTo",
+        foreignField: "_id",
+        as: "subscribedUsers",
+      },
+    },
+    { $unwind: "$subscribedUsers" },
+    {
+      $addFields: {
+        subscriberCount: {
+          $size: "$subscribedUsers",
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        // userId: 1,
+        userName: 1,
+        email: 1,
+        profilePic: "$subscribedUsers.avatar",
+        subscriberCount: 1,
+      },
+    },
+  ]);
+
+  console.log("subs: ", subscription);
+
+  return successResponse(
+    res,
+    "subscriber fetched successfully",
+    subscription,
+    200
+  );
+});
 
 export {
   signUp,

@@ -34,5 +34,5 @@ router.route("/update-profile").patch(verifyJwt, updateMyProfile);
 router.route("/subscription").get(verifyJwt, getMySubscriber)
 router.route("/subscription/subscribe/:id").post(verifyJwt, subscribeUser);
 
-router.route("/:id").get(getUserProfile);
+router.route("/:id").get(verifyJwt, getUserProfile);
 export default router;
