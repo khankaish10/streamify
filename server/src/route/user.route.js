@@ -1,6 +1,17 @@
 import { Router } from "express";
-import { login, signUp, logout } from "../controller/user.controller.js";
+import {
+  login,
+  signUp,
+  logout,
+  getMyProfile,
+  getUserProfile,
+  updateMyProfile,
+
+  subscribeUser,
+  getMySubscriber
+} from "../controller/user.controller.js";
 import upload from "../middleware/multer.middleware.js";
+import verifyJwt from "../middleware/auth.middleware.js";
 const router = Router();
 
 router.route("/signup").post(
@@ -17,6 +28,11 @@ router.route("/signup").post(
   signUp
 );
 router.route("/login").post(login);
-router.route("/logout").post(logout);
+router.route("/logout").post(verifyJwt, logout);
+router.route("/profile").get(verifyJwt, getMyProfile);
+router.route("/update-profile").patch(verifyJwt, updateMyProfile);
+router.route("/subscription").get(verifyJwt, getMySubscriber)
+router.route("/subscription/subscribe/:id").post(verifyJwt, subscribeUser);
 
+router.route("/:id").get(getUserProfile);
 export default router;
