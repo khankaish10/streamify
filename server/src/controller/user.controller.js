@@ -3,6 +3,7 @@ import { successResponse, errorResponse } from "../utils/apiResponse.js";
 import uploadToCloudinary from "../utils/cloudinary.config.js";
 import User from "../model/user.model.js";
 import Subscription from "../model/subscription.model.js";
+import WatchHistory from "../model/watchHistory.model.js";
 import mongoose from "mongoose";
 import fs from "fs";
 import jwt from "jsonwebtoken";
@@ -357,6 +358,36 @@ const getMySubscriber = asyncHandler(async (req, res) => {
   );
 });
 
+const addToWatchHistory = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const videoId = req.params.videoId;
+
+  if (!videoId) {
+    return errorResponse(res, "video Id is required", 404);
+  }
+
+  const existingEntry = await WatchHistory.findOne({ userId, videoId });
+  if (existingEntry) {
+    existingEntry.createdAt = new Date();
+    await existingEntry.save();
+    return successResponse(res, "watch history updated", {}, 200);
+  }
+
+  const history = new WatchHistory({
+    userId,
+    videoId,
+  });
+
+  await history.save();
+
+  return successResponse(res, "video updated to watch history", history, 200);
+});
+
+const getMyWatchHistory = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+});
+const deleteWatchHistory = asyncHandler(async (req, res) => {});
+
 export {
   signUp,
   login,
@@ -367,4 +398,7 @@ export {
   updateMyProfile,
   getMySubscriber,
   subscribeUser,
+  getMyWatchHistory,
+  addToWatchHistory,
+  deleteWatchHistory,
 };

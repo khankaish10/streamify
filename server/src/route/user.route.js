@@ -8,7 +8,10 @@ import {
   updateMyProfile,
 
   subscribeUser,
-  getMySubscriber
+  getMySubscriber,
+  getMyWatchHistory,
+  addToWatchHistory,
+  deleteWatchHistory
 } from "../controller/user.controller.js";
 import upload from "../middleware/multer.middleware.js";
 import verifyJwt from "../middleware/auth.middleware.js";
@@ -33,6 +36,10 @@ router.route("/profile").get(verifyJwt, getMyProfile);
 router.route("/update-profile").patch(verifyJwt, updateMyProfile);
 router.route("/subscription").get(verifyJwt, getMySubscriber)
 router.route("/subscription/subscribe/:id").post(verifyJwt, subscribeUser);
+router.route("/history").get(verifyJwt, getMyWatchHistory)
+router.route("/history").post(verifyJwt, deleteWatchHistory)
+router.route("/history/:videoId").post(verifyJwt, addToWatchHistory)
+
 
 router.route("/:id").get(verifyJwt, getUserProfile);
 export default router;
