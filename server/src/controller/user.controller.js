@@ -204,11 +204,18 @@ const getUserProfile = asyncHandler(async (req, res) => {
         subscribedToCount: { $size: "$subscribedTo" },
         isSubscribed: {
           $cond: {
-              if: { $in: [req.user._id, { $map: { input: "$subscriber", as: "s", in: "$$s.subscriber" } }]},
-              then: true,
-              else: false
-          }
-      }
+            if: {
+              $in: [
+                req.user._id,
+                {
+                  $map: { input: "$subscriber", as: "s", in: "$$s.subscriber" },
+                },
+              ],
+            },
+            then: true,
+            else: false,
+          },
+        },
         // isSubscribed: {
         //   $gt: [
         //     {
@@ -229,6 +236,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       $project: {
         password: 0,
         refreshToken: 0,
+        watchHistory: 0,
+        subscribedTo: 0,
       },
     },
   ]);
@@ -293,16 +302,15 @@ const getMySubscriber = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
   const subscription = await Subscription.aggregate([
-    { $match: { subscribeTo: userId } },
+    { $match: { subscribeTo: new mongoose.Types.ObjectId(userId) } },
     {
       $lookup: {
         from: "users",
-        localField: "subscribeTo",
+        localField: "subscriber",
         foreignField: "_id",
         as: "subscribedUsers",
       },
     },
-    { $unwind: "$subscribedUsers" },
     {
       $addFields: {
         subscriberCount: {
@@ -311,13 +319,30 @@ const getMySubscriber = asyncHandler(async (req, res) => {
       },
     },
     {
+      $unwind: "$subscribedUsers", // Flatten the subscribedUsers array
+    },
+    {
+      $group: {
+        _id: "$subscribeTo",
+        subscriber: {
+          $push: {
+            _id: "$subscribedUsers._id",
+            userName: "$subscribedUsers.userName",
+            email: "$subscribedUsers.email",
+            fullName: "$subscribedUsers.fullName",
+            avatar: "$subscribedUsers.avatar",
+            coverImage: "$subscribedUsers.coverImage",
+            createdAt: "$subscribedUsers.createdAt",
+          },
+        },
+        subscriberCount: { $sum: 1 },
+      },
+    },
+    {
       $project: {
         _id: 0,
-        // userId: 1,
-        userName: 1,
-        email: 1,
-        profilePic: "$subscribedUsers.avatar",
         subscriberCount: 1,
+        subscriber: 1,
       },
     },
   ]);
