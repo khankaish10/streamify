@@ -203,19 +203,26 @@ const getUserProfile = asyncHandler(async (req, res) => {
         subscriberCount: { $size: "$subscriber" },
         subscribedToCount: { $size: "$subscribedTo" },
         isSubscribed: {
-          $gt: [
-            {
-              $size: {
-                $filter: {
-                  input: "$subscriber",
-                  as: "sub",
-                  cond: { $eq: ["$$sub.subscriber", req.user._id] },
-                },
-              },
-            },
-            0,
-          ],
-        },
+          $cond: {
+              if: { $in: [req.user._id, { $map: { input: "$subscriber", as: "s", in: "$$s.subscriber" } }]},
+              then: true,
+              else: false
+          }
+      }
+        // isSubscribed: {
+        //   $gt: [
+        //     {
+        //       $size: {
+        //         $filter: {
+        //           input: "$subscriber",
+        //           as: "sub",
+        //           cond: { $eq: ["$$sub.subscriber", req.user._id] },
+        //         },
+        //       },
+        //     },
+        //     0,
+        //   ],
+        // },
       },
     },
     {
