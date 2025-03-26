@@ -1,0 +1,18 @@
+ <svg
+    width="200"
+    height="60"
+    viewBox="0 0 200 60"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <text
+      x="10"
+      y="40"
+      font-family="Arial, sans-serif"
+      font-size="32"
+      fill="#1D4ED8"
+    >
+      Streamify
+    </text>
+    <polygon points="160,20 185,30 160,40" fill="#FACC15" />
+  </svg>
