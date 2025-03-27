@@ -1,7 +1,8 @@
 import Image from "next/image";
+import VideoCard from "../components/VideoCard";
 
 export default function Home() {
   return (
-   <h1>Hello</h1>
+   <VideoCard />
   );
 }

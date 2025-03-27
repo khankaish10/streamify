@@ -3,10 +3,20 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+ 
 }
+
+
 
 @theme {
   --color-midnight: #121063;
   --color-tahiti: #3ab7bf;
   --color-bermuda: #78dcca;
+  --color-primary: #00E6E6; /* Cyan */
+  --color-secondary: #FF0266; /* Pink */
+  --color-background: #09122C; /* Dark Black */
+  --color-card: #161616; /* Dark Gray */
+  --color-text: #EAEAEA; /* Light Gray */
+  --color-muted: #A0A0A0; /* Muted Gray */
+  --color-hover: #1B1B1B; /* Slightly Lighter Black */
 }
