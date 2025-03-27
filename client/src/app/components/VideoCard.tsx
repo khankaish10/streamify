@@ -1,4 +1,3 @@
-
 import React from "react";
 import Image from "next/image";
 
@@ -13,31 +12,31 @@ const data = {
 
 const VideoCard = () => {
   return (
-    <div className="font-poppins h-60 w-100  flex-col border-1 border-red-300">
-      <div className="relative overflow-hidden w-full h-full">
+    <div className="font-poppins h-auto w-80 overflow-hidden p-2 cursor-pointer">
+      <div className="overflow-hidden w-full h-48 relative">
         <Image
           src={`${data.thumbnail}`}
-          //   width={100}
-          //   height={100}
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: "cover" }}
           alt="video thumbnail"
           className="rounded-2xl"
         />
       </div>
 
       {/* profile pic and title with username and views */}
-      <div className="flex  border-1 border-red-300">
+      <div className="flex py-1 mt-2">
         {/* profile pic */}
-        <div className="border-1 border-black-500 rounded-[2xl]">
-          p
+        <div className="w-10 h-10 overflow-hidden border-1 border-black-500 rounded-full flex justify-center items-center">
+          P
         </div>
 
-        <div className="text-gray-500">
-          <h4>Title of the video</h4>
-          <p>username</p>
-          <p>2k views</p>
-          <p>2 weeks ago</p>
+        <div className="text-gray-500 ml-2">
+          <h2 className="text-black font-semibold">Title of the video</h2>
+          <p className="text-sm">username</p>
+          <div className="flex text-xs text-gray-400">
+            <p className="mr-2">2k views</p>
+            <p>2 weeks ago</p>
+          </div>
         </div>
       </div>
     </div>
