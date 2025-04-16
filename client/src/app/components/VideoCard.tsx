@@ -4,6 +4,7 @@ import Image from "next/image";
 const data = {
   thumbnail:
     "https://res.cloudinary.com/dnlrrhbsl/image/upload/v1741559069/uzib44uul8tgdb9n1pe2.jpg",
+ 
   videoFile:
     "https://res.cloudinary.com/dnlrrhbsl/video/upload/v1741559061/u9oyevlygtzflwlp0wqm.mp4",
   owner: "Kaish10",
@@ -12,17 +13,19 @@ const data = {
 
 const VideoCard = () => {
   return (
-    <div className="font-poppins h-auto w-80 overflow-hidden p-2 cursor-pointer">
-      <div className="overflow-hidden w-full h-48 relative">
-        <Image
+    <div className="font-poppins h-auto w-full overflow-hidden p-2 
+    cursor-pointer border-1 border-gray-300 ">
+      <div className="overflow-hidden w-full h-60 sm:h-48 
+        relative bg-[#CD7991]">
+        {/* <Image
           src={`${data.thumbnail}`}
           fill
           style={{ objectFit: "cover" }}
           alt="video thumbnail"
-          className="rounded-2xl"
-        />
+          className="rounded-xl"
+        /> */}
       </div>
-
+      {/* md:w-90 lg:w-70 */}
       {/* profile pic and title with username and views */}
       <div className="flex py-1 mt-2">
         {/* profile pic */}
