@@ -5,18 +5,18 @@ import { Search } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <nav className="flex justify-between items-center p-1  m-auto F">
+    <nav className="nav flex justify-between items-center p-1  m-auto">
       {/* Logo----------- */}
       <div>
         <div>
           <Image
-            className="md:hidden"
+            className="lg:hidden"
             src={"/hamburger.svg"}
             width={30}
             height={30}
             alt="hamburder"
           />
-          <Link href={"/"} className="hidden md:block">
+          <Link href={"/"} className="hidden lg:block">
             <Image
               src="/logo.svg"
               width={200}

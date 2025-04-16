@@ -3,15 +3,15 @@ import VideoCard from "../components/VideoCard";
 
 export default function Home() {
   return (
-    <main
-      className="border-1 border-red-500 lg:max-w-[90%] m-auto grid 
+    <div
+      className="grid w-full
       lg:grid-cols-3 md:grid-cols-2 gap-2 md:place-items-center
       "
     >
       {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((video) => {
         return <VideoCard key={video} />;
       })}
-    </main>
+    </div>
   );
 }
 
