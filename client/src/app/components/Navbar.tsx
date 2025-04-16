@@ -5,22 +5,23 @@ import { Search } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <nav className="nav flex justify-between items-center p-1  m-auto">
+    <nav className="nav flex items-center justify-between p-0.5 w-full m-auto
+      sticky top-0 z-10 bg-white shadow-md h-15">
       {/* Logo----------- */}
       <div>
         <div>
           <Image
             className="lg:hidden"
             src={"/hamburger.svg"}
-            width={30}
-            height={30}
+            width={32}
+            height={32}
             alt="hamburder"
           />
           <Link href={"/"} className="hidden lg:block">
             <Image
               src="/logo.svg"
-              width={200}
-              height={100}
+              width={180}
+              height={90}
               alt="Picture of the author"
             />
           </Link>
@@ -28,8 +29,9 @@ const Navbar = () => {
       </div>
 
       {/* Search input----------- */}
-      <div className="h-10">
-        <div className="flex justify-center items-center rounded-[50px] p-1 h-full border-1 border-gray-300 ">
+      <div className="h-10 ml-7 w-full lg:w-auto ">
+        <div className="flex justify-center items-center w-full rounded-[50px] 
+            p-1 h-full border-1 border-gray-300 ">
           <Search color="#333333" className="hidden md:block" />
           <input
             type="text"
@@ -43,7 +45,7 @@ const Navbar = () => {
       {/* Login signup */}
 
       {/* Profile-------------- */}
-      <div>
+      <div className="hidden lg:block">
         <Link
           href={"/profile"}
           className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-[50px]"

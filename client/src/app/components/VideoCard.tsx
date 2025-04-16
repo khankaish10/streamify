@@ -13,9 +13,9 @@ const data = {
 
 const VideoCard = () => {
   return (
-    <div className="font-poppins h-auto w-full overflow-hidden p-2 
-    cursor-pointer border-1 border-gray-300 ">
-      <div className="overflow-hidden w-full h-60 sm:h-48 
+    <div className="font-poppins h-auto w-full overflow-hidden p-2 flex flex-col
+    justify-between cursor-pointer border-1 border-gray-300">
+      <div className="overflow-hidden w-full  h-60 sm:h-48 
         relative bg-[#CD7991]">
         {/* <Image
           src={`${data.thumbnail}`}

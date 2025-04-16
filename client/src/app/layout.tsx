@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import Sidebar_Bottom from "./components/Sidebar_Bottom";
 
 
 // const poppins = Poppins({
@@ -31,12 +32,13 @@ export default function RootLayout({
       <body
         className={`${poppins.variable}`}
       >
-        <main>
+        <main className="flex flex-col">
           <Navbar />
           <section className="flex">
             <Sidebar />
             {children}
           </section>
+          <Sidebar_Bottom />
         </main>
       </body>
     </html>
