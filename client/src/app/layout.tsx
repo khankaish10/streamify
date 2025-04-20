@@ -32,9 +32,9 @@ export default function RootLayout({
       <body
         className={`${poppins.variable}`}
       >
-        <main className="flex flex-col">
+        <main className="flex flex-col h-screen">
           <Navbar />
-          <section className="flex">
+          <section className="flex flex-1">
             <Sidebar />
             {children}
           </section>
