@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const VideoCard = ({ card }: any) => {
-  console.log(card);
+  // console.log(card);
   return (
     <Link href={`/videos/watch/${card._id}`} >
       <div className="font-poppins h-auto w-full overflow-hidden p-2 flex flex-col
