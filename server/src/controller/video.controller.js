@@ -1,5 +1,5 @@
 import asyncHandler from '../utils/asyncHandler.js'
-import { successResponse } from '../utils/apiResponse.js'
+import { errorResponse, successResponse } from '../utils/apiResponse.js'
 import uploadToCloudinary from '../utils/cloudinary.config.js'
 import Video from '../model/video.model.js'
 
@@ -31,8 +31,16 @@ const uploadAVideo = asyncHandler(async (req, res) => {
 })
 
 const getvideo = asyncHandler(async (req, res) => {
-    // await uploadToCloudinary(req.files.video[0].path)
-    return successResponse(res, "video uploaded",{}, 200 )
+    const {videoid} = req.params;
+
+    const video = await Video.findById(videoid)
+
+    if(!video) {
+        return errorResponse(res, "video not found", 404)
+    }
+
+
+    return successResponse(res, "video fetched", video, 200 )
 })
 
 

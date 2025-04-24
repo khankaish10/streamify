@@ -19,4 +19,6 @@ router.route("/upload-video").post(
   uploadAVideo
 );
 
+router.route("/watch/:videoid").get(getvideo);
+
 export default router;

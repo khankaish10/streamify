@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 
 const signUp = asyncHandler(async (req, res) => {
   const { userName, email, password, fullName } = req.body;
+
   if (
     [fullName, email, userName, password].some((field) => field?.trim() === "")
   ) {
@@ -20,9 +21,10 @@ const signUp = asyncHandler(async (req, res) => {
     $or: [{ email }, { userName }],
   });
 
+
   if (existedUser) throw errorResponse(res, "User already exist");
 
-  const avatarLocalPath = req.files.avatar[0].path;
+  const avatarLocalPath = req.files?.avatar[0]?.path;
   if (!avatarLocalPath)
     throw errorResponse(res, "Avatar file is required", 404);
 
@@ -35,7 +37,7 @@ const signUp = asyncHandler(async (req, res) => {
 
   //upload cover Image if available
   let coverImageUrl = "";
-  if (req.files.coverImage[0]?.path) {
+  if (req.files?.coverImage && req.files?.coverImage[0]?.path) {
     const coverImageUploadResult = await uploadToCloudinary(
       req.files.coverImage[0].path
     );
@@ -74,8 +76,8 @@ const signUp = asyncHandler(async (req, res) => {
       userName: newUser.userName,
       email: newUser.email,
       fullName: newUser.fullName,
-      avatar: newUser.avatarUploadResult,
-      coverImage: newUser.coverImageUrl,
+      avatar: newUser.avatar,
+      coverImage: newUser.coverImage,
       createdAt: newUser.createdAt,
     },
     200
@@ -90,7 +92,7 @@ const login = asyncHandler(async (req, res) => {
   const existedUser = await User.findOne({
     $or: [{ email }, { userName }],
   });
-  console.log(existedUser);
+  console.log("existed user: ", existedUser);
   if (!existedUser) {
     throw errorResponse(res, "User doesnot exist", 400);
   }
@@ -129,6 +131,7 @@ const login = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
+  console.log("logout called");
   await User.findByIdAndUpdate(req.user._id, {
     $unset: {
       refreshToken: 1,

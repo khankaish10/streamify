@@ -12,13 +12,13 @@ const connectDB = async () => {
 
   try {
     const connectionInstance = await mongoose.connect(
-      `${process.env.MONGODB_ATLAS_URI}}`
+      `${process.env.MONGODB_ATLAS_URI}/${DB_NAME}`,
     );
     isConnected = true;
     console.log("Mongodb connected to : ", connectionInstance?.connection.host);
     return connectionInstance
   } catch (error) {
-    console.log(error);
+    console.log("connectDB error:", error);
     process.exit(1);
   }
 };

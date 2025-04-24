@@ -1,3 +1,5 @@
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
+
 export const cards = [
     {
         data: {
@@ -95,3 +97,18 @@ export const cards = [
         },
     },
 ]
+
+export const dummyUser = {
+    success: true,
+    message: "success",
+    data: {
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2RmNTA5NWJhMDY1Y2Q2YjY2MmE4NyIsImlhdCI6MTc0NTM5ODk3MywiZXhwIjoxNzQ1NDAyNTczfQ.imJMXdXno6sPIdkmJUe2xx3PPuLyakCx3QT0zo92GpY",
+        _id: "67cdf5095ba065cd6b662a87",
+        userName: "kaish",
+        email: "kaish@gmail.com",
+        fullName: "kaish khan",
+        avatar: "https://res.cloudinary.com/dnlrrhbsl/image/upload/v1741550742/v3mxe54njxws3su1cx2m.jpg",
+        coverImage: "https://res.cloudinary.com/dnlrrhbsl/image/upload/v1741550856/uwdsgkqwahdgrlsujlx8.jpg",
+        createdAt: "2025-03-09T20:07:38.001Z"
+    }
+}

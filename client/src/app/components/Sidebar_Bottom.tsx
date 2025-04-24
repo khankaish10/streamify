@@ -5,7 +5,7 @@ import { House, History, FileVideo } from 'lucide-react'
 
 const Sidebar_Bottom = () => {
   return (
-    <div className='sm:hidden sticky bottom-0 z-10
+    <div className='sm:hidden sticky bottom-0 z-5
     flex justify-around items-center w-full bg-white'>
        <Link href={"/"} className="">
            <div className='flex item-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300

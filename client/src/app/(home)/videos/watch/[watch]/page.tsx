@@ -36,7 +36,7 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                         controls={controls}
                         height={400}
                         width={600}
-                        className='z-10 object-contain'
+                        className='z-5 object-contain'
                         loop >
                     </video>
                 </div>

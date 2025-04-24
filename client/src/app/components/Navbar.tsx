@@ -1,9 +1,36 @@
+'use client'
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { handleLogout } from "@/api";
+import { logout } from "@/lib/features/users/userSlice";
+import { useRouter as userRouter } from "next/navigation";
 
 const Navbar = () => {
+  const user = useAppSelector((state) => state.user[0]);
+  const dispatch = useAppDispatch();
+  const router = userRouter()
+
+  const handleSubmit = () => {
+    handleLogout()
+    .then(response => 
+      {
+        dispatch(logout()); 
+        router.push('/auth/login')
+
+      }
+    )
+    .catch((error) => {
+      console.error("Logout error:", error);
+    });
+
+
+  };
+
+  console.log("user", user);
+
   return (
     <nav className="nav flex items-center justify-between p-0.5 w-full m-auto
       sticky top-0 z-10 bg-white shadow-md h-15">
@@ -29,15 +56,15 @@ const Navbar = () => {
       </div>
 
       {/* Search input----------- */}
-      <div className="h-10 ml-7 w-full lg:w-auto ">
-        <div className="flex justify-center items-center w-full rounded-[50px] 
+      <div className="h-10 ml-3 w-full md:max-w-[50%] lg:max-w-[40%]">
+        <div className="flex justify-center items-center  rounded-[50px] 
             p-1 h-full border-1 border-gray-300 ">
           <Search color="#333333" className="hidden md:block" />
           <input
             type="text"
             name="Search"
             placeholder="Search"
-            className="p-1 md:w-100 mx-2  outline-0"
+            className="p-1 w-full mx-2  outline-0"
           />
         </div>
       </div>
@@ -45,29 +72,52 @@ const Navbar = () => {
       {/* Login signup */}
 
       {/* Profile-------------- */}
-      <div className="hidden lg:block">
-        <Link
-          href={"/profile"}
-          className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-[50px]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-9 md:size-8"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-            />
-          </svg>
-          <p className="text-[16px] hidden md:block">Sign in</p>
-        </Link>
-      </div>
-    </nav>
+      <div className="hidden sm:block">
+        {
+          user ? (
+            <div
+              className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-full h-full"
+            >
+              <Link
+                href={"/profile"}
+                className="hidden sm:block">
+                <Image
+                  src={user?.avatar}
+                  alt="profile"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+                {/* <p className="text-[16px] hidden lg:block">{user?.name}</p> */}
+              </Link>
+              <button onClick={handleSubmit} >logout</button>
+            </div>
+          ) : (
+            <Link
+              href={"/profile"}
+              className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-[50px]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-9 md:size-8"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+              <p className="text-[16px] hidden lg:block">Sign in</p>
+            </Link>
+          )
+        }
+
+      </div >
+    </nav >
   );
 };
 

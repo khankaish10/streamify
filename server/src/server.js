@@ -9,7 +9,10 @@ app.get("/", (req, res) => {
 })
 
 // enable cors
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+}));
 
 
 // middleware for parsing
