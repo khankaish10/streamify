@@ -30,7 +30,8 @@ interface AuthData {
 
 export const handleLogin = async (authData: AuthData) => {
     try {
-        const response = await api.post("/users/login", authData);
+        console.log("Login data:", authData); // Log the login data to verify it's correct
+        const response = await api.post("/api/v1/users/login", authData);
         return response.data;
 
     } catch (error) {
@@ -41,7 +42,7 @@ export const handleLogin = async (authData: AuthData) => {
 
 export const handleLogout = async () => {
     try {
-        const response = await api.post("/users/logout");
+        const response = await api.post("/api/v1/users/logout");
         console.log("Logout response:", response.data); // Log the response data to verify it's correct
         return response.data;
     } catch (error) {
@@ -65,5 +66,13 @@ export const handleSignup = async (formData: any) => {
     }
 }
 
-
+export const handleGetProfile = async () => {
+    try {
+        const response = await api.get("/api/v1/users/profile");
+        return response.data;
+    } catch (error) {
+        console.error("Get profile error:", error);
+        throw error;
+    }
+}
 

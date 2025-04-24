@@ -92,7 +92,7 @@ const login = asyncHandler(async (req, res) => {
   const existedUser = await User.findOne({
     $or: [{ email }, { userName }],
   });
-  console.log("existed user: ", existedUser);
+
   if (!existedUser) {
     throw errorResponse(res, "User doesnot exist", 400);
   }
@@ -178,7 +178,7 @@ const getMyProfile = async (req, res) => {
   if (!user) {
     return errorResponse(res, "User not found", 404);
   }
-  return successResponse(res, "logged in user", user, 200);
+  return successResponse(res, "User profile", user, 200);
 };
 
 const getUserProfile = asyncHandler(async (req, res) => {

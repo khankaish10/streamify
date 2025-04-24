@@ -15,16 +15,15 @@ const Navbar = () => {
 
   const handleSubmit = () => {
     handleLogout()
-    .then(response => 
-      {
-        dispatch(logout()); 
+      .then(response => {
+        dispatch(logout());
         router.push('/auth/login')
 
       }
-    )
-    .catch((error) => {
-      console.error("Logout error:", error);
-    });
+      )
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
 
 
   };
@@ -56,7 +55,7 @@ const Navbar = () => {
       </div>
 
       {/* Search input----------- */}
-      <div className="h-10 ml-3 w-full md:max-w-[50%] lg:max-w-[40%]">
+      <div className="h-10 ml-3 w-[90%] md:max-w-[50%] lg:max-w-[40%]">
         <div className="flex justify-center items-center  rounded-[50px] 
             p-1 h-full border-1 border-gray-300 ">
           <Search color="#333333" className="hidden md:block" />
@@ -72,25 +71,35 @@ const Navbar = () => {
       {/* Login signup */}
 
       {/* Profile-------------- */}
-      <div className="hidden sm:block">
+      <div className="flex justify-center items-center">
+
+        {
+          user && (
+            <Link
+              href={"/profile"}
+              className="border-1 border-gray-300 h-10 w-10 rounded-full 
+                  flex justify-center items-center overflow-hidden mr-1 hidden md:block"
+            >
+              <Image
+                src={user?.avatar}
+                width={32}
+                height={32}
+
+                alt="profile"
+                className="border-1 border-gray-300 object-cover rounded-full h-full w-full"
+              />
+
+            </Link>
+          )
+        }
+
+
         {
           user ? (
             <div
-              className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-full h-full"
+              className="p-1 md:border-1 md:border-gray-300 rounded-full h-full "
             >
-              <Link
-                href={"/profile"}
-                className="hidden sm:block">
-                <Image
-                  src={user?.avatar}
-                  alt="profile"
-                  width={32}
-                  height={32}
-                  className="rounded-full"
-                />
-                {/* <p className="text-[16px] hidden lg:block">{user?.name}</p> */}
-              </Link>
-              <button onClick={handleSubmit} >logout</button>
+              <button onClick={handleSubmit} className="cursor-pointer" >logout</button>
             </div>
           ) : (
             <Link

@@ -6,21 +6,24 @@ const VideoCard = ({ card }: any) => {
   // console.log(card);
   return (
     <Link href={`/videos/watch/${card._id}`} >
-      <div className="font-poppins h-auto w-full overflow-hidden p-2 flex flex-col
-    justify-between cursor-pointer border-1 border-gray-300">
+      <div className="font-poppins h-full w-full 
+      overflow-hidden p-2 flex flex-col
+      justify-between cursor-pointer border-1 
+      border-gray-300 ">
 
-        <div className="overflow-hidden w-full  h-60 sm:h-48 
-        relative">
+        {/* video thumbnail */}
+        <div className="overflow-hidden 
+        h-60 sm:h-60 relative
+        ">
           <Image
             src={`${card.thumbnail}`}
             fill
-            style={{ objectFit: "cover" }}
             alt="video"
-            className="rounded-xl"
+            className="rounded-xl object-cover"
 
           />
         </div>
-        {/* md:w-90 lg:w-70 */}
+       
         {/* profile pic and title with username and views */}
         <div className="flex py-1 mt-2">
           {/* profile pic */}
