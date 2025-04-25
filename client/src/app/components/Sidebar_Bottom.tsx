@@ -10,7 +10,7 @@ const Sidebar_Bottom = () => {
 
 
     return (
-        <div className='sm:hidden sticky bottom-0 z-5
+        <div className='sticky bottom-0 left-0 sm:hidden bottom-0 z-5
     flex justify-around items-center w-full bg-white'>
             <Link href={"/"} className="">
                 <div className='flex item-center my-1 
@@ -50,7 +50,7 @@ const Sidebar_Bottom = () => {
             {
                 user ? (
                     <div className='flex justify-center items-center'>
-                        <Link href={"/profile"} className="border-1 border-gray-300 h-10 w-10 rounded-full 
+                        <Link href={"/profile"} className="border-1 border-gray-300 h-8 w-8 rounded-full 
                                 flex justify-center items-center overflow-hidden">
                             <Image
                                 src={user?.avatar}
@@ -93,3 +93,5 @@ const Sidebar_Bottom = () => {
 }
 
 export default Sidebar_Bottom
+
+

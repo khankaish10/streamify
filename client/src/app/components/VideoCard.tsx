@@ -6,7 +6,7 @@ const VideoCard = ({ card }: any) => {
   // console.log(card);
   return (
     <Link href={`/videos/watch/${card._id}`} >
-      <div className="font-poppins h-full w-full 
+      <div className="font-poppins 
       overflow-hidden p-2 flex flex-col
       justify-between cursor-pointer border-1 
       border-gray-300 ">
