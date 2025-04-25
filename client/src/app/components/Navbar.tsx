@@ -36,13 +36,18 @@ const Navbar = () => {
       {/* Logo----------- */}
       <div>
         <div>
-          <Image
+          {/* <Image
             className="lg:hidden"
             src={"/hamburger.svg"}
             width={32}
             height={32}
             alt="hamburder"
-          />
+          /> */}
+          
+          <div className="inline-block w-0 h-0 border-solid lg:hidden
+          rotate-90 border-t-0 border-r-[15px] border-l-[15px] ml-1
+          border-b-[26px] border-l-transparent border-r-transparent 
+          border-t-transparent border-b-[#f73b3b]"></div>
           <Link href={"/"} className="hidden lg:block">
             <Image
               src="/logo.svg"
@@ -77,7 +82,7 @@ const Navbar = () => {
           user && (
             <Link
               href={"/profile"}
-              className="border-1 border-gray-300 h-10 w-10 rounded-full 
+              className="border-1 border-gray-300 h-8 w-8 rounded-full 
                   flex justify-center items-center overflow-hidden mr-1 hidden md:block"
             >
               <Image

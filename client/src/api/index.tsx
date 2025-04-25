@@ -53,7 +53,7 @@ export const handleLogout = async () => {
 
 export const handleSignup = async (formData: any) => {
     try {
-        const response = await api.post("/users/signup", formData, {
+        const response = await api.post("/api/v1/users/signup", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
