@@ -17,6 +17,7 @@ function Home() {
     >
       {cards?.map((card) => {
         return <VideoCard key={card.data._id} card={card.data} />;
+        // return <div key={card.data._id} className="border-1 border-red-500 h-50 w-50"></div>;
       })}
     </div>
 //  lg:grid-cols-3 md:grid-cols-2 gap-2 2xl:grid-cols-4 2xl:gap-2

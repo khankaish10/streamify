@@ -7,14 +7,14 @@ const layout = ({ children }: Readonly<{
     children: React.ReactNode;
 }>) => {
     return (
-            <div className="flex flex-col h-screen">
-                <Navbar />
-                <section className="flex flex-1">
-                    <Sidebar />
-                    {children}
-                </section>
+        <main className="flex flex-col">
+            <Navbar />
+            <section className="sm:min-flex-col sm:flex h-full">
+                <Sidebar />
+                {children}
                 <Sidebar_Bottom />
-            </div>
+            </section>
+        </main>
     )
 }
 

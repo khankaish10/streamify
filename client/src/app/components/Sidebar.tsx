@@ -1,6 +1,6 @@
 
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { House, History, FileVideo } from 'lucide-react'
 
@@ -9,8 +9,8 @@ const Sidebar = () => {
     return (
         <>
             <div className='sm:flex flex-col  lg:w-[15%] 
-             font-[Poppins] px-1
-             lg:sticky top-15 left-0 h-full hidden'>
+             font-[Poppins] px-1 
+             sticky top-11 left-0 h-full hidden'>
 
                 <Link href={"/"} className="">
                     <div className='flex item-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300

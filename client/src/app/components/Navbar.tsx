@@ -31,19 +31,12 @@ const Navbar = () => {
   console.log("user", user);
 
   return (
-    <nav className="nav flex items-center justify-between p-0.5 w-full m-auto
-      sticky top-0 z-10 bg-white shadow-md h-15">
+    <nav className="flex items-center p-0.5 justify-between w-full
+      sticky top-0 z-10 bg-white shadow-md h-10">
+
+
       {/* Logo----------- */}
-      <div>
         <div>
-          {/* <Image
-            className="lg:hidden"
-            src={"/hamburger.svg"}
-            width={32}
-            height={32}
-            alt="hamburder"
-          /> */}
-          
           <div className="inline-block w-0 h-0 border-solid lg:hidden
           rotate-90 border-t-0 border-r-[15px] border-l-[15px] ml-1
           border-b-[26px] border-l-transparent border-r-transparent 
@@ -51,16 +44,16 @@ const Navbar = () => {
           <Link href={"/"} className="hidden lg:block">
             <Image
               src="/logo.svg"
-              width={180}
-              height={90}
+              width={140}
+              height={70}
               alt="Picture of the author"
             />
           </Link>
         </div>
-      </div>
+
 
       {/* Search input----------- */}
-      <div className="h-10 ml-3 w-[90%] md:max-w-[50%] lg:max-w-[40%]">
+      <div className="h-full ml-3 w-[90%] md:max-w-[50%] lg:max-w-[40%]">
         <div className="flex justify-center items-center  rounded-[50px] 
             p-1 h-full border-1 border-gray-300 ">
           <Search color="#333333" className="hidden md:block" />
@@ -72,8 +65,6 @@ const Navbar = () => {
           />
         </div>
       </div>
-
-      {/* Login signup */}
 
       {/* Profile-------------- */}
       <div className="flex justify-center items-center">
