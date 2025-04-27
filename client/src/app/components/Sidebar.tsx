@@ -8,16 +8,16 @@ const Sidebar = () => {
 
     return (
         <>
-            <div className='sm:flex flex-col  lg:w-[15%] 
-             font-[Poppins] px-1 
-             sticky top-11 left-0 h-full hidden'>
+            <div className='sm:flex flex-col lg:w-[15%] 
+             font-[Poppins] px-1 z-10 bg-white max-w-[200px]
+             fixed top-11 left-0 h-full hidden
+             '>
 
                 <Link href={"/"} className="">
                     <div className='flex item-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
                     '>
                         <div className='lg:mr-4'>
                             <House size={30} />
-
                         </div>
 
                         <p className='hidden lg:block text-base'>Home</p>

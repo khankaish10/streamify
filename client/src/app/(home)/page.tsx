@@ -9,18 +9,16 @@ function Home() {
   return (
 
     <div
-      className="grid gap-2 w-full p-1
-      sm:grid-cols-2 
-      lg:grid-cols-3
-      2xl:grid-cols-4 xl:max-w-[1300px] 
+      className="grid gap-2 w-full p-1 m-0
+      sm:grid-cols-2 sm:ml-[50px]
+      lg:grid-cols-3 lg:ml-[200px] 
+      xl:max-w-[1600px]  
       "
     >
       {cards?.map((card) => {
         return <VideoCard key={card.data._id} card={card.data} />;
-        // return <div key={card.data._id} className="border-1 border-red-500 h-50 w-50"></div>;
       })}
     </div>
-//  lg:grid-cols-3 md:grid-cols-2 gap-2 2xl:grid-cols-4 2xl:gap-2
   );
 }
 
