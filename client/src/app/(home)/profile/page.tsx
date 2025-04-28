@@ -38,8 +38,7 @@ const Profile = () => {
             font-[poppins]'>
             {
                 loading ? <div className='flex justify-center items-center h-screen'>Loading...</div> : (
-                    <div className="container flex flex-col pl-10 pt-10 \
-                                    border-1 border-red-500 h-screen">
+                    <div className="container flex flex-col pl-10 pt-10 h-screen">
                         <div className='flex items-center p-3 '>
                             {/* profile pic, update password */}
                             <div className='h-35 w-35 overflow-hidden 
@@ -68,10 +67,10 @@ const Profile = () => {
                         {/* Home, videos, short, playlist*/}
                         <div className='border-b-1 border-gray-200
                                         flex gap-2'>
-                            <div className='border-b-2 border-black p-2'>Home</div>
-                            <div className='border-b-2 border-black p-2'>Videos</div>
-                            <div className='border-b-2 border-black p-2'>Playlist</div>
-                            <div className='border-b-2 border-black p-2'>Post</div>
+                            <Link href={`/features` } ><div className='border-b-2 border-black p-2 cursor-pointer'>Home</div></Link>
+                            <Link href={`/videos` } ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Videos</div></Link>
+                            <Link href={`/playlist`} ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Playlist</div></Link>
+                            <Link href={`/post` } ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Post</div></Link>
                         </div>
 
                         {/* main content - Home(All videos), shorts, playlists, post */}
