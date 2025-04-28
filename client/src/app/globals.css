@@ -6,22 +6,34 @@
   --radius: 0.625rem;
   --background: #ffffff;
   --foreground: #000000;
-  --primary: #00E6E6; /* Cyan */
-  --secondary: #FF0266; /* Pink */
-  --muted: #A0A0A0; /* Muted Gray */
-  --border: #E5E7EB; /* Light Gray */
-  --ring: #3B82F6; /* Blue */
+  --primary: #00E6E6;
+  /* Cyan */
+  --secondary: #FF0266;
+  /* Pink */
+  --muted: #A0A0A0;
+  /* Muted Gray */
+  --border: #E5E7EB;
+  /* Light Gray */
+  --ring: #3B82F6;
+  /* Blue */
 }
 
 /* Dark mode variables */
 .dark {
-  --background: #09122C; /* Dark Black */
-  --foreground: #EAEAEA; /* Light Gray */
-  --primary: #00E6E6; /* Cyan */
-  --secondary: #FF0266; /* Pink */
-  --muted: #6B7280; /* Muted Gray */
-  --border: #374151; /* Dark Gray */
-  --ring: #2563EB; /* Dark Blue */
+  --background: #09122C;
+  /* Dark Black */
+  --foreground: #EAEAEA;
+  /* Light Gray */
+  --primary: #00E6E6;
+  /* Cyan */
+  --secondary: #FF0266;
+  /* Pink */
+  --muted: #6B7280;
+  /* Muted Gray */
+  --border: #374151;
+  /* Dark Gray */
+  --ring: #2563EB;
+  /* Dark Blue */
 }
 
 /* Base styles */
@@ -30,8 +42,21 @@
     scroll-behavior: smooth;
   }
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 
+}
+
+@layer utilities {
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hidden {
+    scrollbar-width: 0;
+    -ms-overflow-style: none;
+  }
 }
