@@ -32,7 +32,7 @@ const Navbar = () => {
 
   return (
     <nav className="flex items-center p-1 justify-between w-full
-      sticky top-0 z-10 bg-white shadow-md h-10">
+      fixed top-0 z-10 bg-white shadow-md h-10">
 
 
       {/* Logo----------- */}
