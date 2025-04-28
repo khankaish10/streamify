@@ -7,9 +7,11 @@ const verifyJwt = async (req, res, next) => {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-    if (!token) throw errorResponse(res, "Unauthorized access!", 401);
 
-    const decodedToken = await jwt.verify(
+
+    if (!token) throw errorResponse(res, "Unauthorized access!", 401);
+   
+    const decodedToken = jwt.verify(
       token,
       process.env.ACCESSTOKEN_SECRET
     );

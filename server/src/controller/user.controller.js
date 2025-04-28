@@ -174,6 +174,7 @@ const generateRefreshAccessToken = async (req, res) => {
 
 const getMyProfile = async (req, res) => {
   const id = req.user._id;
+  console.log("id: ", id);
   const user = await User.findById(id).select("-password -refreshToken");
   if (!user) {
     return errorResponse(res, "User not found", 404);
@@ -183,7 +184,7 @@ const getMyProfile = async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
+  console.log("id: ", id);
   const userDetails = await User.aggregate([
     { $match: { _id: new mongoose.Types.ObjectId(id) } },
     {

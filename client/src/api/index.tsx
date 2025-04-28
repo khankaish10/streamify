@@ -1,5 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../Constants/Constants";
+import  getCookie  from "../util/cookie";
+
 console.log("API URL:", API_URL); // Log the API URL to verify it's correct
 const api = axios.create({
     baseURL: API_URL,
@@ -9,9 +11,21 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         // const token = localStorage.getItem("token");
-        const token = document.cookie.split('; ')[0] || JSON.parse(localStorage.getItem("user")).accessToken 
-        console.log("Token:", token); // Log the token to verify it's correct
+        const user = localStorage.getItem("user");
+        let token = null;
+        getCookie().then((cookie) => {
+            token = cookie?.value;
+
+        }
+        ).catch((error) => {
+            console.error("Error getting cookie:", error);
+        });
+
         if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }else if((user)) {
+            const userData = JSON.parse(user);
+            token = userData?.accessToken;
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -66,8 +80,10 @@ export const handleSignup = async (formData: any) => {
 }
 
 export const handleGetProfile = async () => {
+
     try {
         const response = await api.get("/api/v1/users/profile");
+        console.log("Profile response:", response.data); // Log the profile data to verify it's correct
         return response.data;
     } catch (error) {
         console.error("Get profile error:", error);

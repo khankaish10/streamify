@@ -75,13 +75,13 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
 
                             {/* channel description*/}
                             <div className='w-full flex
-                        items-center mb-5'>
+                                            items-center mb-5'>
 
                                 <div className='flex flex-1 items-center'>
 
                                     <div className="profilePic flex items-center 
-                            justify-center border-1 border-gray-200 rounded-full
-                            mr-2 w-10 h-10 overflow-hidden">
+                                        justify-center border-1 border-gray-200 rounded-full
+                                        mr-2 w-10 h-10 overflow-hidden">
                                         <Image
                                             src={videoDetails?.owner?.avatar}
                                             alt="profile"
