@@ -31,7 +31,7 @@ const Navbar = () => {
   console.log("user", user);
 
   return (
-    <nav className="flex items-center p-0.5 justify-between w-full
+    <nav className="flex items-center p-1 justify-between w-full
       sticky top-0 z-10 bg-white shadow-md h-10">
 
 

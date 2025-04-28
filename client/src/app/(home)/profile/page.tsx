@@ -21,18 +21,22 @@ const Profile = () => {
     }, [])
 
     return (
-        <div className='border-1 border-gray-300 w-full lg:max-w-[1200px] border-1 border-red-500'>
+        <div className='w-full lg:max-w-[1200px] 
+            border-1 border-red-500 m-0 h-screen
+            sm:ml-[50px]
+            lg:ml-[200px] 
+            xl:max-w-[1300px]'>
             <div className="container flex ">
                 <div className=''>
                     {/* profile pic, update password */}
-                  
+
                 </div>
 
                 <div>
                     {/* profile details */}
-                   
+
                 </div>
-                
+
             </div>
         </div>
     )
