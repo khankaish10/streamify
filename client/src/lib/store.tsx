@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './features/users/userSlice'
-import App from 'next/app'
+import videoSlice from './features/video/videoSlice'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      user: userSlice
+      user: userSlice,
+      video: videoSlice,
     }
   })
 }

@@ -1,7 +1,9 @@
+'use client'
 import React from 'react'
 import { cards } from '@/Constants/Constants';
 import Image from 'next/image';
-import { Button } from "@/components/ui/button"
+import { useAppSelector } from '@/lib/hooks';
+
 
 
 interface VideoPlayerProps {
@@ -22,9 +24,15 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
     className = "",
     ...props
 }) => {
+
+    const videoDetails = useAppSelector(state => state.video)
+    console.log("video",videoDetails)
     return (
         <div
-            className="w-full h-full xl:max-w-[1300px] p-1"
+            className="w-full h-full p-1 ml-0 mt-10
+            sm:ml-[50px]
+            lg:ml-[200px] 
+            xl:max-w-[1600px] "
         >
             <div className='lg:w-[70%] h-full'>
                 {/* video container */}
@@ -73,7 +81,10 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                         </div>
 
 
-                        <Button variant="outline">Subscribe</Button>
+                        <div className='flex flex-col items-center'>
+                            <button className='bg-red-600 text-white px-4 py-2 rounded-full'>Subscribe</button>
+                            <p className='text-xs'>100k subscribers</p>
+                        </div>
 
 
                     </div>

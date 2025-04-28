@@ -2,6 +2,7 @@ import asyncHandler from '../utils/asyncHandler.js'
 import { errorResponse, successResponse } from '../utils/apiResponse.js'
 import uploadToCloudinary from '../utils/cloudinary.config.js'
 import Video from '../model/video.model.js'
+import mongoose from 'mongoose'
 
 const uploadAVideo = asyncHandler(async (req, res) => {
     const { title, description, duration, tags } = req.body;
@@ -32,13 +33,38 @@ const uploadAVideo = asyncHandler(async (req, res) => {
 
 const getvideo = asyncHandler(async (req, res) => {
     const {videoid} = req.params;
+    console.log(videoid)
+    const video = await Video.aggregate([
+        {
+            $match: { _id: new mongoose.Types.ObjectId('67ce1520624559d1352a9bfd') }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'owner',
+                foreignField: '_id',
+                as: 'owner'
+            }
+        },
+        {
+            $unwind: "$owner"
+        },
+        {
+            $project: {
+                "owner.password": 0,
+                "owner.watchHistory": 0,
+                "owner.refreshToken": 0,
+                "owner.__v": 0,
+                "owner.createdAt": 0,
+                "owner.updatedAt": 0,
+            }
+        }
 
-    const video = await Video.findById(videoid)
+    ])
 
     if(!video) {
         return errorResponse(res, "video not found", 404)
     }
-
 
     return successResponse(res, "video fetched", video, 200 )
 })

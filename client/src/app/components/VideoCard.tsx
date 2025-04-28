@@ -1,15 +1,30 @@
+'use client';
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { handleGetAVideo } from "@/api";
+import { useAppDispatch } from "@/lib/hooks";
+import { videoDetails } from "@/lib/features/video/videoSlice"
 
 const VideoCard = ({ card }: any) => {
-  // console.log(card);
+  const dispatch = useAppDispatch()
+
+  const handleClick = (id: string) => {
+    handleGetAVideo(id)
+
+      .then((res) => {
+        console.log("rs:",res.data)
+        dispatch(videoDetails(res.data[0]))
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
-    <Link href={`/videos/watch/${card._id}`} >
+    <Link href={`/videos/watch/${card._id}`} onClick={() => handleClick(card._id)} >
       <div className="font-poppins 
       overflow-hidden p-2 flex flex-col
-      justify-between cursor-pointer border-1 
-      border-gray-300 ">
+      justify-between cursor-pointer ">
 
         {/* video thumbnail */}
         <div className="overflow-hidden 
@@ -23,7 +38,7 @@ const VideoCard = ({ card }: any) => {
 
           />
         </div>
-       
+
         {/* profile pic and title with username and views */}
         <div className="flex py-1 mt-2">
           {/* profile pic */}
