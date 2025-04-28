@@ -1,17 +1,26 @@
 'use client'
 import { handleGetProfile } from '@/api'
-import React, { useLayoutEffect } from 'react'
-import { useAppDispatch } from '@/lib/hooks'
+import React, { useLayoutEffect, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const Profile = () => {
+    // const [user, setUser] = React.useState<any>(null)
+    const [loading, setLoading] = React.useState(true)
+    const [user, setUser] = useAppSelector((state) => state.user)
     const dispatch = useAppDispatch()
 
+    const handleClick = (id: string) => {
 
-    useLayoutEffect(() => {
+    }
+
+
+    useEffect(() => {
         handleGetProfile()
             .then(response => {
                 console.log("Profile data:", response); // Log the profile data to verify it's correct
-
+                setLoading(false)
             })
             .catch((error) => {
                 console.error("Get profile error:", error);
@@ -19,25 +28,151 @@ const Profile = () => {
 
 
     }, [])
-
+    console.log("User data:", user); // Log the user data to verify it's correct
     return (
-        <div className='w-full lg:max-w-[1200px] 
-            border-1 border-red-500 m-0 h-screen
+        <div className='w-full lg:max-w-[1200px] ml-0 mt-10
+            m-0 h-screen box-border
             sm:ml-[50px]
             lg:ml-[200px] 
-            xl:max-w-[1300px]'>
-            <div className="container flex ">
-                <div className=''>
-                    {/* profile pic, update password */}
+            xl:max-w-[1300px]
+            font-[poppins]'>
+            {
+                loading ? <div className='flex justify-center items-center h-screen'>Loading...</div> : (
+                    <div className="container flex flex-col pl-10 pt-10 \
+                                    border-1 border-red-500 h-screen">
+                        <div className='flex items-center p-3 '>
+                            {/* profile pic, update password */}
+                            <div className='h-35 w-35 overflow-hidden 
+                                            rounded-full border-1 border-gray-500
+                                            '>
+                                <Image
+                                    src={user?.avatar}
+                                    alt="Profile Picture"
+                                    width={120}
+                                    height={100}
+                                    className="object-cover rounded-full h-full w-full"
+                                />
+                            </div>
 
-                </div>
+                            <div className='flex flex-col ml-5'>
+                                <div className='text-2xl'>{user?.fullName}</div>
+                                <div className='flex items-center'>
+                                    <p className='font-semibold text-xl'>{`@${user?.userName}. `}</p>
+                                    <p className='text-gray-500'>7 subscribers{`. `}</p>
+                                    <p className='text-gray-500'>2 videos</p>
+                                </div>
+                            </div>
 
-                <div>
-                    {/* profile details */}
+                        </div>
 
-                </div>
+                        {/* Home, videos, short, playlist*/}
+                        <div className='border-b-1 border-gray-200
+                                        flex gap-2'>
+                            <div className='border-b-2 border-black p-2'>Home</div>
+                            <div className='border-b-2 border-black p-2'>Videos</div>
+                            <div className='border-b-2 border-black p-2'>Playlist</div>
+                            <div className='border-b-2 border-black p-2'>Post</div>
+                        </div>
 
-            </div>
+                        {/* main content - Home(All videos), shorts, playlists, post */}
+                        <div className='flex gap-2 overflow-x-scroll scrollbar-none'>
+                            <Link href={`/videos/watch/`} onClick={() => handleClick('34')} >
+                                <div className="font-poppins 
+                                            overflow-hidden p-2 flex flex-col
+                                            justify-between cursor-pointer ">
+
+                                    {/* video thumbnail */}
+                                    <div className="overflow-hidden 
+                                            h-40 w-30 relative
+                                            ">
+                                        <Image
+                                            src={`${'https://res.cloudinary.com/dnlrrhbsl/image/upload/v1745133472/pexels-maximilian-orlowsky-515733-30327991_kdkai4.jpg'}`}
+                                            fill
+                                            alt="video"
+                                            className="rounded-xl object-cover"
+
+                                        />
+                                    </div>
+
+                                    {/* profile pic and title with username and views */}
+                                    <div className="flex mt-2">
+                                        <div className="text-gray-500 ml-2">
+                                            <p className="text-black">title</p>
+                                            <div className="flex text-xs text-gray-400">
+                                                <p className="mr-2">23K</p>
+                                                <p>2hrs</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                            <Link href={`/videos/watch/`} onClick={() => handleClick('34')} >
+                                <div className="font-poppins 
+                                            overflow-hidden p-2 flex flex-col
+                                            justify-between cursor-pointer ">
+
+                                    {/* video thumbnail */}
+                                    <div className="overflow-hidden 
+                                            h-40 w-30 relative
+                                            ">
+                                        <Image
+                                            src={`${'https://res.cloudinary.com/dnlrrhbsl/image/upload/v1745133472/pexels-maximilian-orlowsky-515733-30327991_kdkai4.jpg'}`}
+                                            fill
+                                            alt="video"
+                                            className="rounded-xl object-cover"
+
+                                        />
+                                    </div>
+
+                                    {/* profile pic and title with username and views */}
+                                    <div className="flex mt-2">
+                                        <div className="text-gray-500 ml-2">
+                                            <p className="text-black">title</p>
+                                            <div className="flex text-xs text-gray-400">
+                                                <p className="mr-2">23K</p>
+                                                <p>2hrs</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                            <Link href={`/videos/watch/`} onClick={() => handleClick('34')} >
+                                <div className="font-poppins 
+                                            overflow-hidden p-2 flex flex-col
+                                            justify-between cursor-pointer ">
+
+                                    {/* video thumbnail */}
+                                    <div className="overflow-hidden 
+                                            h-40 w-30 relative
+                                            ">
+                                        <Image
+                                            src={`${'https://res.cloudinary.com/dnlrrhbsl/image/upload/v1745133472/pexels-maximilian-orlowsky-515733-30327991_kdkai4.jpg'}`}
+                                            fill
+                                            alt="video"
+                                            className="rounded-xl object-cover"
+
+                                        />
+                                    </div>
+
+                                    {/* profile pic and title with username and views */}
+                                    <div className="flex mt-2">
+                                        <div className="text-gray-500 ml-2">
+                                            <p className="text-black">title</p>
+                                            <div className="flex text-xs text-gray-400">
+                                                <p className="mr-2">23K</p>
+                                                <p>2hrs</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+
+                        </div>
+
+                    </div>
+                )
+            }
+
         </div>
     )
 }
