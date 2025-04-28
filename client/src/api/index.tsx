@@ -102,3 +102,13 @@ export const handleGetAVideo = async (videoid: string) => {
         throw error;
     }
 }
+
+export const handleGetAllVideos = async() => {
+    try {
+        const response = await api.get('/api/v1/videos');
+        return response.data
+    } catch (error) {
+        console.error("Getting all video error:", error);
+        throw error;
+    }
+}

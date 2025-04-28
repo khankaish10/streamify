@@ -4,7 +4,7 @@ import { cards } from '@/Constants/Constants';
 import Image from 'next/image';
 import { useAppSelector } from '@/lib/hooks';
 import { handleGetAVideo } from "@/api";
-import { videoDetails } from "@/lib/features/video/videoSlice"
+
 import { useParams } from 'next/navigation';
 
 
@@ -28,7 +28,6 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
     ...props
 }) => {
     const [videoDetails, setVideoDetails] = React.useState<any>(null)
-    // const videoDetails = useAppSelector((state) => state.video)
     const [isLoading, setIsLoading] = React.useState(true)
     const videoId = useParams<any>();
 

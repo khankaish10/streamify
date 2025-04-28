@@ -1,10 +1,20 @@
+'use client'
 
-
+import { useLayoutEffect } from "react";
 import VideoCard from "../components/VideoCard";
-import { cards } from "@/Constants/Constants";
+// import { cards } from "@/Constants/Constants";
+import { allVideos } from "@/lib/features/video/videoSlice";
+import { handleGetAllVideos } from "@/api";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 
 function Home() {
+  const dispatch = useAppDispatch()
+  const cards = useAppSelector((state) => state.video)
+  console.log(cards)
+  useLayoutEffect(() => {
+    handleGetAllVideos().then(res =>  dispatch(allVideos(res.data))).catch(err => console.log(err))
+  }, [])
 
   return (
 
@@ -16,7 +26,8 @@ function Home() {
       "
     >
       {cards?.map((card) => {
-        return <VideoCard key={card.data._id} card={card.data} />;
+        return <p></p>
+        // <VideoCard key={card.data._id} card={card.data} />;
       })}
     </div>
   );
