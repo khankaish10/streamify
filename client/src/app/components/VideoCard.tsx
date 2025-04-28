@@ -2,23 +2,14 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { handleGetAVideo } from "@/api";
+
 import { useAppDispatch } from "@/lib/hooks";
-import { videoDetails } from "@/lib/features/video/videoSlice"
 
 const VideoCard = ({ card }: any) => {
   const dispatch = useAppDispatch()
 
   const handleClick = (id: string) => {
-    handleGetAVideo(id)
-
-      .then((res) => {
-        console.log("rs:",res.data)
-        dispatch(videoDetails(res.data[0]))
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    
   }
   return (
     <Link href={`/videos/watch/${card._id}`} onClick={() => handleClick(card._id)} >

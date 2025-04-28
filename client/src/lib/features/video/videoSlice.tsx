@@ -39,9 +39,22 @@ const videoslice = createSlice({
     initialState,
     reducers:{
         videoDetails: (state, action) => {
-            console.log("a:",action.payload)
-            state = action.payload
+            state._id = action.payload._id
+            state.title = action.payload.title
+            state.description = action.payload.description
+            state.thumbnail = action.payload.thumbnail
+            state.videoFile = action.payload.videoFile
+            state.views = action.payload.views
+            state.owner = action.payload.owner
+            state.tags = action.payload.tags
+            state.createdAt = action.payload.createdAt
+            state.updatedAt = action.payload.updatedAt
+            state.__v = action.payload.__v
+            state.isPublished = action.payload.isPublished
+            state.duration = action.payload.duration
+
         }
+
     }
 
 })
