@@ -3,44 +3,25 @@ import { errorResponse, successResponse } from '../utils/apiResponse.js'
 import uploadToCloudinary from '../utils/cloudinary.config.js'
 import Video from '../model/video.model.js'
 import mongoose from 'mongoose'
-import Ffmpeg from 'fluent-ffmpeg'
-import fs from 'fs'
-import path from 'path'
-import uploadThumbnailAndGetLocalpath from '../utils/uploadThumbnail.js'
+
 
 const uploadAVideo = asyncHandler(async (req, res) => {
     const { title, description, duration, tags } = req.body;
     const userId = req.user._id; 
-    const thumbnailDir = 'public/thumbnails'
-    console.log(" path: ", req.file.path)
 
     // Validate required fields
-    if (!req.file) {
+    if (!req.files) {
         throw errorResponse(res, "Video file is required", 400);
     }
-    if (!fs.existsSync(thumbnailDir)) {
-        fs.mkdirSync(thumbnailDir, { recursive: true });
-      }
-
-    // create thumbnail and get the localPath
-    const thumbnailPath = path.join(
-        thumbnailDir,
-        `${Date.now()}-thumbnail.png`
-      );
+ 
   
-      Ffmpeg(req.file?.path)
-        .screenshots({
-          timestamps: ["50%"], // Capture a frame at 50% of the video duration
-          filename: path.basename(thumbnailPath),
-          folder: thumbnailDir,
-          size: "320x240", // Thumbnail size
-        })
-        .on("end", async () => {
-          console.log("Thumbnail generated:", thumbnailPath);
-  
-        })
+    console.log("Files:", req.files); // Logs uploaded files
+    console.log("Title:", title); // Logs title
+    console.log("Description:", description); // Logs description
+    console.log("Tags:", tags); // Logs tags
+    console.log("duration:", duration); // Logs tags
 
-
+    
     // const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
     // const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
 
