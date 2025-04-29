@@ -14,7 +14,7 @@ const Sidebar = () => {
              '>
 
                 <Link href={"/"} className="">
-                    <div className='flex item-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
+                    <div className='flex items-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
                     '>
                         <div className='lg:mr-4'>
                             <House size={30} />
@@ -25,7 +25,7 @@ const Sidebar = () => {
                 </Link>
 
                 <Link href={"/"} className="">
-                    <div className='flex item-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
+                    <div className='flex items-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
                     '>
                         <div className='lg:mr-4'>
                             <History size={30} />
@@ -37,7 +37,7 @@ const Sidebar = () => {
                 </Link>
 
                 <Link href={"/"} className="">
-                    <div className='flex item-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
+                    <div className='flex items-center p-1 my-3 hover:bg-gray-100 hover:border-1 hover:border-gray-300
                     '>
                         <div className='lg:mr-4'>
                             <FileVideo size={30} />

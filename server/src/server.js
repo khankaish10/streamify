@@ -2,6 +2,7 @@ import express, { urlencoded } from "express";
 import cors from 'cors'
 const app = express();
 import cookieParser from 'cookie-parser'
+// import errorHandler from './utils/errorHandler.js'
 
 
 app.get("/", (req, res) => {
@@ -34,5 +35,5 @@ app.use("/api/v1/videos", videoRouter)
 
 
 
-
+// app.use(errorHandler)
 export {app}

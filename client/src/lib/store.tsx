@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './features/users/userSlice'
 import videoSlice from './features/video/videoSlice'
+import globalModalSlice from './features/globalModalslice'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       user: userSlice,
       video: videoSlice,
+      modal: globalModalSlice
     }
   })
 }

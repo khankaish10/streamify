@@ -13,7 +13,7 @@ const Sidebar_Bottom = () => {
         <div className='sticky bottom-0 left-0 sm:hidden bottom-0 z-5
     flex justify-around items-center w-full bg-white'>
             <Link href={"/"} className="">
-                <div className='flex item-center my-1 
+                <div className='flex items-center my-1 
            '>
                     <div className='lg:mr-4'>
                         <House size={30} />
@@ -25,7 +25,7 @@ const Sidebar_Bottom = () => {
             </Link>
 
             <Link href={"/history"} className="">
-                <div className='flex item-center my-1
+                <div className='flex items-center my-1
            '>
                     <div className='lg:mr-4'>
                         <History size={30} />
@@ -37,7 +37,7 @@ const Sidebar_Bottom = () => {
             </Link>
 
             <Link href={"/my-videos"} className="">
-                <div className='flex item-center my-1
+                <div className='flex items-center my-1
            '>
                     <div className='lg:mr-4'>
                         <FileVideo size={30} />

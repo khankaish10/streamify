@@ -6,16 +6,17 @@ const router = Router();
 
 router.route("/upload-video").post(
   verifyJwt,
-  upload.fields([
-    {
-      name: "videoFile",
-      maxCount: 1,
-    },
-    {
-      name: "thumbnail",
-      maxCount: 1,
-    },
-  ]),
+  upload.single("videoFile"),
+  // upload.fields([
+  //   {
+  //     name: "videoFile",
+  //     maxCount: 1,
+  //   },
+  //   {
+  //     name: "thumbnail",
+  //     maxCount: 1,
+  //   },
+  // ]),
   uploadAVideo
 );
 

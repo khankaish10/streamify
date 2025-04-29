@@ -57,13 +57,14 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                     <div className='lg:w-[70%] h-full'>
                         {/* video container */}
                         <div className='w-full h-[70%] bg-black
-                    flex justify-center items-center 
-                    overflow-hidden'>
+                                        flex justify-center items-center 
+                                        overflow-hidden'>
                             <video src={videoDetails?.videoFile}
                                 autoPlay={autoPlay}
                                 controls={controls}
                                 height={400}
                                 width={600}
+                                poster={videoDetails.thumbnail}
                                 className='z-5 object-contain'
                                 loop >
                             </video>
@@ -88,7 +89,7 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                                             alt="profile"
                                             width={50}
                                             height={50}
-                                            className="rounded-full object-cover"
+                                            className="rounded-full object-cover h-full w-full"
                                         />
                                     </div>
 

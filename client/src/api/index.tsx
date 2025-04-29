@@ -22,6 +22,10 @@ api.interceptors.request.use(
         });
 
         if (token) {
+            if (!config.headers) {
+                config.headers = {};
+            }
+            config.headers = config.headers || {};
             config.headers.Authorization = `Bearer ${token}`;
         }else if((user)) {
             const userData = JSON.parse(user);
@@ -30,7 +34,7 @@ api.interceptors.request.use(
         }
         return config;
     },
-    (error) => {
+    (error: any) => {
         return Promise.reject(error);
     }
 
@@ -56,7 +60,7 @@ export const handleLogin = async (authData: AuthData) => {
 export const handleLogout = async () => {
     try {
         const response = await api.post("/api/v1/users/logout");
-        console.log("Logout response:", response.data); // Log the response data to verify it's correct
+        console.log("Logout response:", response); // Log the response data to verify it's correct
         return response.data;
     } catch (error) {
         console.error("Logout error:", error);
@@ -109,6 +113,23 @@ export const handleGetAllVideos = async() => {
         return response.data
     } catch (error) {
         console.error("Getting all video error:", error);
+        throw error;
+    }
+}
+
+export const handleUploadVideoApi = async(formData: FormData) => {
+    try {
+        const response = await api.post('/api/v1/videos/upload-video',
+            formData, 
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+        )
+        return response.data
+    } catch (error) {
+        console.error("Error uploading video:", error);
         throw error;
     }
 }

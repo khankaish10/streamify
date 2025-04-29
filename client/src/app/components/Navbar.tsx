@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
@@ -7,18 +7,20 @@ import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { handleLogout } from "@/api";
 import { logout } from "@/lib/features/users/userSlice";
 import { useRouter as userRouter } from "next/navigation";
+import { openModal } from "@/lib/features/globalModalslice";
 
 const Navbar = () => {
   const user = useAppSelector((state) => state.user[0]);
+  const [profileModal, setProfileModal] = useState(false);
   const dispatch = useAppDispatch();
   const router = userRouter()
 
   const handleSubmit = () => {
     handleLogout()
-      .then(response => {
+      .then(() => {
+        setProfileModal(!profileModal)
         dispatch(logout());
         router.push('/auth/login')
-
       }
       )
       .catch((error) => {
@@ -34,29 +36,28 @@ const Navbar = () => {
     <nav className="flex items-center p-1 justify-between w-full
       fixed top-0 z-10 bg-white shadow-md h-10">
 
-
       {/* Logo----------- */}
-        <div>
-          <div className="inline-block w-0 h-0 border-solid lg:hidden
+      <div>
+        <div className="inline-block w-0 h-0 border-solid lg:hidden
           rotate-90 border-t-0 border-r-[15px] border-l-[15px] ml-1
           border-b-[26px] border-l-transparent border-r-transparent 
           border-t-transparent border-b-[#f73b3b]"></div>
-          <Link href={"/"} className="hidden lg:block">
-            <Image
-              src="/logo.svg"
-              width={140}
-              height={70}
-              alt="Picture of the author"
-            />
-          </Link>
-        </div>
+        <Link href={"/"} className="hidden lg:block">
+          <Image
+            src="/logo.svg"
+            width={140}
+            height={70}
+            alt="Picture of the author"
+          />
+        </Link>
+      </div>
 
 
       {/* Search input----------- */}
       <div className="h-full ml-3 w-[90%] md:max-w-[50%] lg:max-w-[40%]">
         <div className="flex justify-center items-center  rounded-[50px] 
             p-1 h-full border-1 border-gray-300 ">
-          <Search color="#333333" className="hidden md:block" />
+          <Search color="#333333" className="md:block" />
           <input
             type="text"
             name="Search"
@@ -67,14 +68,36 @@ const Navbar = () => {
       </div>
 
       {/* Profile-------------- */}
-      <div className="flex justify-center items-center">
-
+      <div className="flex justify-center 
+                      items-center relative">
         {
           user && (
-            <Link
-              href={"/profile"}
-              className="border-1 border-gray-300 h-8 w-8 rounded-full 
-                  flex justify-center items-center overflow-hidden mr-1 hidden md:block"
+            <div className={`absolute top-5 left-[-120px] 
+                        flex flex-col border border-gray-300
+                        bg-white gap-2 rounded-lg overflow-hidden
+                        ${profileModal ? 'block' : 'hidden'}`}>
+              <Link href={"/profile"}>
+                <div className="cursor-pointer hover:bg-gray-100 
+                          hover:border-b-1 p-1 " >Profile</div>
+              </Link>
+              <div className="cursor-pointer hover:bg-gray-100 
+                          hover:border-b-1 p-1 "
+                          onClick={() => dispatch(openModal())} >Upload Video</div>
+              <div className="cursor-pointer hover:bg-gray-100 
+                          hover:border-b-1 p-1 rounded-b-lg"
+                          onClick={()=> handleSubmit()} >Logout</div>
+            </div>
+
+          )
+        }
+        {
+          user && (
+            <div
+              className="border-1 border-gray-300 h-8 
+                        w-8 rounded-full flex justify-center 
+                        items-center overflow-hidden mr-1 
+                        hidden sm:block cursor-pointer ml-5"
+              onClick={() => setProfileModal(!profileModal)}
             >
               <Image
                 src={user?.avatar}
@@ -85,21 +108,15 @@ const Navbar = () => {
                 className="border-1 border-gray-300 object-cover rounded-full h-full w-full"
               />
 
-            </Link>
+            </div>
           )
         }
 
 
         {
-          user ? (
-            <div
-              className="p-1 md:border-1 md:border-gray-300 rounded-full h-full "
-            >
-              <button onClick={handleSubmit} className="cursor-pointer" >logout</button>
-            </div>
-          ) : (
+          !user && (
             <Link
-              href={"/profile"}
+              href={"/auth/login"}
               className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-[50px]"
             >
               <svg

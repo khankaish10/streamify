@@ -3,32 +3,60 @@ import { errorResponse, successResponse } from '../utils/apiResponse.js'
 import uploadToCloudinary from '../utils/cloudinary.config.js'
 import Video from '../model/video.model.js'
 import mongoose from 'mongoose'
+import Ffmpeg from 'fluent-ffmpeg'
+import fs from 'fs'
+import path from 'path'
+import uploadThumbnailAndGetLocalpath from '../utils/uploadThumbnail.js'
 
 const uploadAVideo = asyncHandler(async (req, res) => {
     const { title, description, duration, tags } = req.body;
-    const userId = req.user._id; // Extracted from auth middleware
+    const userId = req.user._id; 
+    const thumbnailDir = 'public/thumbnails'
+    console.log(" path: ", req.file.path)
 
     // Validate required fields
-    if (!req.files?.videoFile || !req.files?.thumbnail) {
-        throw errorResponse(res, "Video file and thumbnail are required", 400);
+    if (!req.file) {
+        throw errorResponse(res, "Video file is required", 400);
     }
+    if (!fs.existsSync(thumbnailDir)) {
+        fs.mkdirSync(thumbnailDir, { recursive: true });
+      }
 
-    const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
-    const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
+    // create thumbnail and get the localPath
+    const thumbnailPath = path.join(
+        thumbnailDir,
+        `${Date.now()}-thumbnail.png`
+      );
+  
+      Ffmpeg(req.file?.path)
+        .screenshots({
+          timestamps: ["50%"], // Capture a frame at 50% of the video duration
+          filename: path.basename(thumbnailPath),
+          folder: thumbnailDir,
+          size: "320x240", // Thumbnail size
+        })
+        .on("end", async () => {
+          console.log("Thumbnail generated:", thumbnailPath);
+  
+        })
 
-    // Save video to MongoDB
-    const newVideo = await Video.create({
-        title,
-        videoFile: videoUpload,
-        thumbnail: thumbnailUpload,
-        description,
-        duration,
-        tags: tags ? tags.split(",") : [],
-        owner: userId,
-    });
+
+    // const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
+    // const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
+
+    // // Save video to MongoDB
+    // const newVideo = await Video.create({
+    //     title,
+    //     videoFile: videoUpload,
+    //     thumbnail: thumbnailUpload,
+    //     description,
+    //     duration,
+    //     tags: tags ? tags.split(",") : [],
+    //     owner: userId,
+    // });
 
 
-    return successResponse(res, "video uploaded", newVideo, 200)
+    // return successResponse(res, "video uploaded", newVideo, 200)
 })
 
 const getvideo = asyncHandler(async (req, res) => {

@@ -13,7 +13,7 @@ function Home() {
   const cards = useAppSelector((state) => state.video)
   useEffect(() => {
     handleGetAllVideos()
-    .then(res => {dispatch(allVideos(res.data))
+    .then((res):any => {dispatch(allVideos(res.data))
       console.log('all videos: ', res.data)
     })
     .catch(err => console.log(err))
