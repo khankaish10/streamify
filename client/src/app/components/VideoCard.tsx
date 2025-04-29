@@ -12,7 +12,7 @@ const VideoCard = ({ card }: any) => {
 
   }
 
-  console.log('video card: ', card.owner.avatar)
+  console.log('video card: ', card)
   return (
     <Link
       href={`/videos/watch/${card._id}`}

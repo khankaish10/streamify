@@ -32,7 +32,7 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
     const videoId = useParams<any>();
 
     useLayoutEffect(() => {
-        handleGetAVideo(videoId)
+        handleGetAVideo(videoId?.watch)
 
             .then((res) => {
                 console.log("rs:", res.data[0])
@@ -43,6 +43,8 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                 console.log(err);
             });
     }, [])
+
+    console.log("videoDetails: ", videoDetails)
     return (
         <div
             className="w-full h-full p-1 ml-0 mt-10

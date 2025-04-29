@@ -33,10 +33,10 @@ const uploadAVideo = asyncHandler(async (req, res) => {
 
 const getvideo = asyncHandler(async (req, res) => {
     const { videoid } = req.params;
-    console.log(videoid)
+    
     const video = await Video.aggregate([
         {
-            $match: { _id: new mongoose.Types.ObjectId('67ce1520624559d1352a9bfd') }
+            $match: { _id: new mongoose.Types.ObjectId(videoid) }
         },
         {
             $lookup: {
@@ -61,7 +61,7 @@ const getvideo = asyncHandler(async (req, res) => {
         }
 
     ])
-
+    console.log("video :", video)
     if (!video) {
         return errorResponse(res, "video not found", 404)
     }

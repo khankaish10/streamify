@@ -93,7 +93,6 @@ export const handleGetProfile = async () => {
 
 
 export const handleGetAVideo = async (videoid: string) => {
-    console.log("Video ID:", videoid); // Log the video ID to verify it's correct
     try {
         const response = await api.get(`/api/v1/videos/watch/${videoid}`);
         return response.data;
