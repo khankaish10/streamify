@@ -17,21 +17,7 @@ interface VideoDetails {
     duration: number,
 }
 
-const initialState: VideoDetails[] = [{
-    _id: '',
-    title: '',
-    description: '',
-    thumbnail: '',
-    videoFile: '',
-    views: 0,
-    owner: {},
-    tags: [],
-    createdAt: '',
-    updatedAt: '',
-    __v: 0,
-    isPublished: false,
-    duration: 0,
-}]
+const initialState: VideoDetails[] = []
 
 
 const videoslice = createSlice({
@@ -39,21 +25,8 @@ const videoslice = createSlice({
     initialState,
     reducers: {
         allVideos: (state, action) => {
-            console.log(action.payload)
-            state.push(action.payload)
-            // state._id = action.payload._id
-            // state.title = action.payload.title
-            // state.description = action.payload.description
-            // state.thumbnail = action.payload.thumbnail
-            // state.videoFile = action.payload.videoFile
-            // state.views = action.payload.views
-            // state.owner = action.payload.owner
-            // state.tags = action.payload.tags
-            // state.createdAt = action.payload.createdAt
-            // state.updatedAt = action.payload.updatedAt
-            // state.__v = action.payload.__v
-            // state.isPublished = action.payload.isPublished
-            // state.duration = action.payload.duration
+            // state.push(action.payload)
+            return action.payload
         },
 
     

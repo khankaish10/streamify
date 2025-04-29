@@ -9,20 +9,25 @@ const VideoCard = ({ card }: any) => {
   const dispatch = useAppDispatch()
 
   const handleClick = (id: string) => {
-    
+
   }
+
+  console.log('video card: ', card.owner.avatar)
   return (
-    <Link href={`/videos/watch/${card._id}`} onClick={() => handleClick(card._id)} >
+    <Link
+      href={`/videos/watch/${card._id}`}
+      onClick={() => handleClick(card._id)} >
       <div className="font-poppins 
       overflow-hidden p-2 flex flex-col
-      justify-between cursor-pointer ">
+      justify-between cursor-pointer 
+      ">
 
         {/* video thumbnail */}
         <div className="overflow-hidden 
         h-60 sm:h-60 relative
         ">
           <Image
-            src={`${card.thumbnail}`}
+            src={card?.thumbnail}
             fill
             alt="video"
             className="rounded-xl object-cover"
@@ -33,13 +38,21 @@ const VideoCard = ({ card }: any) => {
         {/* profile pic and title with username and views */}
         <div className="flex py-1 mt-2">
           {/* profile pic */}
-          <div className="w-10 h-10 overflow-hidden border-1 border-black-500 rounded-full flex justify-center items-center">
-            {card.owner}
+          <div className="w-10 h-10 overflow-hidden 
+                       
+                          rounded-full flex justify-center 
+                          items-center">
+            <Image src={card.owner.avatar}
+              height={32}
+              width={32}
+              alt='profile pic'
+              className="h-full w-full rounded-full object-cover"
+            />
           </div>
 
           <div className="text-gray-500 ml-2">
             <h2 className="text-black font-semibold">{card.title}</h2>
-            <p className="text-sm">username</p>
+            <p className="text-sm">{card.owner.username}</p>
             <div className="flex text-xs text-gray-400">
               <p className="mr-2">{card.views}</p>
               <p>{card.createdAt}</p>
