@@ -1,35 +1,49 @@
 import axios from "axios";
 import { API_URL } from "../Constants/Constants";
-import  getCookie  from "../util/cookie";
+// import getCookie from "../util/cookie";
+import { jwtDecode } from "jwt-decode";
+import checkTokenExpiry from "@/app/components/checkTokenExpiry";
 
-console.log("API URL:", API_URL); // Log the API URL to verify it's correct
 const api = axios.create({
     baseURL: API_URL,
     withCredentials: true,
 });
 
+const getCookie = (cookieName: string) => {
+    const cookies = document.cookie.split("; ");
+    console.log("cookies: ", cookies)
+    const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
+    return cookie ? cookie.split("=")[1] : null;
+};
+
 api.interceptors.request.use(
     (config) => {
-        // const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
-        let token = null;
-        getCookie().then((cookie) => {
-            token = cookie?.value;
-
+        let localStorageToken = null
+        if (user) {
+            localStorageToken = JSON.parse(user);
         }
-        ).catch((error) => {
-            console.error("Error getting cookie:", error);
-        });
 
-        if (token) {
+        const token = getCookie("accessToken")
+        console.log("token: ", token)
+        console.log("localstorage token : ", localStorageToken)
+
+        if (token || localStorageToken) {
             if (!config.headers) {
                 config.headers = {};
             }
+
+            const decoded: { exp: number } = jwtDecode(token || localStorageToken); // Decode the token
+            const currentTime = Date.now() / 1000; // Current time in seconds
+
+            if (decoded.exp < currentTime) {
+                localStorage.removeItem("user"); 
+                document.cookie = `accessToken="";`
+                window.location.href = "/auth/login"
+                alert("Token expired. Pleae login again.")
+            }
+
             config.headers = config.headers || {};
-            config.headers.Authorization = `Bearer ${token}`;
-        }else if((user)) {
-            const userData = JSON.parse(user);
-            token = userData?.accessToken;
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -47,8 +61,7 @@ interface AuthData {
 
 export const handleLogin = async (authData: AuthData) => {
     try {
-        console.log("Login data:", authData); // Log the login data to verify it's correct
-        const response = await api.post("/api/v1/users/login", authData);
+        const response = await api.post("/users/login", authData);
         return response.data;
 
     } catch (error) {
@@ -59,7 +72,7 @@ export const handleLogin = async (authData: AuthData) => {
 
 export const handleLogout = async () => {
     try {
-        const response = await api.post("/api/v1/users/logout");
+        const response = await api.post("/users/logout");
         console.log("Logout response:", response); // Log the response data to verify it's correct
         return response.data;
     } catch (error) {
@@ -70,11 +83,11 @@ export const handleLogout = async () => {
 
 export const handleSignup = async (formData: any) => {
     try {
-        const response = await api.post("/api/v1/users/signup", formData, {
+        const response = await api.post("/users/signup", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
-        }); 
+        });
         console.log("Signup response:", response.data); // Log the response data to verify it's correct
         return response.data;
     } catch (error) {
@@ -86,7 +99,7 @@ export const handleSignup = async (formData: any) => {
 export const handleGetProfile = async () => {
 
     try {
-        const response = await api.get("/api/v1/users/profile");
+        const response = await api.get("/users/profile");
         console.log("Profile response:", response.data); // Log the profile data to verify it's correct
         return response.data;
     } catch (error) {
@@ -98,7 +111,7 @@ export const handleGetProfile = async () => {
 
 export const handleGetAVideo = async (videoid: string) => {
     try {
-        const response = await api.get(`/api/v1/videos/watch/${videoid}`);
+        const response = await api.get(`/videos/watch/${videoid}`);
         return response.data;
     } catch (error) {
         console.error("Get a video error:", error);
@@ -106,9 +119,9 @@ export const handleGetAVideo = async (videoid: string) => {
     }
 }
 
-export const handleGetAllVideos = async() => {
+export const handleGetAllVideos = async () => {
     try {
-        const response = await api.get('/api/v1/videos');
+        const response = await api.get('/videos');
         console.log(response.data)
         return response.data
     } catch (error) {
@@ -117,10 +130,10 @@ export const handleGetAllVideos = async() => {
     }
 }
 
-export const handleUploadVideoApi = async(formData: FormData) => {
+export const handleUploadVideoApi = async (formData: FormData) => {
     try {
-        const response = await api.post('/api/v1/videos/upload-video',
-            formData, 
+        const response = await api.post('/videos/upload-video',
+            formData,
             {
                 headers: {
                     "Content-Type": "multipart/form-data"

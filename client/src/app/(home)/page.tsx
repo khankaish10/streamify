@@ -20,7 +20,6 @@ function Home() {
 
   }, [])
 
-  console.log("cards: ", cards)
   return (
 
     <div
