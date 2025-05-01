@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './features/users/userSlice'
+import VideoHistorySlice from './features/video/videoHistory'
 import videoSlice from './features/video/videoSlice'
 import globalModalSlice from './features/globalModalslice'
 
@@ -8,7 +9,8 @@ export const makeStore = () => {
     reducer: {
       user: userSlice,
       video: videoSlice,
-      modal: globalModalSlice
+      modal: globalModalSlice,
+      history: VideoHistorySlice
     }
   })
 }

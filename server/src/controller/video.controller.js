@@ -3,47 +3,47 @@ import { errorResponse, successResponse } from '../utils/apiResponse.js'
 import uploadToCloudinary from '../utils/cloudinary.config.js'
 import Video from '../model/video.model.js'
 import mongoose from 'mongoose'
+import Subscription from '../model/subscription.model.js'
+import WatchHistory from '../model/watchHistory.model.js'
+import User from '../model/user.model.js'
 
 
 const uploadAVideo = asyncHandler(async (req, res) => {
     const { title, description, duration, tags } = req.body;
-    const userId = req.user._id; 
+    const userId = req.user._id;
 
     // Validate required fields
     if (!req.files) {
         throw errorResponse(res, "Video file is required", 400);
     }
- 
-  
-    console.log("Files:", req.files); // Logs uploaded files
-    console.log("Title:", title); // Logs title
-    console.log("Description:", description); // Logs description
-    console.log("Tags:", tags); // Logs tags
-    console.log("duration:", duration); // Logs tags
 
-    
-    // const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
-    // const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
+    // console.log("title: ", title)
+    // console.log("description: ", description)
+    // console.log("duration: ", duration)
+    // console.log("tags: ", tags)
 
-    // // Save video to MongoDB
-    // const newVideo = await Video.create({
-    //     title,
-    //     videoFile: videoUpload,
-    //     thumbnail: thumbnailUpload,
-    //     description,
-    //     duration,
-    //     tags: tags ? tags.split(",") : [],
-    //     owner: userId,
-    // });
+    const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
+    const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
 
+    // Save video to MongoDB
+    const newVideo = await Video.create({
+        title,
+        videoFile: videoUpload,
+        thumbnail: thumbnailUpload,
+        description,
+        duration,
+        tags: tags ? tags.split(",") : [],
+        owner: userId,
+    });
 
-    // return successResponse(res, "video uploaded", newVideo, 200)
+    return successResponse(res, "video uploaded", newVideo, 200)
 })
 
 const getvideo = asyncHandler(async (req, res) => {
     const { videoid } = req.params;
-    
-    const video = await Video.aggregate([
+    const {currentUserId} = req?.body;
+
+    const pipeline = [
         {
             $match: { _id: new mongoose.Types.ObjectId(videoid) }
         },
@@ -59,6 +59,19 @@ const getvideo = asyncHandler(async (req, res) => {
             $unwind: "$owner"
         },
         {
+            $lookup: {
+                from: 'subscriptions',
+                localField: 'owner._id',
+                foreignField: 'subscribeTo',
+                as: 'subscriptions'
+            }
+        },
+        {
+            $addFields: {
+                subscriberCount: { $size: "$subscriptions" } // Count total subscribers
+            }
+        },
+        {
             $project: {
                 "owner.password": 0,
                 "owner.watchHistory": 0,
@@ -66,11 +79,47 @@ const getvideo = asyncHandler(async (req, res) => {
                 "owner.__v": 0,
                 "owner.createdAt": 0,
                 "owner.updatedAt": 0,
+                "subscriptions": 0 // Exclude the subscriptions array
             }
         }
+    ];
 
-    ])
-    console.log("video :", video)
+    // Add isSubscribed logic only if currentUserId exists
+    if (currentUserId) {
+        pipeline.splice(4, 0, {
+            $lookup: {
+                from: 'subscriptions',
+                let: { ownerId: "$owner._id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$subscribeTo", "$$ownerId"] }, // Match the video's owner
+                                    { $eq: ["$subscriber", new mongoose.Types.ObjectId(currentUserId)] } // Match the current user
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: 'userSubscription' // This will contain the subscription if it exists
+            }
+        });
+
+        pipeline.splice(5, 0, {
+            $addFields: {
+                isSubscribed: { $gt: [{ $size: "$userSubscription" }, 0] } // Check if the current user is subscribed
+            }
+        });
+
+        pipeline.splice(6, 0, {
+            $project: {
+                "userSubscription": 0 // Exclude the userSubscription array
+            }
+        });
+    }
+
+    const video = await Video.aggregate(pipeline)
     if (!video) {
         return errorResponse(res, "video not found", 404)
     }
@@ -115,9 +164,72 @@ const getAllVideos = asyncHandler(async (req, res) => {
     return successResponse(res, "all video fetched", videos, 200)
 })
 
+const subscribeChannel = asyncHandler(async (req, res) => {
+    const { subscribeTo } = req.body;
+    const subscriber = req.user._id;
+
+    if (!subscriber || !subscribeTo) throw errorResponse(res, "Error subscribing to channel", 400);
+
+    const userSubscribed = new Subscription({
+        subscriber, subscribeTo
+    })
+
+    await userSubscribed.save();
+    return successResponse(res, "subscribed", userSubscribed, 200)
+})
+
+const unSubscribeChannel= asyncHandler(async (req, res) => {
+    const {unSubscribeTo} = req.body;
+    const unSubscriber = req.user._id;
+
+    if (!unSubscribeTo || !unSubscriber) throw errorResponse(res, "Error unsubscribing", 400);
+
+    const userUnSubscribed = await Subscription.findOneAndDelete({
+        subscriber: unSubscriber,
+        subscribeTo: unSubscribeTo
+    })
+
+    return successResponse(res, "unSubscribed", userUnSubscribed, 200)
+    
+})
+
+
+const createHistory = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const {videoid} = req.params;
+
+    if(!videoid) throw errorResponse(res, "Invalid videoId", 400);
+
+    const watchHistory = new WatchHistory({
+        userId,
+        VideoId: videoid
+    })
+
+    return successResponse(res, "Video added to watch history", {}, 200)
+
+})
+
+const getWatchHistory = asyncHandler(async(req, res) => {
+    const userId = req.user._id;
+    
+    const allHistory = await WatchHistory.aggregate([
+        {
+            $match: {_id: new mongoose.Types.ObjectId(userId)}
+        },
+        
+    ])
+
+    console.log(allHistory)
+
+})
+
 
 export {
     uploadAVideo,
     getvideo,
-    getAllVideos
+    getAllVideos,
+    subscribeChannel,
+    unSubscribeChannel,
+    createHistory,
+    getWatchHistory
 }

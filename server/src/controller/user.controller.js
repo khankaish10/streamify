@@ -7,6 +7,7 @@ import WatchHistory from "../model/watchHistory.model.js";
 import mongoose from "mongoose";
 import fs from "fs";
 import jwt from "jsonwebtoken";
+import { subscribe } from "diagnostics_channel";
 
 const signUp = asyncHandler(async (req, res) => {
   const { userName, email, password, fullName } = req.body;
@@ -59,12 +60,15 @@ const signUp = asyncHandler(async (req, res) => {
   const accessToken = await newUser.generateAccessToken();
 
   const options = {
-    httpOnly: false,
+    httpOnly: true,
     secure: true,
   };
 
   res
-    .cookie("accessToken", accessToken, options)
+    .cookie("accessToken", accessToken, {
+      httpOnly: false,
+      secure: true,
+    })
     .cookie("refreshToken", refreshToken, options);
 
   return successResponse(
@@ -110,7 +114,10 @@ const login = asyncHandler(async (req, res) => {
     secure: true,
   };
   res
-    .cookie("accessToken", accessToken, options)
+    .cookie("accessToken", accessToken, {
+      httpOnly: false,
+      secure: true,
+    })
     .cookie("refreshToken", refreshToken, options);
 
   return successResponse(
@@ -139,7 +146,7 @@ const logout = asyncHandler(async (req, res) => {
   });
 
   res
-    .clearCookie("accessToken", { httpOnly: true, secure: true })
+    .clearCookie("accessToken", { httpOnly: false, secure: true })
     .clearCookie("refreshToken", { httpOnly: true, secure: true });
 
   return successResponse(res, "success logout", {}, 200);
@@ -160,7 +167,10 @@ const generateRefreshAccessToken = async (req, res) => {
 
   const accessToken = await user.generateAccessToken();
 
-  res.cookie("accessToken", accessToken, options);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: false,
+    secure: true,
+  });
 
   return successResponse(
     res,
@@ -174,8 +184,45 @@ const generateRefreshAccessToken = async (req, res) => {
 
 const getMyProfile = async (req, res) => {
   const id = req.user._id;
-  console.log("id: ", id);
-  const user = await User.findById(id).select("-password -refreshToken");
+
+  const user = await User.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(id) } },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "_id",
+        foreignField: "owner",
+        as: "allvideos"
+      }
+    }, 
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "subscribeTo",
+        as:"subscription",
+      }
+    },
+    {
+      $addFields: {
+        subscriberCount: {
+          $size: "$subscription"
+        }
+      }
+    },
+    {
+      $project: {
+        password: 0,
+        watchHistory: 0,
+        refreshToken: 0,
+        __v: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        subscription: 0
+      }
+    }
+  ])
+
   if (!user) {
     return errorResponse(res, "User not found", 404);
   }
@@ -390,7 +437,7 @@ const addToWatchHistory = asyncHandler(async (req, res) => {
 const getMyWatchHistory = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 });
-const deleteWatchHistory = asyncHandler(async (req, res) => {});
+const deleteWatchHistory = asyncHandler(async (req, res) => { });
 
 export {
   signUp,

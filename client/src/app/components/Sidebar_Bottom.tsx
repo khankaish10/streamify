@@ -4,50 +4,56 @@ import Link from 'next/link'
 import { House, History, FileVideo } from 'lucide-react'
 import Image from "next/image";
 import { useAppSelector } from "@/lib/hooks";
+import { sideBarMenuAndPath } from '@/Constants/Constants';
 
 const Sidebar_Bottom = () => {
     const user = useAppSelector((state) => state.user[0]);
 
-
+    console.log("user sidebar bottom : ", user)
     return (
-        <div className='sticky bottom-0 left-0 sm:hidden bottom-0 z-5
-    flex justify-around items-center w-full bg-white'>
-            <Link href={"/"} className="">
-                <div className='flex items-center my-1 
-           '>
-                    <div className='lg:mr-4'>
-                        <House size={30} />
-
-                    </div>
-
-                    <p className='hidden lg:block text-base'>Home</p>
-                </div>
-            </Link>
-
-            <Link href={"/history"} className="">
-                <div className='flex items-center my-1
-           '>
-                    <div className='lg:mr-4'>
-                        <History size={30} />
-
-                    </div>
-
-                    <p className='hidden lg:block text-base'>History</p>
-                </div>
-            </Link>
-
-            <Link href={"/my-videos"} className="">
-                <div className='flex items-center my-1
-           '>
-                    <div className='lg:mr-4'>
-                        <FileVideo size={30} />
-
-                    </div>
-                    <p className='hidden lg:block text-base '>Your Videos</p>
-                </div>
-            </Link>
+        <div className='fixed bottom-0 left-0 sm:hidden bottom-0 z-5
+                        flex justify-around items-center w-full bg-white
+                        p-1'>
 
             {
+                sideBarMenuAndPath?.map((menu, index) => {
+                    return (
+                        <Link href={(user && menu.name === "Profile") ? "/profile" : menu.path} key={index}>
+                            <div className='flex items-center my-1 
+           '>
+                                <div className='lg:mr-4 flex flex-col items-center 
+                                                justify-center'>
+                                    {
+                                        user && menu.name === "Profile" ? (
+                                            <div className='h-8 w-8 rounded-full 
+                                                            flex justify-center 
+                                                            items-center overflow-hidden'>
+                                                <Image
+                                                    src={user?.avatar}
+                                                    width={28}
+                                                    height={28}
+                                                    alt="Picture of the author"
+                                                    className="rounded-full object-cover h-full w-full"
+                                                />
+                                            </div>
+
+                                        ) : <menu.Icon size={menu.iconSize} />
+                                    }
+
+                                    <p className='lg:block text-sm mt-[1]'>{menu.name}</p>
+                                </div>
+                            </div>
+                        </Link>
+                    )
+                })
+            }
+
+
+
+
+
+
+            {/* 
                 user ? (
                     <div className='flex justify-center items-center'>
                         <Link href={"/profile"} className="border-1 border-gray-300 h-8 w-8 rounded-full 
@@ -84,7 +90,7 @@ const Sidebar_Bottom = () => {
                         </svg>
                     </Link>
                 )
-            }
+            */}
 
 
         </div>

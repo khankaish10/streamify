@@ -1,31 +1,43 @@
 'use client'
 import { handleGetProfile } from '@/api'
 import React, { useLayoutEffect, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import {useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+TimeAgo.addLocale(en);
+
 
 const Profile = () => {
-    // const [user, setUser] = React.useState<any>(null)
+    const timeAgo = new TimeAgo('en')
+    const [user, setUser] = React.useState<any>(null)
     const [loading, setLoading] = React.useState(true)
-    const [user, setUser] = useAppSelector((state) => state.user)
-    const dispatch = useAppDispatch()
-
-    const handleClick = (id: string) => {
-
-    }
+    const reload = useAppSelector((state) => state.modal.reload)
 
 
     useEffect(() => {
         handleGetProfile()
+        .then(response => {
+            setUser(response.data[0])
+            console.log("Profile data:", response.data); // Log the profile data to verify it's correct
+            setLoading(false)
+        })
+        .catch((error) => {
+            console.error("Get profile error:", error);
+        });
+    },[reload])
+
+    useLayoutEffect(() => {
+        handleGetProfile()
             .then(response => {
-                console.log("Profile data:", response); // Log the profile data to verify it's correct
+                setUser(response.data[0])
+                console.log("Profile data:", response.data); // Log the profile data to verify it's correct
                 setLoading(false)
             })
             .catch((error) => {
                 console.error("Get profile error:", error);
             });
-
 
     }, [])
     console.log("User data:", user); // Log the user data to verify it's correct
@@ -35,7 +47,8 @@ const Profile = () => {
             sm:ml-[50px]
             lg:ml-[200px] 
             xl:max-w-[1300px]
-            font-[poppins]'>
+            '>
+            {/* font-[poppins]'> */}
             {
                 loading ? <div className='flex justify-center items-center h-screen'>Loading...</div> : (
                     <div className="container flex flex-col pl-10 pt-10 h-screen">
@@ -57,8 +70,13 @@ const Profile = () => {
                                 <div className='text-2xl'>{user?.fullName}</div>
                                 <div className='flex items-center'>
                                     <p className='font-semibold text-xl'>{`@${user?.userName}. `}</p>
-                                    <p className='text-gray-500'>7 subscribers{`. `}</p>
-                                    <p className='text-gray-500'>2 videos</p>
+                                    <p className='text-gray-500 ml-1 mr-1'>
+                                       {user?.subscriberCount > 1 ? (`${user.subscriberCount} subscribers.`) : (`${user.subscriberCount} subscriber.`) } 
+                                    </p>
+                                    <p className='text-gray-500'>
+                                    {user?.allvideos.length > 1 ? (` ${user?.allvideos.length} videos`) : (` ${user?.allvideos.length} video`) } 
+                                        {}
+                                    </p>
                                 </div>
                             </div>
 
@@ -67,105 +85,60 @@ const Profile = () => {
                         {/* Home, videos, short, playlist*/}
                         <div className='border-b-1 border-gray-200
                                         flex gap-2'>
-                            <Link href={`/features` } ><div className='border-b-2 border-black p-2 cursor-pointer'>Home</div></Link>
-                            <Link href={`/videos` } ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Videos</div></Link>
+                            <Link href={`/features`} ><div className='border-b-2 border-black p-2 cursor-pointer'>Home</div></Link>
+                            <Link href={`/videos`} ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Videos</div></Link>
                             <Link href={`/playlist`} ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Playlist</div></Link>
-                            <Link href={`/post` } ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Post</div></Link>
+                            <Link href={`/post`} ><div className='hover:border-b-2 border-black p-2 cursor-pointer'>Post</div></Link>
                         </div>
+
+                        {
+                            user?.allvideos?.length <= 0 && (
+                                <div className='w-full h-full flex
+                                                items-center justify-center'>
+                                    <p className='text-xl'>No videos.</p>
+                                </div>
+                            )
+                        }
 
                         {/* main content - Home(All videos), shorts, playlists, post */}
                         <div className='flex gap-2 overflow-x-scroll scrollbar-none'>
-                            <Link href={`/videos/watch/`} onClick={() => handleClick('34')} >
-                                <div className="font-poppins 
-                                            overflow-hidden p-2 flex flex-col
-                                            justify-between cursor-pointer ">
+                            {
 
-                                    {/* video thumbnail */}
-                                    <div className="overflow-hidden 
-                                            h-40 w-30 relative
-                                            ">
-                                        <Image
-                                            src={`${'https://res.cloudinary.com/dnlrrhbsl/image/upload/v1745133472/pexels-maximilian-orlowsky-515733-30327991_kdkai4.jpg'}`}
-                                            fill
-                                            alt="video"
-                                            className="rounded-xl object-cover"
+                                user?.allvideos.map((video: any) => {
+                                    return (
+                                        <Link key={video._id} href={`/videos/watch/${video._id}`} >
+                                            <div className="font-poppins 
+                                                        overflow-hidden p-2 flex flex-col
+                                                        justify-between cursor-pointer ">
 
-                                        />
-                                    </div>
+                                                {/* video thumbnail */}
+                                                <div className="overflow-hidden 
+                                                        h-40 w-30 relative
+                                                        ">
+                                                    <Image
+                                                        src={video?.thumbnail}
+                                                        fill
+                                                        alt="video"
+                                                        className="rounded-xl object-cover"
 
-                                    {/* profile pic and title with username and views */}
-                                    <div className="flex mt-2">
-                                        <div className="text-gray-500 ml-2">
-                                            <p className="text-black">title</p>
-                                            <div className="flex text-xs text-gray-400">
-                                                <p className="mr-2">23K</p>
-                                                <p>2hrs</p>
+                                                    />
+                                                </div>
+
+                                                {/* profile pic and title with username and views */}
+                                                <div className="flex mt-2">
+                                                    <div className="text-gray-500 ml-2">
+                                                        <p className="text-black">{video.title}</p>
+                                                        <div className="flex text-xs text-gray-400">
+                                                            <p className="mr-2">23K</p>
+                                                            <p>{timeAgo.format(new Date(video.createdAt))}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                            <Link href={`/videos/watch/`} onClick={() => handleClick('34')} >
-                                <div className="font-poppins 
-                                            overflow-hidden p-2 flex flex-col
-                                            justify-between cursor-pointer ">
-
-                                    {/* video thumbnail */}
-                                    <div className="overflow-hidden 
-                                            h-40 w-30 relative
-                                            ">
-                                        <Image
-                                            src={`${'https://res.cloudinary.com/dnlrrhbsl/image/upload/v1745133472/pexels-maximilian-orlowsky-515733-30327991_kdkai4.jpg'}`}
-                                            fill
-                                            alt="video"
-                                            className="rounded-xl object-cover"
-
-                                        />
-                                    </div>
-
-                                    {/* profile pic and title with username and views */}
-                                    <div className="flex mt-2">
-                                        <div className="text-gray-500 ml-2">
-                                            <p className="text-black">title</p>
-                                            <div className="flex text-xs text-gray-400">
-                                                <p className="mr-2">23K</p>
-                                                <p>2hrs</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                            <Link href={`/videos/watch/`} onClick={() => handleClick('34')} >
-                                <div className="font-poppins 
-                                            overflow-hidden p-2 flex flex-col
-                                            justify-between cursor-pointer ">
-
-                                    {/* video thumbnail */}
-                                    <div className="overflow-hidden 
-                                            h-40 w-30 relative
-                                            ">
-                                        <Image
-                                            src={`${'https://res.cloudinary.com/dnlrrhbsl/image/upload/v1745133472/pexels-maximilian-orlowsky-515733-30327991_kdkai4.jpg'}`}
-                                            fill
-                                            alt="video"
-                                            className="rounded-xl object-cover"
-
-                                        />
-                                    </div>
-
-                                    {/* profile pic and title with username and views */}
-                                    <div className="flex mt-2">
-                                        <div className="text-gray-500 ml-2">
-                                            <p className="text-black">title</p>
-                                            <div className="flex text-xs text-gray-400">
-                                                <p className="mr-2">23K</p>
-                                                <p>2hrs</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-
+                                        </Link>
+                                    )
+                                })
+                            }
                         </div>
 
                     </div>

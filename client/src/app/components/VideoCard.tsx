@@ -7,13 +7,15 @@ import en from 'javascript-time-ago/locale/en'
 TimeAgo.addLocale(en);
 
 import { useAppDispatch } from "@/lib/hooks";
+import { videoHistory } from "@/lib/features/video/videoHistory";
 
 const VideoCard = ({ card }: any) => {
   const timeAgo = new TimeAgo('en')
   const dispatch = useAppDispatch()
 
   const handleClick = (id: string) => {
-
+      
+      dispatch(videoHistory(card))
   }
 
   console.log('video card: ', card)
@@ -29,6 +31,7 @@ const VideoCard = ({ card }: any) => {
         {/* video thumbnail */}
         <div className="overflow-hidden 
         h-60 sm:h-60 relative
+        
         ">
           <Image
             src={card?.thumbnail}
@@ -58,7 +61,7 @@ const VideoCard = ({ card }: any) => {
             <h2 className="text-black font-semibold">{card.title}</h2>
             <p className="text-sm">{card.owner.username}</p>
             <div className="flex text-xs text-gray-400">
-              <p className="mr-2">{card.views}</p>
+              <p className="mr-2">{card.views} views</p>
               <p>{timeAgo.format(new Date(card.createdAt))}</p>
             </div>
           </div>

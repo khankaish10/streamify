@@ -29,7 +29,6 @@ const videoslice = createSlice({
             return action.payload
         },
 
-    
     }
 
 })

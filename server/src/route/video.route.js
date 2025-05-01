@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { uploadAVideo, getvideo, getAllVideos } from "../controller/video.controller.js";
+import { uploadAVideo, getvideo, getAllVideos, subscribeChannel, unSubscribeChannel, createHistory, getWatchHistory } from "../controller/video.controller.js";
 import upload from "../middleware/multer.middleware.js";
 import verifyJwt from "../middleware/auth.middleware.js";
 const router = Router();
@@ -19,7 +19,11 @@ router.route("/upload-video").post(
   uploadAVideo
 );
 
-router.route("/watch/:videoid").get(getvideo);
+router.route("/watch/:videoid").post(getvideo);
 router.route("/").get(getAllVideos)
+router.route("/subscribe").post(verifyJwt, subscribeChannel)
+router.route("/unsubscribe").post(verifyJwt, unSubscribeChannel)
+router.route("/history/:videoid").post(verifyJwt, createHistory)
+router.route("/history/").get(verifyJwt, getWatchHistory)
 
 export default router;

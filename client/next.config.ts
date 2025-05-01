@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
 
     ],
   },
+  // devServer: {
+  //   Proxy: {
+  //     "/": {
+  //       target: "http://localhost:8000",
+  //       changeOrigin: true
+  //     }
+  //   }
+  // }
 
   /* config options here */
 };

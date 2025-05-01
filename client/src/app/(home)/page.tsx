@@ -24,10 +24,10 @@ function Home() {
 
     <div
       className="grid grid-cols-1 
-      gap-2 w-full p-1 ml-0 mt-10
-      sm:grid-cols-2 sm:ml-[50px] sm:h-90
+      gap-2 w-full p-1 ml-0 mt-10 pb-16
+      sm:grid-cols-2 sm:ml-[50px]
       lg:grid-cols-3 lg:ml-[200px] 
-      xl:max-w-[1600px]  
+      xl:max-w-[1600px] 
       "
     >
       {cards?.map((card, index) => {

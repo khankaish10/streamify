@@ -1,12 +1,12 @@
 'use client'
-import React, { use, useLayoutEffect } from 'react'
+import React, { use, useLayoutEffect, useState } from 'react'
 import { cards } from '@/Constants/Constants';
 import Image from 'next/image';
 import { useAppSelector } from '@/lib/hooks';
 import { handleGetAVideo } from "@/api";
-
+import { subscribeApi } from '@/api';
 import { useParams } from 'next/navigation';
-
+import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
 
 
 interface VideoPlayerProps {
@@ -30,19 +30,31 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
     const [videoDetails, setVideoDetails] = React.useState<any>(null)
     const [isLoading, setIsLoading] = React.useState(true)
     const videoId = useParams<any>();
+    const [user, setUser] = useState(false)
 
     useLayoutEffect(() => {
-        handleGetAVideo(videoId?.watch)
+        let loggedInUserId = null;
+        const userData = localStorage.getItem('user')
+        if (!userData) {
+            setUser(true)
+        } else {
+            loggedInUserId = JSON.parse(userData)._id
+            setUser(false)
+        }
+
+        handleGetAVideo(videoId?.watch, loggedInUserId)
 
             .then((res) => {
-                console.log("rs:", res.data[0])
-                setVideoDetails(res.data[0])
+                console.log("rs:", res?.data[0])
+                setVideoDetails(res?.data[0])
                 setIsLoading(false)
             })
             .catch((err) => {
                 console.log(err);
             });
     }, [])
+
+
 
     console.log("videoDetails: ", videoDetails)
     return (
@@ -79,32 +91,13 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                             <div className='w-full flex
                                             items-center mb-5'>
 
-                                <div className='flex flex-1 items-center'>
-
-                                    <div className="profilePic flex items-center 
-                                        justify-center border-1 border-gray-200 rounded-full
-                                        mr-2 w-10 h-10 overflow-hidden">
-                                        <Image
-                                            src={videoDetails?.owner?.avatar}
-                                            alt="profile"
-                                            width={50}
-                                            height={50}
-                                            className="rounded-full object-cover h-full w-full"
-                                        />
-                                    </div>
-
-                                    <div className='flex flex-col'>
-                                        <h3 className='text-lg font-bold'>{videoDetails?.owner?.userName}</h3>
-                                        <p className='text-xs'>{videoDetails.description}</p>
-                                    </div>
-
-                                </div>
-
-
-                                <div className='flex flex-col items-center'>
-                                    <button className='bg-red-600 text-white px-4 py-2 rounded-full'>Subscribe</button>
-                                    <p className='text-xs'>100k subscribers</p>
-                                </div>
+                                <IsSubscribedDetails
+                                    avatar={videoDetails?.owner.avatar || ""}
+                                    userName={videoDetails?.owner.userName || ""}
+                                    subsCount={videoDetails?.subscriberCount || 0}
+                                    ownerId={videoDetails?.owner._id || ""}
+                                    isSubsd={videoDetails?.isSubscribed || false}
+                                />
 
 
                             </div>

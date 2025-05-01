@@ -26,6 +26,7 @@ const LoginForm = () => {
 
             }).catch((error) => {
                 console.error('Login failed:', error)
+                setIsLoading(false);
                 // Handle login failure (e.g., show error message)
             })
     }

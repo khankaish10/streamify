@@ -6,7 +6,7 @@ import checkTokenExpiry from "@/app/components/checkTokenExpiry";
 
 const api = axios.create({
     baseURL: API_URL,
-    withCredentials: true,
+    // withCredentials: true,
 });
 
 const getCookie = (cookieName: string) => {
@@ -37,7 +37,7 @@ api.interceptors.request.use(
             const currentTime = Date.now() / 1000; // Current time in seconds
 
             if (decoded.exp < currentTime) {
-                localStorage.removeItem("user"); 
+                localStorage.removeItem("user");
                 document.cookie = `accessToken="";`
                 window.location.href = "/auth/login"
                 alert("Token expired. Pleae login again.")
@@ -100,7 +100,6 @@ export const handleGetProfile = async () => {
 
     try {
         const response = await api.get("/users/profile");
-        console.log("Profile response:", response.data); // Log the profile data to verify it's correct
         return response.data;
     } catch (error) {
         console.error("Get profile error:", error);
@@ -109,9 +108,13 @@ export const handleGetProfile = async () => {
 }
 
 
-export const handleGetAVideo = async (videoid: string) => {
+export const handleGetAVideo = async (videoid: string, currentUserId: string | null) => {
     try {
-        const response = await api.get(`/videos/watch/${videoid}`);
+        const response = await api.post(`/videos/watch/${videoid}`, { currentUserId }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
         return response.data;
     } catch (error) {
         console.error("Get a video error:", error);
@@ -144,5 +147,38 @@ export const handleUploadVideoApi = async (formData: FormData) => {
     } catch (error) {
         console.error("Error uploading video:", error);
         throw error;
+    }
+}
+
+export const subscribeApi = async (subscribeTo: string) => {
+    try {
+        const response = await api.post('/videos/subscribe', { subscribeTo }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log("subscribing failed: ", error)
+    }
+}
+export const unSubscribeApi = async (unSubscribeTo: string) => {
+    try {
+        const response = await api.post('/videos/unsubscribe', { unSubscribeTo }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log("subscribing failed: ", error)
+    }
+}
+export const createHistoryApi = async (videoid: string) => {
+    try {
+        const response = await api.post('/history')
+        return response.data
+    } catch (error) {
+        console.log("subscribing failed: ", error)
     }
 }

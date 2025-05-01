@@ -2,10 +2,12 @@ import {createSlice} from '@reduxjs/toolkit'
 
 interface GlobalModalState {
     isOpen: boolean;
+    reload: boolean;
 }
 
 const initialState: GlobalModalState = {
-    isOpen: false
+    isOpen: false,
+    reload: false
 };
 
 
@@ -18,6 +20,7 @@ const globalModalSlice = createSlice({
         },
         closeModal:(state: GlobalModalState) => {
             state.isOpen = false;
+            state.reload = true;
         }
     }
 })
