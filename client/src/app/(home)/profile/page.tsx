@@ -6,6 +6,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import { useAppDispatch } from "@/lib/hooks";
+import { videoHistory } from "@/lib/features/video/videoHistory";
+import { createHistoryAndViewsApi } from "@/api";
 TimeAgo.addLocale(en);
 
 
@@ -14,7 +17,17 @@ const Profile = () => {
     const [user, setUser] = React.useState<any>(null)
     const [loading, setLoading] = React.useState(true)
     const reload = useAppSelector((state) => state.modal.reload)
+      const dispatch = useAppDispatch()
 
+
+    const handleClick = (video: {_id: string}) => {
+        createHistoryAndViewsApi(video._id)
+          .then((res) => {
+            dispatch(videoHistory(video))
+      })
+          .catch(err => console.log(err))
+      }
+    
 
     useEffect(() => {
         handleGetProfile()
@@ -106,7 +119,7 @@ const Profile = () => {
 
                                 user?.allvideos.map((video: any) => {
                                     return (
-                                        <Link key={video._id} href={`/videos/watch/${video._id}`} >
+                                        <Link key={video._id} href={`/videos/watch/${video._id}`} onClick={()=> handleClick(video)}>
                                             <div className="font-poppins 
                                                         overflow-hidden p-2 flex flex-col
                                                         justify-between cursor-pointer ">
@@ -129,7 +142,7 @@ const Profile = () => {
                                                     <div className="text-gray-500 ml-2">
                                                         <p className="text-black">{video.title}</p>
                                                         <div className="flex text-xs text-gray-400">
-                                                            <p className="mr-2">23K</p>
+                                                            <p className="mr-2">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
                                                             <p>{timeAgo.format(new Date(video.createdAt))}</p>
                                                         </div>
                                                     </div>

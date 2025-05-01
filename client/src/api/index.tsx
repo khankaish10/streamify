@@ -180,7 +180,7 @@ export const unSubscribeApi = async (unSubscribeTo: string) => {
         console.log("subscribing failed: ", error)
     }
 }
-export const createHistoryApi = async (videoid: string) => {
+export const createHistoryAndViewsApi = async (videoid: string) => {
    try {
         const response = await api.post(`/videos/history/${videoid}`)
         return response.data

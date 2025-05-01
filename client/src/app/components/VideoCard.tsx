@@ -6,21 +6,25 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 TimeAgo.addLocale(en);
 
-import { useAppDispatch } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryApi } from "@/api";
+import { createHistoryAndViewsApi } from "@/api";
 
 const VideoCard = ({ card }: any) => {
+  const user = useAppSelector(state => state.user)
   const timeAgo = new TimeAgo('en')
   const dispatch = useAppDispatch()
 
   const handleClick = (id: string) => {
-    createHistoryApi(id)
-      .then((res) => {
-        console.log("history api before dispatch: ", res.data)
-        dispatch(videoHistory(card))
-  })
-      .catch(err => console.log(err))
+    if (user) {
+      createHistoryAndViewsApi(id)
+        .then((res) => {
+          console.log("history api before dispatch: ", res.data)
+          dispatch(videoHistory(card))
+        })
+        .catch(err => console.log(err))
+    } 
+
   }
 
 

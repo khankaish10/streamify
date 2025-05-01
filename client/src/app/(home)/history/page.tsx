@@ -6,9 +6,11 @@ import { useAppSelector, useAppDispatch } from '@/lib/hooks'
 import { deleteHistory, videoHistory } from '@/lib/features/video/videoHistory'
 import Link from 'next/link'
 import { deleteHistoryApi, getAllHistoryApi } from '@/api'
+import { User } from "lucide-react";
 
 const Page = () => {
     const historyDetails = useAppSelector(state => state.history)
+    const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
 
 
@@ -46,11 +48,15 @@ const Page = () => {
                     <div className='mb-5 lg:mb-0'>
                         fixed ______ need to add clear history
                     </div>
-                    <div className='flex flex-col videolist
-                                    w-full '>
+                    <div className={`flex flex-col videolist
+                                    w-full  
+                                        ${!user.length ? 
+                                        'justify-center items-center' :
+                                        ""
+                                    } `}>
 
                         {
-                            !historyDetails.length ? (
+                          user.length ?  (!historyDetails.length ? (
                                 <div> No watch history </div>
                             ) : (
 
@@ -99,6 +105,16 @@ const Page = () => {
 
                                     )
                                 })
+                            )) : (
+                                <Link
+                                href={"/auth/login"}
+                                className="flex justify-center items-center 
+                                            p-1 md:border-1 md:border-gray-300 
+                                            rounded-[50px] max-w-60"
+                              >
+                                <User size={20} />
+                                <p className="text-[16px] hidden lg:block">Sign in</p>
+                              </Link>
                             )
                         }
                     </div>

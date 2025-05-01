@@ -194,20 +194,32 @@ const unSubscribeChannel = asyncHandler(async (req, res) => {
 })
 
 
-const createHistory = asyncHandler(async (req, res) => {
+const createHistoryAndViews = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const { videoid } = req.params;
 
-    console.log('videoid: ', typeof videoid)
     if (!videoid) throw errorResponse(res, "Invalid videoId", 400);
 
+    const alreadyWatched = await WatchHistory.find({ userId, videoId: videoid })
+    console.log("before: ", alreadyWatched)
+    if (!alreadyWatched.length) {
+        console.log("afater: ", alreadyWatched)
+        
+        await Video.findByIdAndUpdate(
+            videoid,
+            { $inc: { views: 1 } },
+            { new: true }
+        )
+        
+    }
     const watchHistory = new WatchHistory({
         userId,
         videoId: new mongoose.Types.ObjectId(videoid)
     })
     await watchHistory.save()
 
-    return successResponse(res, "Video added to watch history", {}, 200)
+
+    return successResponse(res, "Video added to watch history and views increamented", {}, 200)
 
 })
 
@@ -227,7 +239,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
             }
         },
         {
-            $unwind:"$videoDetails"
+            $unwind: "$videoDetails"
         },
         {
             $lookup: {
@@ -237,24 +249,14 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                 as: 'ownerDetails'
             }
         },
-        
+
         {
-            $unwind:"$ownerDetails"
+            $unwind: "$ownerDetails"
         },
-        // {
-        //     $group: {
-        //         _id: "$userId",
-        //         videoDetails: {
-        //             $push: "$videoDetails"
-        //         },
-        //         ownerDetails: {
-        //            $first: "$ownerDetails"
-        //         }
-        //     }
-        // },
+
         {
             $project: {
-                _id: 1, 
+                _id: 1,
                 videoId: "$videoDetails._id",
                 title: "$videoDetails.title",
                 description: "$videoDetails.description",
@@ -273,7 +275,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
             }
         },
         {
-            $sort : {
+            $sort: {
                 watchedAt: -1
             }
         }
@@ -284,9 +286,9 @@ const getWatchHistory = asyncHandler(async (req, res) => {
 
 const deleteHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;
-    const {videoid} = req.params
+    const { videoid } = req.params
 
-    if(!videoid) return errorResponse(res, "Invalid videoId", 404)
+    if (!videoid) return errorResponse(res, "Invalid videoId", 404)
 
     const deletedHistory = await WatchHistory.findOneAndDelete({
         userId,
@@ -304,7 +306,7 @@ export {
     getAllVideos,
     subscribeChannel,
     unSubscribeChannel,
-    createHistory,
+    createHistoryAndViews,
     getWatchHistory,
     deleteHistory
 }
