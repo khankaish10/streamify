@@ -1,10 +1,11 @@
 'use client'
 
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import Image from 'next/image'
 import { useAppSelector, useAppDispatch } from '@/lib/hooks'
-import { deleteHistory } from '@/lib/features/video/videoHistory'
+import { deleteHistory, videoHistory } from '@/lib/features/video/videoHistory'
 import Link from 'next/link'
+import { deleteHistoryApi, getAllHistoryApi } from '@/api'
 
 const Page = () => {
     const historyDetails = useAppSelector(state => state.history)
@@ -12,8 +13,23 @@ const Page = () => {
 
 
     const handleDeleteHistory = (id: string, index: number) => {
-        dispatch(deleteHistory({ id, index }))
+        deleteHistoryApi(id)
+        .then(res => {
+            console.log(res.data)
+            dispatch(deleteHistory({videoId: res.data._id, index}))
+        })
+        .catch(error => console.log("error deleting", error))
     }
+
+    useLayoutEffect(()=> {
+        getAllHistoryApi()
+        .then((res) => {
+            console.log("history: ", res.data)
+             dispatch(videoHistory(res.data))
+            }
+        )
+        .catch(err => console.log("Error getting history: ", err))
+    },[dispatch])
 
 
     return (
@@ -46,14 +62,14 @@ const Page = () => {
                                             mb-5 relative shadow'>
 
                                                 <button className='absolute top-0 right-0 text-2xl 
-                                                    text-gray-400 cursor-pointer z- 10
+                                                    text-gray-400 cursor-pointer z-10
                                                     rounded-full hover:bg-gray-200 h-8 w-8'
-                                                    onClick={() => handleDeleteHistory(history._id, index)}>
+                                                    onClick={() => handleDeleteHistory(history?.videoId, index)}>
                                                     X</button>
 
 
 
-                                                <Link href={`/videos/watch/${history._id}`} className='flex' >
+                                                <Link href={`/videos/watch/${history.videoId}`} className='flex' >
                                                     {/* delete history - cross at top right corner */}
 
 

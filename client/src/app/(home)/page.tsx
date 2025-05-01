@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import VideoCard from "../components/VideoCard";
 // import { cards } from "@/Constants/Constants";
 import { allVideos } from "@/lib/features/video/videoSlice";
@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 function Home() {
   const dispatch = useAppDispatch()
   const cards = useAppSelector((state) => state.video)
-  useEffect(() => {
+  useLayoutEffect(() => {
     handleGetAllVideos()
     .then((res):any => {dispatch(allVideos(res.data))
       console.log('all videos: ', res.data)

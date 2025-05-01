@@ -41,7 +41,7 @@ const uploadAVideo = asyncHandler(async (req, res) => {
 
 const getvideo = asyncHandler(async (req, res) => {
     const { videoid } = req.params;
-    const {currentUserId} = req?.body;
+    const { currentUserId } = req?.body;
 
     const pipeline = [
         {
@@ -178,8 +178,8 @@ const subscribeChannel = asyncHandler(async (req, res) => {
     return successResponse(res, "subscribed", userSubscribed, 200)
 })
 
-const unSubscribeChannel= asyncHandler(async (req, res) => {
-    const {unSubscribeTo} = req.body;
+const unSubscribeChannel = asyncHandler(async (req, res) => {
+    const { unSubscribeTo } = req.body;
     const unSubscriber = req.user._id;
 
     if (!unSubscribeTo || !unSubscriber) throw errorResponse(res, "Error unsubscribing", 400);
@@ -190,36 +190,110 @@ const unSubscribeChannel= asyncHandler(async (req, res) => {
     })
 
     return successResponse(res, "unSubscribed", userUnSubscribed, 200)
-    
+
 })
 
 
 const createHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;
-    const {videoid} = req.params;
+    const { videoid } = req.params;
 
-    if(!videoid) throw errorResponse(res, "Invalid videoId", 400);
+    console.log('videoid: ', typeof videoid)
+    if (!videoid) throw errorResponse(res, "Invalid videoId", 400);
 
     const watchHistory = new WatchHistory({
         userId,
-        VideoId: videoid
+        videoId: new mongoose.Types.ObjectId(videoid)
     })
+    await watchHistory.save()
 
     return successResponse(res, "Video added to watch history", {}, 200)
 
 })
 
-const getWatchHistory = asyncHandler(async(req, res) => {
+const getWatchHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;
-    
+
     const allHistory = await WatchHistory.aggregate([
         {
-            $match: {_id: new mongoose.Types.ObjectId(userId)}
+            $match: { userId: new mongoose.Types.ObjectId(userId) }
+        },
+        {
+            $lookup: {
+                from: 'videos',
+                localField: 'videoId',
+                foreignField: '_id',
+                as: 'videoDetails'
+            }
+        },
+        {
+            $unwind:"$videoDetails"
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'ownerDetails'
+            }
         },
         
+        {
+            $unwind:"$ownerDetails"
+        },
+        // {
+        //     $group: {
+        //         _id: "$userId",
+        //         videoDetails: {
+        //             $push: "$videoDetails"
+        //         },
+        //         ownerDetails: {
+        //            $first: "$ownerDetails"
+        //         }
+        //     }
+        // },
+        {
+            $project: {
+                _id: 1, 
+                videoId: "$videoDetails._id",
+                title: "$videoDetails.title",
+                description: "$videoDetails.description",
+                thumbnail: "$videoDetails.thumbnail",
+                duration: "$videoDetails.duration",
+                views: "$videoDetails.views",
+                owner: {
+                    _id: "$ownerDetails._id",
+                    userName: "$ownerDetails.userName",
+                    email: "$ownerDetails.email",
+                    fullName: "$ownerDetails.fullName",
+                    avatar: "$ownerDetails.avatar"
+                },
+                watchedAt: "$createdAt",
+                createdAt: "$videoDetails.createdAt"
+            }
+        },
+        {
+            $sort : {
+                watchedAt: -1
+            }
+        }
     ])
+    return successResponse(res, "Watched history fetched", allHistory, 200)
 
-    console.log(allHistory)
+})
+
+const deleteHistory = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const {videoid} = req.params
+
+    if(!videoid) return errorResponse(res, "Invalid videoId", 404)
+
+    const deletedHistory = await WatchHistory.findOneAndDelete({
+        userId,
+        videoId: videoid
+    })
+
+    return successResponse(res, "Watch history deleted", deletedHistory, 200)
 
 })
 
@@ -231,5 +305,6 @@ export {
     subscribeChannel,
     unSubscribeChannel,
     createHistory,
-    getWatchHistory
+    getWatchHistory,
+    deleteHistory
 }

@@ -7,7 +7,6 @@ import WatchHistory from "../model/watchHistory.model.js";
 import mongoose from "mongoose";
 import fs from "fs";
 import jwt from "jsonwebtoken";
-import { subscribe } from "diagnostics_channel";
 
 const signUp = asyncHandler(async (req, res) => {
   const { userName, email, password, fullName } = req.body;
@@ -66,7 +65,7 @@ const signUp = asyncHandler(async (req, res) => {
 
   res
     .cookie("accessToken", accessToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
     })
     .cookie("refreshToken", refreshToken, options);
@@ -115,7 +114,7 @@ const login = asyncHandler(async (req, res) => {
   };
   res
     .cookie("accessToken", accessToken, {
-      httpOnly: false,
+      httpOnly: true,
       secure: true,
     })
     .cookie("refreshToken", refreshToken, options);
@@ -146,7 +145,7 @@ const logout = asyncHandler(async (req, res) => {
   });
 
   res
-    .clearCookie("accessToken", { httpOnly: false, secure: true })
+    .clearCookie("accessToken", { httpOnly: true, secure: true })
     .clearCookie("refreshToken", { httpOnly: true, secure: true });
 
   return successResponse(res, "success logout", {}, 200);
@@ -231,7 +230,8 @@ const getMyProfile = async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log("id: ", id);
+  console.log("getUserProfile -- id: ", id);
+  if(!id) throw errorResponse(res, "Invalid user Id", 404)
   const userDetails = await User.aggregate([
     { $match: { _id: new mongoose.Types.ObjectId(id) } },
     {

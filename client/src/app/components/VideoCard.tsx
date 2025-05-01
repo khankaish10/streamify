@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from 'javascript-time-ago'
@@ -8,19 +8,25 @@ TimeAgo.addLocale(en);
 
 import { useAppDispatch } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
+import { createHistoryApi } from "@/api";
 
 const VideoCard = ({ card }: any) => {
   const timeAgo = new TimeAgo('en')
   const dispatch = useAppDispatch()
 
   const handleClick = (id: string) => {
-      
-      dispatch(videoHistory(card))
+    createHistoryApi(id)
+      .then((res) => {
+        console.log("history api before dispatch: ", res.data)
+        dispatch(videoHistory(card))
+  })
+      .catch(err => console.log(err))
   }
+
 
   console.log('video card: ', card)
   return (
-    <Link
+    <Link className=" lg:max-h-[310px]"
       href={`/videos/watch/${card._id}`}
       onClick={() => handleClick(card._id)} >
       <div className="font-poppins 
@@ -40,6 +46,11 @@ const VideoCard = ({ card }: any) => {
             className="rounded-xl object-cover"
 
           />
+          <div className=" absolute bottom-2 right-2 p-0.5"
+            style={{ background: "rgb(0,0,0,0.5)" }}>
+            <p className="text-white text-sm">{`${card?.duration.toString().split('.')[0]}.${card.duration.toString().split(".")[1].slice(0, 2)}`}</p>
+
+          </div>
         </div>
 
         {/* profile pic and title with username and views */}
@@ -61,7 +72,7 @@ const VideoCard = ({ card }: any) => {
             <h2 className="text-black font-semibold">{card.title}</h2>
             <p className="text-sm">{card.owner.username}</p>
             <div className="flex text-xs text-gray-400">
-              <p className="mr-2">{card.views} views</p>
+              <p className="mr-2">{card.views > 0 ? `${card.views} views` : `${card.views} view`}</p>
               <p>{timeAgo.format(new Date(card.createdAt))}</p>
             </div>
           </div>

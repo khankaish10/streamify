@@ -23,8 +23,8 @@ const userSlice = createSlice({
       localStorage.setItem('user', JSON.stringify(action.payload))
     },
     logout: (state) => {
-      state.length = 0
       localStorage.removeItem('user')
+      state.length = 0
     },
     signUp: (state, action) => {
       state.push(action.payload)

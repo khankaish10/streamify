@@ -21,6 +21,7 @@ const LoginForm = () => {
         handleLogin({ email, password })
             .then((response) => {
                 dispatch(login(response.data))
+                console.log("login response: ", response.data)
                 setIsLoading(false);
                 router.push('/')
 

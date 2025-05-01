@@ -6,7 +6,7 @@ import checkTokenExpiry from "@/app/components/checkTokenExpiry";
 
 const api = axios.create({
     baseURL: API_URL,
-    // withCredentials: true,
+    withCredentials: true,
 });
 
 const getCookie = (cookieName: string) => {
@@ -18,14 +18,19 @@ const getCookie = (cookieName: string) => {
 
 api.interceptors.request.use(
     (config) => {
-        const user = localStorage.getItem("user");
+        if(config.url === "/users/login" || config.url === "/users/signup"
+            
+        ) {
+            console.log("skipping login")
+            return config
+        }
         let localStorageToken = null
+        const user = localStorage.getItem("user");
         if (user) {
-            localStorageToken = JSON.parse(user);
+            localStorageToken = JSON.parse(user).accessToken;
         }
 
         const token = getCookie("accessToken")
-        console.log("token: ", token)
         console.log("localstorage token : ", localStorageToken)
 
         if (token || localStorageToken) {
@@ -44,7 +49,8 @@ api.interceptors.request.use(
             }
 
             config.headers = config.headers || {};
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token || localStorageToken}`;
+            console.log("authorization : ", config.headers.Authorization)
         }
         return config;
     },
@@ -175,10 +181,29 @@ export const unSubscribeApi = async (unSubscribeTo: string) => {
     }
 }
 export const createHistoryApi = async (videoid: string) => {
+   try {
+        const response = await api.post(`/videos/history/${videoid}`)
+        return response.data
+   } catch (error) {
+        console.log("Error creating history", error)
+   }
+}
+export const deleteHistoryApi = async (videoid: string) => {
     try {
-        const response = await api.post('/history')
+         const response = await api.delete(`/videos/history/${videoid}`)
+         return response.data
+    } catch (error) {
+         console.log("Error deleting history", error)
+    }
+ }
+ 
+
+
+export const getAllHistoryApi = async() => {
+    try {
+        const response = await api.get('/videos/history')
         return response.data
     } catch (error) {
-        console.log("subscribing failed: ", error)
+        console.log("Error fetching history", error)
     }
 }

@@ -11,20 +11,20 @@ app.get("/", (req, res) => {
 
 // enable cors
 app.use(cors({
-    // origin: ["http://localhost:3000", "http://192.168.0.116:3000"],
-    origin: "*",
-    // credentials: true,
+    origin: ["http://localhost:3000", "http://192.168.0.116:3000"],
+    // origin: "*",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], 
 }));
-app.options("*", cors())
+// app.options("*", cors())
 
 
 // middleware for parsing
+app.use(cookieParser())
 app.use(express.json({limit: '50mb'}));
 app.use(urlencoded({extended: true, limit: "50mb"}))
 app.use(express.static("public"));
-app.use(cookieParser())
 
 
 // imports

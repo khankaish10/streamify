@@ -8,19 +8,18 @@ const verifyJwt = async (req, res, next) => {
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
 
-
+    console.log("cookie token: ", req.cookies?.accessToken)
     if (!token) throw errorResponse(res, "Unauthorized access!", 401);
-    console.log("token: ", token)
+    // console.log("token: ", token)
     const decodedToken = jwt.verify(
       token,
       process.env.ACCESSTOKEN_SECRET
     );
 
-    console.log("decoded token : ", decodedToken)
     const user = await User.findById(decodedToken?.id).select(
       "-password -refreshToken"
     );
-
+    // console.log("user: ", user)
     if (!user) {
       return next(errorResponse(res, "User not found!", 404)); // Pass error to error-handling middleware
     }
