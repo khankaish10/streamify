@@ -21,7 +21,7 @@ const Navbar = () => {
       .then(() => {
         setProfileModal(!profileModal)
         dispatch(logout());
-        router.push('/auth/login')
+        // router.push('/auth/login')
       }
       )
       .catch((error) => {

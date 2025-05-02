@@ -30,8 +30,8 @@ function Home() {
     <div
       className="grid grid-cols-1 
       gap-2 p-1 ml-0 mt-10 pb-16
-      sm:grid-cols-2 sm:ml-[50px]
-      lg:grid-cols-3 lg:ml-[200px] 
+      sm:grid-cols-2 sm:pl-[50px]
+      lg:grid-cols-3 lg:pl-[200px] 
       xl:grid-cols-3 xl:max-w-[1600px] 
       "
     >

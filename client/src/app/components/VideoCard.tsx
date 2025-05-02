@@ -59,9 +59,9 @@ const VideoCard = ({ card }: any) => {
         </div>
 
         {/* profile pic and title with username and views */}
-        <div className="flex py-1 mt-2">
+        <div className="flex py-1 mt-2 ">
           {/* profile pic */}
-          <div className="w-10 h-10 overflow-hidden 
+          <div className="w-11 h-11 overflow-hidden 
                        
                           rounded-full flex justify-center 
                           items-center">
@@ -73,9 +73,9 @@ const VideoCard = ({ card }: any) => {
             />
           </div>
 
-          <div className="text-gray-500 ml-2">
+          <div className="text-gray-500 ml-2 ">
             <h2 className="text-black font-semibold">{card.title}</h2>
-            <p className="text-sm">{card.owner.username}</p>
+            <p className="text-xs">{card?.owner?.userName}</p>
             <div className="flex text-xs text-gray-400">
               <p className="mr-2">{card.views > 0 ? `${card.views} views` : `${card.views} view`}</p>
               <p>{timeAgo.format(new Date(card.createdAt))}</p>

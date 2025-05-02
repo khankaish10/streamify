@@ -57,8 +57,8 @@ const Profile = () => {
     return (
         <div className='w-full lg:max-w-[1200px] ml-0 mt-10
             m-0 h-screen box-border
-            sm:ml-[50px]
-            lg:ml-[200px] 
+            sm:pl-[50px]
+            lg:pl-[200px] 
             xl:max-w-[1300px]
             '>
             {/* font-[poppins]'> */}

@@ -1,32 +1,28 @@
 import React from 'react'
 
 const WatchHistoryAnimation = () => {
-  return (
-    <div className='flex w-full cursor-pointer
-    mb-5 relative shadow animate-pulse border'>
-
-    <div className='flex' >
-        {/* delete history - cross at top right corner */}
-
-
-        {/*  */}
-        <div className='h-30 w-[45%] lg:min-w-[200px] max-w-[200px] overflow-hidden 
-                                rounded-lg mr-5 bg-black'>
-            <div className='h-20 bg-gray-300'></div>
-        </div>
-        <div className='flex-col md:flex pr-1'>
-            <p className='text-xl'></p>
-            <div className='flex item-center'>
-                <p className='mr-2 text-xs'></p>
-                <p className='text-xs'></p>
+    return (
+        <div className='p-10 h-full flex flex-col p-5'>
+            <div className='pb-10 text-xl text-bold'>Watch history</div>
+            <div className='h-30 '>
+                <div className='h-full w-full gap-4 
+                        animate-pulse flex max-w-[400px]
+                        sm:w-[90%] 
+                        md:w-[70%]
+                        lg:w-[50%] '>
+                    {/* // Image */}
+                    <div className='h-full rounded-xl bg-gray-400
+                                    w-[200px]'></div>
+                    <div className='flex flex-col  w-full'>
+                        <div className='h-2 bg-gray-300 mb-4'></div>
+                        <div className='h-2 bg-gray-300 mb-4'></div>
+                        <div className='h-2 bg-gray-300'></div>
+                    </div>
+                </div>
             </div>
-            <p className='text-gray-400 w-full
-            break-words text-sm 
-            overflow-hidden'></p>
+
         </div>
-    </div>
-</div>
-  )
+    )
 }
 
 export default WatchHistoryAnimation

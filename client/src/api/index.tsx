@@ -5,9 +5,9 @@ import { jwtDecode } from "jwt-decode";
 const api = axios.create({
     baseURL: API_URL,
     withCredentials: true,
-    headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}").accessToken}`, 
-    },
+    // headers: {
+    //     Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}").accessToken}`, 
+    // },
 });
 
 const getCookie = (cookieName: string) => {

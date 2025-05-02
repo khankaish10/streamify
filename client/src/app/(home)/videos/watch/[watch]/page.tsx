@@ -59,9 +59,10 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
     console.log("videoDetails: ", videoDetails)
     return (
         <div
-            className="w-full h-full p-1 ml-0 mt-10
-            sm:ml-[50px]
-            lg:ml-[200px] 
+            className="w-full h-full p-1 ml-0
+            mt-10 
+            sm:pl-[50px]
+            lg:pl-[200px] lg:[w-90vw]
             xl:max-w-[1600px] "
         >
             {
