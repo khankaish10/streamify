@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, User } from "lucide-react";
@@ -14,6 +14,7 @@ const Navbar = () => {
   const [profileModal, setProfileModal] = useState(false);
   const dispatch = useAppDispatch();
   const router = userRouter()
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = () => {
     handleLogout()
@@ -30,11 +31,24 @@ const Navbar = () => {
 
   };
 
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+  //       setProfileModal(false); // Close the modal
+  //     }
+  //   };
+    
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
+
   console.log("user", user);
 
   return (
     <nav className="flex items-center p-1 justify-between w-full
-      fixed top-0 z-10 bg-white shadow-md h-10">
+      fixed top-0 z-10 bg-white shadow-md h-11">
 
       {/* Logo----------- */}
       <div>
@@ -93,11 +107,15 @@ const Navbar = () => {
         {
           user && (
             <div
+            id="profileDiv"
+            ref={profileRef}
               className="border-1 border-gray-300 h-8 
                         w-8 rounded-full flex justify-center 
                         items-center overflow-hidden mr-1 
                         hidden sm:block cursor-pointer ml-5"
-              onClick={() => setProfileModal(!profileModal)}
+              onClick={(e) => {
+                if(e.currentTarget.id !== 'profileDiv') {}
+                setProfileModal(!profileModal)}}
             >
               <Image
                 src={user?.avatar}

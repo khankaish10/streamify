@@ -4,13 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
-TimeAgo.addLocale(en);
+
 
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
 import { createHistoryAndViewsApi } from "@/api";
 
 const VideoCard = ({ card }: any) => {
+  TimeAgo.addLocale(en);
   const user = useAppSelector(state => state.user)
   const timeAgo = new TimeAgo('en')
   const dispatch = useAppDispatch()
@@ -23,7 +24,7 @@ const VideoCard = ({ card }: any) => {
           dispatch(videoHistory(card))
         })
         .catch(err => console.log(err))
-    } 
+    }
 
   }
 

@@ -1,5 +1,5 @@
 import User from "../model/user.model.js";
-import {errorResponse } from "../utils/apiResponse.js";
+import { errorResponse } from "../utils/apiResponse.js";
 import jwt from "jsonwebtoken";
 
 const verifyJwt = async (req, res, next) => {
@@ -8,7 +8,9 @@ const verifyJwt = async (req, res, next) => {
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
 
-      if (!token) throw errorResponse(res, "Unauthorized access!", 401);
+    console.log("Cookies: ", req.cookies.accessToken);
+    console.log("Authorization Header: ", req.header("Authorization"));
+    if (!token) throw errorResponse(res, "Unauthorized access!", 401);
     // console.log("token: ", token)
     const decodedToken = jwt.verify(
       token,

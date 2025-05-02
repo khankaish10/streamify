@@ -1,12 +1,13 @@
 import axios from "axios";
 import { API_URL } from "../Constants/Constants";
-// import getCookie from "../util/cookie";
 import { jwtDecode } from "jwt-decode";
-import checkTokenExpiry from "@/app/components/checkTokenExpiry";
 
 const api = axios.create({
     baseURL: API_URL,
     withCredentials: true,
+    headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}").accessToken}`, 
+    },
 });
 
 const getCookie = (cookieName: string) => {
@@ -18,8 +19,8 @@ const getCookie = (cookieName: string) => {
 
 api.interceptors.request.use(
     (config) => {
-        if(config.url === "/users/login" || config.url === "/users/signup"
-            
+        if (config.url === "/users/login" || config.url === "/users/signup"
+
         ) {
             console.log("skipping login")
             return config
@@ -181,25 +182,25 @@ export const unSubscribeApi = async (unSubscribeTo: string) => {
     }
 }
 export const createHistoryAndViewsApi = async (videoid: string) => {
-   try {
+    try {
         const response = await api.post(`/videos/history/${videoid}`)
         return response.data
-   } catch (error) {
+    } catch (error) {
         console.log("Error creating history", error)
-   }
+    }
 }
 export const deleteHistoryApi = async (videoid: string) => {
     try {
-         const response = await api.delete(`/videos/history/${videoid}`)
-         return response.data
+        const response = await api.delete(`/videos/history/${videoid}`)
+        return response.data
     } catch (error) {
-         console.log("Error deleting history", error)
+        console.log("Error deleting history", error)
     }
- }
- 
+}
 
 
-export const getAllHistoryApi = async() => {
+
+export const getAllHistoryApi = async () => {
     try {
         const response = await api.get('/videos/history')
         return response.data

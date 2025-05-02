@@ -64,10 +64,7 @@ const signUp = asyncHandler(async (req, res) => {
   };
 
   res
-    .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-    })
+    .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options);
 
   return successResponse(
@@ -110,13 +107,10 @@ const login = asyncHandler(async (req, res) => {
   await existedUser.save({ validateBeforeSave: false });
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
   res
-    .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-    })
+    .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options);
 
   return successResponse(
@@ -167,7 +161,7 @@ const generateRefreshAccessToken = async (req, res) => {
   const accessToken = await user.generateAccessToken();
 
   res.cookie("accessToken", accessToken, {
-    httpOnly: false,
+    httpOnly: true,
     secure: true,
   });
 

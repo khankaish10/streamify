@@ -64,8 +64,8 @@ const Profile = () => {
             {/* font-[poppins]'> */}
             {
                 loading ? <div className='flex justify-center items-center h-screen'>Loading...</div> : (
-                    <div className="container flex flex-col pl-10 pt-10 h-screen">
-                        <div className='flex items-center p-3 '>
+                    <div className="container flex flex-col sm:pl-10 sm:pt-10 h-screen  p-1 sm:p-0">
+                        <div className='flex flex-col sm:flex-row items-center justify-center sm:justify-start p-3 '>
                             {/* profile pic, update password */}
                             <div className='h-35 w-35 overflow-hidden 
                                             rounded-full border-1 border-gray-500
@@ -79,9 +79,9 @@ const Profile = () => {
                                 />
                             </div>
 
-                            <div className='flex flex-col ml-5'>
+                            <div className='flex flex-col justify-center items-center sm:justify-start sm:items-start ml-5 mt-2 sm:mt-0 '>
                                 <div className='text-2xl'>{user?.fullName}</div>
-                                <div className='flex items-center'>
+                                <div className='flex flex-col sm:flex-row sm:w-auto items-center '>
                                     <p className='font-semibold text-xl'>{`@${user?.userName}. `}</p>
                                     <p className='text-gray-500 ml-1 mr-1'>
                                        {user?.subscriberCount > 1 ? (`${user.subscriberCount} subscribers.`) : (`${user.subscriberCount} subscriber.`) } 

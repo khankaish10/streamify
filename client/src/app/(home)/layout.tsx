@@ -12,7 +12,7 @@ const layout = ({ children }: Readonly<{
         <main className="flex flex-col h-screen w-full ">
 
             <Navbar />
-            <section className="sm:min-flex-col sm:flex h-full">
+            <section className=" xl:max-w-[1500px] sm:flex-col sm:flex h-full">
                 <Sidebar />
                 {children}
                 <Sidebar_Bottom />
