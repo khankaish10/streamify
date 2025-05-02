@@ -26,9 +26,10 @@ const VideoThumbnail = () => {
 
                     </div>
 
-                    <div className="text-gray-500 ml-2 w-[80%]">
+                    <div className="text-gray-500 ml-2 w-[100%]">
                         <div className="h-2 mb-2 bg-gray-300"></div>
-                        <p className="h-1 bg-gray-300"></p>
+                        <p className="h-2 mb-2 bg-gray-300"></p>
+                        <p className="h-2 bg-gray-300"></p>
                     </div>
                 </div>
             </div>

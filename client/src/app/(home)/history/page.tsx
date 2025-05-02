@@ -13,7 +13,7 @@ const Page = () => {
     const historyDetails = useAppSelector(state => state.history)
     const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
 
     const handleDeleteHistory = (id: string, index: number) => {
@@ -48,7 +48,7 @@ const Page = () => {
             '>
             {(isLoading && user.length) ? <WatchHistoryAnimation /> : (
                 <div className='flex flex-col p-5 pb-16'>
-                    <p className='text-3xl text-bold my-5'>Watch history</p>
+                    <p className='text-3xl font-bold my-5'>Watch history</p>
                     <div className='flex flex-col lg:flex-row-reverse w-full'>
                         <div className='mb-5 lg:mb-0'>
                             fixed ______ need to add clear history

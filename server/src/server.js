@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 
 // enable cors
 app.use(cors({
-    origin: ["http://localhost:3000", "http://192.168.0.116:3000"],
+    origin: ["http://localhost:3000", "http://192.168.0.116:3000", "http://192.168.235.40:3000/"],
     // origin: "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific HTTP methods
