@@ -7,7 +7,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { sideBarMenuAndPath } from '@/Constants/Constants';
 
 const Sidebar_Bottom = () => {
-    const user = useAppSelector((state) => state.user[0]);
+    const user = useAppSelector((state) => state.user);
 
     console.log("user sidebar bottom : ", user)
     return (

@@ -60,6 +60,7 @@ const Profile = () => {
     console.log("User data:", user); // Log the user data to verify it's correct
     return (
         isLoading ? <ProfilePageAnimation /> : (
+
             <div className='w-full lg:max-w-[1200px] ml-0 mt-10
             m-0 h-screen box-border
             sm:pl-[50px]
@@ -162,6 +163,7 @@ const Profile = () => {
 
                 </div>
             </div>)
+        // <div>Login </div>
     )
 }
 

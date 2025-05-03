@@ -30,19 +30,20 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
     const [videoDetails, setVideoDetails] = React.useState<any>(null)
     const [isLoading, setIsLoading] = React.useState(true)
     const videoId = useParams<any>();
-    const [user, setUser] = useState(false)
+    // const [user, setUser] = useState(false)
+    const user = useAppSelector(state => state.user)
 
     useLayoutEffect(() => {
-        let loggedInUserId = null;
-        const userData = localStorage.getItem('user')
-        if (!userData) {
-            setUser(true)
-        } else {
-            loggedInUserId = JSON.parse(userData)._id
-            setUser(false)
-        }
+        // let loggedInUserId = null;
+        // const userData = localStorage.getItem('user')
+        // if (!userData) {
+        //     setUser(true)
+        // } else {
+        //     loggedInUserId = JSON.parse(userData)._id
+        //     setUser(false)
+        // }
 
-        handleGetAVideo(videoId?.watch, loggedInUserId)
+        handleGetAVideo(videoId?.watch, user?._id)
 
             .then((res) => {
                 console.log("rs:", res?.data[0])
@@ -53,6 +54,27 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
                 console.log(err);
             });
     }, [])
+    // useLayoutEffect(() => {
+    //     let loggedInUserId = null;
+    //     const userData = localStorage.getItem('user')
+    //     if (!userData) {
+    //         setUser(true)
+    //     } else {
+    //         loggedInUserId = JSON.parse(userData)._id
+    //         setUser(false)
+    //     }
+
+    //     handleGetAVideo(videoId?.watch, loggedInUserId)
+
+    //         .then((res) => {
+    //             console.log("rs:", res?.data[0])
+    //             setVideoDetails(res?.data[0])
+    //             setIsLoading(false)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, [])
 
 
 

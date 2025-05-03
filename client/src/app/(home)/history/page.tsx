@@ -46,7 +46,7 @@ const Page = () => {
             lg:pl-[200px] 
             xl:max-w-[1300px]
             '>
-            {(isLoading && user.length) ? <WatchHistoryAnimation /> : (
+            {(isLoading && user) ? <WatchHistoryAnimation /> : (
                 <div className='flex flex-col p-5 pb-16'>
                     <p className='text-3xl font-bold my-5'>Watch history</p>
                     <div className='flex flex-col lg:flex-row-reverse w-full'>
@@ -55,13 +55,13 @@ const Page = () => {
                         </div>
                         <div className={`flex flex-col videolist
                                 w-full  
-                                    ${!user.length ?
+                                    ${!user ?
                                 'justify-center items-center' :
                                 ""
                             } `}>
 
                             {
-                                user.length ? (!historyDetails.length ? (
+                                user ? (!historyDetails.length ? (
                                     <div> No watch history </div>
                                 ) : (
 
