@@ -19,7 +19,7 @@ app.use(cors({
 // app.options("*", cors())
 
 app.get("/", (req, res) => {
-    res.send(req.cookies.accessToken)
+    res.send("App is running...")
     
 })
 
