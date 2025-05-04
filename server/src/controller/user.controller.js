@@ -160,10 +160,16 @@ const logout = asyncHandler(async (req, res) => {
       refreshToken: 1,
     },
   });
+  const options = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/"
+  };
 
   res
-    .clearCookie("accessToken", { httpOnly: true, secure: true })
-    .clearCookie("refreshToken", { httpOnly: true, secure: true });
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options);
 
   return successResponse(res, "success logout", {}, 200);
 });
