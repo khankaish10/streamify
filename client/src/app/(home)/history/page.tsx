@@ -70,7 +70,7 @@ const Page = () => {
                                         return (
 
                                             <div key={index} className='flex sm:max-w-130 cursor-pointer
-                                        mb-5 relative shadow'>
+                                        mb-5 relative '>
 
                                                 <button className='absolute top-0 right-0 text-2xl 
                                                 text-gray-400 cursor-pointer z-10
