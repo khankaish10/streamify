@@ -6,36 +6,52 @@ import { useRouter } from 'next/navigation'
 import { login } from '@/lib/features/users/userSlice'
 import Link from 'next/link'
 import Image from 'next/image'
+import { loginValidationSchema } from '@/lib/formValidation/form_validation'
 
 const LoginForm = () => {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [userName, setuserName] = React.useState('')
+    const [errors, setErrors] = useState<{ email?: string[]; userName?: string[]; password?: string[] } | undefined>();
     const dispatch = useAppDispatch()
     const router = useRouter()
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
 
-        handleLogin({ email, password })
-            .then((response) => {
-                dispatch(login(response.data))
-                console.log("login response: ", response.data)
-                router.push('/')
+        const validatedFields = loginValidationSchema.safeParse({
+            email, password, userName
+        })
+        console.log("login without entering")
+        if (!validatedFields.success) {
+            setErrors(validatedFields.error.flatten().fieldErrors)
+            setTimeout(() => (
+                setErrors({})   
+            ), 2000)
+            console.log("validation: ", validatedFields.error.flatten().fieldErrors)
+        } else {
 
-            }).catch((error) => {
-                console.error('Login failed:', error)
-                // Handle login failure (e.g., show error message)
-            })
+            handleLogin({ email, password })
+                .then((response) => {
+                    dispatch(login(response.data))
+                    console.log("login response: ", response.data)
+                    router.push('/')
+
+                }).catch((error) => {
+                    console.error('Login failed:', error)
+                    // Handle login failure (e.g., show error message)
+                })
+        }
+
     }
     return (
         <div className=' shadow p-5 rounded-lg flex flex-col items-center'>
-            <form onClick={e => handleSubmit(e)}
+            <form onSubmit={e => handleSubmit(e)}
                 className='max-w-[350px] w-[300px] rounded-lg flex flex-col items-center'>
                 <div className='text-2xl mb-7'>Welcome Back</div>
                 <div className='mb-5 w-full'>
                     <label htmlFor="email" className="block text-gray-700 text-xs">
-                        Email<span className="text-red-500">*</span>
+                        Email or Username<span className="text-red-500">*</span>
                     </label>
                     <input
                         type="email"
@@ -44,7 +60,10 @@ const LoginForm = () => {
                         className='p-2 outline-none shadow mb-1 w-full'
                         placeholder='Email or Username'
                     />
-                    <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>Incorrect username or email</p>
+                    {
+                        errors?.email &&
+                        <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>{errors?.email}</p>
+                    }
                 </div>
                 <div className='mb-5 w-full'>
                     <label htmlFor="password" className="block text-gray-700 text-xs">
@@ -57,12 +76,15 @@ const LoginForm = () => {
                         className='p-2 outline-none shadow mb-2 w-full'
                         placeholder='Password'
                     />
-                    <p className='text-[#CB356B] text-xs w-[90%] break-normal '>Incorrect Password</p>
+                    {
+                        errors?.password &&
+                        <p className='text-[#CB356B] text-xs w-[90%] break-normal '>{errors?.password}</p>
+                    }
                 </div>
-                <div className=' w-[60%] rounded-2xl border bg-linear-to-r from-[#CB356B] to-[#93291E] 
+                <button className=' w-[60%] rounded-2xl border bg-linear-to-r from-[#CB356B] to-[#93291E] 
                         text-center p-1 text-[#bbbbbb]'>
                     Login
-                </div>
+                </button>
             </form>
 
             <p className='my-3'>or</p>
