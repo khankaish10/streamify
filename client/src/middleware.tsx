@@ -3,6 +3,7 @@ import { NextURL } from "next/dist/server/web/next-url";
 
 
 export default function middleware(request: NextRequest) {
+    console.log("request origin: ", request.headers.get("origin"))
     const { pathname } = request.nextUrl;
     // check if route is protected
     const token = request.cookies.get("accessToken")?.value || request.headers.get("Authorization")?.replace("Bearer ", "");;
