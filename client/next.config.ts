@@ -1,6 +1,6 @@
-import type { NextConfig } from "next";
+;
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -35,9 +35,6 @@ const nextConfig: NextConfig = {
 
   /* config options here */
 };
-// module.exports = {
-//   // allowedDevOrigins: ["*"],
-//   allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev'],
-// }
 
-export default nextConfig;
+
+module.exports = nextConfig;
