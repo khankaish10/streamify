@@ -1,15 +1,36 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { House, History, FileVideo } from 'lucide-react'
 import Image from "next/image";
-import { useAppSelector } from "@/lib/hooks";
 import { sideBarMenuAndPath } from '@/Constants/Constants';
+import { openModal } from "@/lib/features/globalModalslice";
+import { handleLogout } from "@/api";
+import { logout } from "@/lib/features/users/userSlice";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { useRouter as userRouter } from "next/navigation";
+
 
 const Sidebar_Bottom = () => {
     const user = useAppSelector((state) => state.user);
+    const [profileModal, setProfileModal] = useState(false);
+    const dispatch = useAppDispatch();
+    const router = userRouter()
 
-    console.log("user sidebar bottom : ", user)
+
+    const handleSubmit = () => {
+        handleLogout()
+            .then(() => {
+                setProfileModal(!profileModal)
+                dispatch(logout());
+                router.push('/')
+            })
+            .catch((error) => {
+                console.error("Logout error:", error);
+            });
+    };
+
+    console.log("user sidebar bottom : ", user);
     return (
         <div className='fixed bottom-0 left-0 sm:hidden bottom-0 z-5
                         flex justify-around items-center w-full bg-white
@@ -18,32 +39,62 @@ const Sidebar_Bottom = () => {
             {
                 sideBarMenuAndPath?.map((menu, index) => {
                     return (
-                        <Link href={(user && menu.name === "Profile") ? "/profile" : menu.path} key={index}>
+                        <div key={index}>
                             <div className='flex items-center my-1 
            '>
                                 <div className='lg:mr-4 flex flex-col items-center 
                                                 justify-center'>
                                     {
                                         user && menu.name === "Profile" ? (
-                                            <div className='h-8 w-8 rounded-full 
+                                            <div className='relative'>
+
+                                                <div className={`absolute top-[-120px] left-[-100px] 
+                                                            flex flex-col border border-gray-300
+                                                            bg-white gap-2 rounded-lg overflow-hidden
+                                                            ${profileModal ? 'block' : 'hidden'}`}>
+                                                    <Link href={"/profile"}>
+                                                        <div className="cursor-pointer hover:bg-gray-100 
+                                                                        hover:border-b-1 p-1 " >Profile</div>
+                                                    </Link>
+                                                    <div className="cursor-pointer hover:bg-gray-100 
+                                                                    hover:border-b-1 p-1 "
+                                                        onClick={() => dispatch(openModal())} >Upload Video</div>
+                                                    <div className="cursor-pointer hover:bg-gray-100 
+                                                                    hover:border-b-1 p-1 rounded-b-lg"
+                                                        onClick={() => handleSubmit()} >Logout</div>
+                                                </div>
+
+
+
+
+                                                <div className='h-8 w-8 rounded-full 
                                                             flex justify-center 
-                                                            items-center overflow-hidden'>
-                                                <Image
-                                                    src={user?.avatar}
-                                                    width={28}
-                                                    height={28}
-                                                    alt="Picture of the author"
-                                                    className="rounded-full object-cover h-full w-full"
-                                                />
+                                                            items-center overflow-hidden'
+                                                    id="profileDiv"
+                                                    onClick={(e) => {
+                                                        if (e.currentTarget.id !== 'profileDiv') { }
+                                                        setProfileModal(!profileModal)
+                                                    }}>
+                                                    <Image
+                                                        src={user?.avatar}
+                                                        width={28}
+                                                        height={28}
+                                                        alt="Picture of the author"
+                                                        className="rounded-full object-cover h-full w-full"
+                                                    />
+                                                </div>
                                             </div>
 
-                                        ) : <menu.Icon size={menu.iconSize} />
+                                        ) : <Link
+                                            href={'/auth/login'}>
+                                            <menu.Icon size={menu.iconSize} />
+                                        </Link>
                                     }
 
                                     <p className='lg:block text-sm mt-[1]'>{menu.name}</p>
                                 </div>
                             </div>
-                        </Link>
+                        </div>
                     )
                 })
             }
