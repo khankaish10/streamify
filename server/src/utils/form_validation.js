@@ -5,7 +5,7 @@ export const loginValidationSchema = z.object({
         .email({ message: "Please enter a valid email." })
         .trim(),
     userName: z.string().optional(),
-    password: z.string().min(1, { message: "Not be empty" })
+    password: z.string().min(1, { message: "Not be empty " })
         .min(8, { message: "Password must be atleast 8 characters long." })
         .trim()
 })
