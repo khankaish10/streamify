@@ -8,6 +8,8 @@ import { handleGetAVideo } from "@/api";
 import { useParams } from 'next/navigation';
 import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
 import WatchVideoAnimation from '@/lib/ui-component/WatchVideoAnimation';
+import {Usertype} from '@/lib/features/users/userSlice'
+import { RootState } from '@reduxjs/toolkit/query';
 
 // interface VideoPlayerProps {
 //   src: string;
@@ -22,11 +24,13 @@ function WatchVideo() {
   const [videoDetails, setVideoDetails] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const videoId = useParams<any>();
-  const user = useAppSelector(state => state.user)
+  const user = useAppSelector((state:any) => state.user)
 
   useLayoutEffect(() => {
+    const userId = user?._id as string
     handleGetAVideo(videoId?.watch, user?._id)
       .then((res) => {
+        console.log("get a video : ", res)
         setVideoDetails(res?.data[0])
         setIsLoading(false)
       })

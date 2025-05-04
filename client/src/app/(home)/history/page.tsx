@@ -9,6 +9,8 @@ import { deleteHistoryApi, getAllHistoryApi } from '@/api'
 import { User } from "lucide-react";
 import WatchHistoryAnimation from '@/lib/ui-component/watchHistoryAnimation'
 
+
+
 const Page = () => {
     const historyDetails = useAppSelector(state => state.history)
     const user = useAppSelector(state => state.user)
@@ -19,7 +21,7 @@ const Page = () => {
     const handleDeleteHistory = (id: string, index: number) => {
         deleteHistoryApi(id)
             .then(res => {
-                dispatch(deleteHistory({ videoId: res.data._id, index }))
+                dispatch(deleteHistory({ videoId: res?.data._id, index }))
             })
             .catch(error => console.log("error deleting", error))
     }
@@ -28,7 +30,7 @@ const Page = () => {
         setIsLoading(true)
         getAllHistoryApi()
             .then((res) => {
-                dispatch(videoHistory(res.data))
+                dispatch(videoHistory(res?.data))
                 setIsLoading(false)
             }
             )

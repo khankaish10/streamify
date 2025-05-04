@@ -12,7 +12,7 @@ import { useRouter as userRouter } from "next/navigation";
 
 
 const Sidebar_Bottom = () => {
-    const user = useAppSelector((state) => state.user);
+    const user = useAppSelector((state:any) => state.user);
     const [profileModal, setProfileModal] = useState(false);
     const dispatch = useAppDispatch();
     const router = userRouter()

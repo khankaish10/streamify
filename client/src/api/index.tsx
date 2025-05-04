@@ -3,12 +3,15 @@ import { API_URL } from "../Constants/Constants";
 import { jwtDecode } from "jwt-decode";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    // baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: API_URL,
     withCredentials: true,
     // headers: {
     //     Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}").accessToken}`, 
     // },
 });
+
+
 
 const getCookie = (cookieName: string) => {
     const cookies = document.cookie.split("; ");
@@ -62,9 +65,15 @@ interface AuthData {
     password: string;
 }
 
+interface authresponseDetails {
+    data: {
+        _id: string
+    }
+}
+
 export const handleLogin = async (authData: AuthData) => {
     try {
-        const response = await api.post("/users/login", authData);
+        const response = await api.post<authresponseDetails>("/users/login", authData);
         return response.data;
 
     } catch (error) {
@@ -85,11 +94,11 @@ export const handleLogout = async () => {
 
 export const handleSignup = async (formData: any) => {
     try {
-        const response = await api.post("/users/signup", formData, {
+        const response = await api.post<authresponseDetails>("/users/signup", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
-        });t
+        });
         return response.data;
     } catch (error) {
         console.error("Signup error:", error);
@@ -97,10 +106,18 @@ export const handleSignup = async (formData: any) => {
     }
 }
 
+interface getProfileType {
+    data: [
+        {
+            _id: string
+        }
+    ]
+}
+
 export const handleGetProfile = async () => {
 
     try {
-        const response = await api.get("/users/profile");
+        const response = await api.get<getProfileType>("/users/profile");
         return response.data;
     } catch (error) {
         console.error("Get profile error:", error);
@@ -108,10 +125,17 @@ export const handleGetProfile = async () => {
     }
 }
 
+interface getAVideoType {
+    data: [
+        {
+            _id: string
+        }
+    ]
+}
 
 export const handleGetAVideo = async (videoid: string, currentUserId: string | null) => {
     try {
-        const response = await api.post(`/videos/watch/${videoid}`, { currentUserId }, {
+        const response = await api.post<getAVideoType>(`/videos/watch/${videoid}`, { currentUserId }, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -123,9 +147,16 @@ export const handleGetAVideo = async (videoid: string, currentUserId: string | n
     }
 }
 
+interface getAllVideosType {
+    data: [
+        {
+            _id: string
+        }
+    ]
+}
 export const handleGetAllVideos = async () => {
     try {
-        const response = await api.get('/videos');
+        const response = await api.get<getAllVideosType>('/videos');
         return response.data
     } catch (error) {
         console.error("Getting all video error:", error);
@@ -184,7 +215,7 @@ export const createHistoryAndViewsApi = async (videoid: string) => {
 }
 export const deleteHistoryApi = async (videoid: string) => {
     try {
-        const response = await api.delete(`/videos/history/${videoid}`)
+        const response = await api.delete<authresponseDetails>(`/videos/history/${videoid}`)
         return response.data
     } catch (error) {
         console.log("Error deleting history", error)
@@ -195,7 +226,7 @@ export const deleteHistoryApi = async (videoid: string) => {
 
 export const getAllHistoryApi = async () => {
     try {
-        const response = await api.get('/videos/history')
+        const response = await api.get<authresponseDetails>('/videos/history')
         return response.data
     } catch (error) {
         console.log("Error fetching history", error)

@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-interface User {
-  accessToken?: string,
-  avatar?: string,
-  coverImage?: string,
-  createdAt?: string,
-  email?: string,
-  fullName?: string,
-  userName?: string,
-  _id?: string
+export interface Usertype {
+  accessToken: string,
+  avatar: string,
+  coverImage: string,
+  createdAt: string,
+  email: string,
+  fullName: string,
+  userName: string,
+  _id: string
 }
 
 
-const initialState: User | null = null;
+const initialState: Usertype | null = null;
 
 const userSlice = createSlice({
   name: 'users',

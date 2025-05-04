@@ -15,7 +15,7 @@ function Home() {
   useLayoutEffect(() => {
     setIsLoading(true)
     handleGetAllVideos()
-      .then((res): any => {
+      .then((res) => {
         dispatch(allVideos(res.data))
         setIsLoading(false)
       })

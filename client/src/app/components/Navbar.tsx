@@ -10,7 +10,7 @@ import { useRouter as userRouter } from "next/navigation";
 import { openModal } from "@/lib/features/globalModalslice";
 
 const Navbar = () => {
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state:any) => state.user);
   const [profileModal, setProfileModal] = useState(false);
   const dispatch = useAppDispatch();
   const router = userRouter()
