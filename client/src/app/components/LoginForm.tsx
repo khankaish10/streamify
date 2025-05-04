@@ -63,10 +63,8 @@ const LoginForm = () => {
                         className='p-2 outline-none shadow mb-1 w-full'
                         placeholder='Email or Username'
                     />
-                    {
-                        errors?.email &&
-                        <p className='text-[#CB356B] text-xs min-h-4 w-[90%] break-normal   '>{errors?.email}</p>
-                    }
+                    <p className={`text-[#CB356B] text-xs w-[90%] min-h-4 break-normal} `}>{errors?.email || ''}</p>
+
                 </div>
                 <div className='mb-5 w-full'>
                     <label htmlFor="password" className="block text-gray-700 text-xs">
@@ -79,10 +77,7 @@ const LoginForm = () => {
                         className='p-2 outline-none shadow mb-2 w-full'
                         placeholder='Password'
                     />
-                    {
-                        errors?.password &&
-                        <p className='text-[#CB356B] text-xs min-h-4 w-[90%] break-normal '>{errors?.password}</p>
-                    }
+                    <p className={`text-[#CB356B] text-xs w-[90%] min-h-4  break-normal`}>{errors?.password || ''}</p>
                 </div>
                 <button className=' w-[60%] rounded-2xl border bg-linear-to-r from-[#CB356B] to-[#93291E] 
                         text-center p-1 text-[#bbbbbb]' disabled={isLoading}>
