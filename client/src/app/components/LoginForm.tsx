@@ -65,7 +65,7 @@ const LoginForm = () => {
                     />
                     {
                         errors?.email &&
-                        <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>{errors?.email}</p>
+                        <p className='text-[#CB356B] text-xs min-h-4 w-[90%] break-normal   '>{errors?.email}</p>
                     }
                 </div>
                 <div className='mb-5 w-full'>
@@ -81,7 +81,7 @@ const LoginForm = () => {
                     />
                     {
                         errors?.password &&
-                        <p className='text-[#CB356B] text-xs w-[90%] break-normal '>{errors?.password}</p>
+                        <p className='text-[#CB356B] text-xs min-h-4 w-[90%] break-normal '>{errors?.password}</p>
                     }
                 </div>
                 <button className=' w-[60%] rounded-2xl border bg-linear-to-r from-[#CB356B] to-[#93291E] 
