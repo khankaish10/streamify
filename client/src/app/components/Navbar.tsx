@@ -10,7 +10,7 @@ import { useRouter as userRouter } from "next/navigation";
 import { openModal } from "@/lib/features/globalModalslice";
 
 const Navbar = () => {
-  const user = useAppSelector((state) => state.user[0]);
+  const user = useAppSelector((state) => state.user);
   const [profileModal, setProfileModal] = useState(false);
   const dispatch = useAppDispatch();
   const router = userRouter()
@@ -21,7 +21,7 @@ const Navbar = () => {
       .then(() => {
         setProfileModal(!profileModal)
         dispatch(logout());
-        // router.push('/auth/login')
+        router.push('/')
       }
       )
       .catch((error) => {
@@ -118,7 +118,7 @@ const Navbar = () => {
                 setProfileModal(!profileModal)}}
             >
               <Image
-                src={user?.avatar}
+                src={user?.avatar || "/default-avatar.png"}
                 width={32}
                 height={32}
 

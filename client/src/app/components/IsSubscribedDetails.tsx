@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { subscribeApi, unSubscribeApi } from '@/api/index'
 import { UserPlus, UserMinus } from 'lucide-react';
+import { useAppSelector } from '@/lib/hooks';
 
 
 
@@ -20,6 +21,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 
     const [subscriberCount, setSubscriberCount] = useState(0);
     const [isSubscribed, setIsSubscribed] = useState(false)
+    const user = useAppSelector(state => state.user)
 
 
     useEffect(() => {
@@ -73,29 +75,31 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 
             </div>
 
+            {
+                user && <div className='flex flex-col items-center'>
+                    <button className='bg-black text-white px-4 py-2 rounded-full
+                                cursor-pointer hover:bg-black-300
+                                hover:opacity-70 text-sm'
+                        onClick={(e) => handleSubsCount(e)
 
-            <div className='flex flex-col items-center'>
-                <button className='bg-black text-white px-4 py-2 rounded-full
-                                    cursor-pointer hover:bg-black-300
-                                    hover:opacity-70 text-sm'
-                    onClick={(e) => handleSubsCount(e)
+                        }>
+                        {isSubscribed ? (
+                            <div className='flex gap-2 justify-center items-center'>
+                                <UserMinus />
+                                Unsubscribe
+                            </div>
 
-                    }>
-                    {isSubscribed ? (
-                        <div className='flex gap-2 justify-center items-center'>
-                            <UserMinus />
-                            Unsubscribe
-                        </div>
+                        ) : (
+                            <div className='flex gap-2'>
+                                <UserPlus />
+                                Subscribe
+                            </div>
 
-                    ) : (
-                        <div className='flex gap-2'>
-                            <UserPlus />
-                            Subscribe
-                        </div>
+                        )}
+                    </button>
+                </div>
+            }
 
-                    )}
-                </button>
-            </div>
         </>
 
     )
