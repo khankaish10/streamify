@@ -51,7 +51,6 @@ const GlobalModal = () => {
                 form.append('thumbnail', thumbnailFile);
             }
 
-            console.log("title: ", title)
             if (title !== null) form.append("title", title);
             if (description !== null) form.append("description", description);
             if (tags !== null) form.append("tags", tags);
@@ -64,15 +63,8 @@ const GlobalModal = () => {
     const handleSubmit = () => {
         setIsUploadProcessing(true)
         if (formData) {
-
-            console.log("title:", title)
-            console.log("description: ", description)
-            console.log("duration: ", videoDuration)
-            console.log("tags: ", tags)
-
             handleUploadVideoApi(formData)
                 .then(response => {
-                    console.log(response.data)
                     setIsUploadProcessing(prev => !prev)
                     dispatch(closeModal())
                 })

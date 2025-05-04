@@ -18,7 +18,6 @@ function Home() {
       .then((res): any => {
         dispatch(allVideos(res.data))
         setIsLoading(false)
-        console.log('all videos: ', res.data)
       })
       .catch(err => console.log(err))
 

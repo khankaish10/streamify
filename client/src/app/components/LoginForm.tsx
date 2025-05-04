@@ -17,7 +17,6 @@ const LoginForm = () => {
     const [errors, setErrors] = useState<{ email?: string[]; userName?: string[]; password?: string[] } | undefined>();
     const dispatch = useAppDispatch()
     const router = useRouter()
-    console.log("error: ", errors)
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
 
@@ -29,13 +28,11 @@ const LoginForm = () => {
             setTimeout(() => (
                 setErrors({})
             ), 2000)
-            console.log("validation: ", validatedFields.error.flatten().fieldErrors)
         } else {
             setIsLoading(true);
             handleLogin({ email, password })
                 .then((response) => {
                     dispatch(login(response.data))
-                    console.log("login response: ", response.data)
                     router.push('/')
                     setIsLoading(false)
 

@@ -33,7 +33,6 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
         if (isSubscribed) {
             unSubscribeApi(ownerId)
                 .then(res => {
-                    console.log("unsubs: ", res?.data)
                     setSubscriberCount((prevCount) => prevCount - 1);
                     setIsSubscribed(prev => !prev)
                 })
@@ -41,7 +40,6 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
         } else {
             subscribeApi(ownerId)
                 .then((res) => {
-                    console.log("subs: ", res?.data)
                     setSubscriberCount((prevCount) => prevCount + 1);
                     setIsSubscribed(prev => !prev)
                 })

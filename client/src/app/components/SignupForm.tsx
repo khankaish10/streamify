@@ -32,16 +32,12 @@ const SignupForm = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!avatar) {
-            console.log(" no avatar selected", avatar)
-        }
         const validatedFields = signupValidationSchema.safeParse(formData)
         if (!validatedFields.success) {
             setErrors(validatedFields.error.flatten().fieldErrors)
             setTimeout(() => (
                 setErrors({})
             ), 2000)
-            console.log("validation: ", validatedFields.error.flatten().fieldErrors)
         } else {
 
             const data = new FormData();

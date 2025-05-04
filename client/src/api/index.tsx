@@ -12,7 +12,6 @@ const api = axios.create({
 
 const getCookie = (cookieName: string) => {
     const cookies = document.cookie.split("; ");
-    console.log("cookies: ", cookies)
     const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
     return cookie ? cookie.split("=")[1] : null;
 };
@@ -22,7 +21,6 @@ api.interceptors.request.use(
         if (config.url === "/users/login" || config.url === "/users/signup"
 
         ) {
-            console.log("skipping login")
             return config
         }
         let localStorageToken = null
@@ -32,7 +30,6 @@ api.interceptors.request.use(
         }
 
         const token = getCookie("accessToken")
-        console.log("localstorage token : ", localStorageToken)
 
         if (token || localStorageToken) {
             if (!config.headers) {
@@ -51,7 +48,6 @@ api.interceptors.request.use(
 
             config.headers = config.headers || {};
             config.headers.Authorization = `Bearer ${token || localStorageToken}`;
-            console.log("authorization : ", config.headers.Authorization)
         }
         return config;
     },
@@ -80,7 +76,6 @@ export const handleLogin = async (authData: AuthData) => {
 export const handleLogout = async () => {
     try {
         const response = await api.post("/users/logout");
-        console.log("Logout response:", response); // Log the response data to verify it's correct
         return response.data;
     } catch (error) {
         console.error("Logout error:", error);
@@ -94,8 +89,7 @@ export const handleSignup = async (formData: any) => {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
-        });
-        console.log("Signup response:", response.data); // Log the response data to verify it's correct
+        });t
         return response.data;
     } catch (error) {
         console.error("Signup error:", error);
@@ -132,7 +126,6 @@ export const handleGetAVideo = async (videoid: string, currentUserId: string | n
 export const handleGetAllVideos = async () => {
     try {
         const response = await api.get('/videos');
-        console.log(response.data)
         return response.data
     } catch (error) {
         console.error("Getting all video error:", error);

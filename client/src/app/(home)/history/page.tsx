@@ -19,7 +19,6 @@ const Page = () => {
     const handleDeleteHistory = (id: string, index: number) => {
         deleteHistoryApi(id)
             .then(res => {
-                console.log(res.data)
                 dispatch(deleteHistory({ videoId: res.data._id, index }))
             })
             .catch(error => console.log("error deleting", error))
@@ -29,7 +28,6 @@ const Page = () => {
         setIsLoading(true)
         getAllHistoryApi()
             .then((res) => {
-                console.log("history: ", res.data)
                 dispatch(videoHistory(res.data))
                 setIsLoading(false)
             }

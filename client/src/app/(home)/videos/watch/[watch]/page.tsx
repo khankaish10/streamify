@@ -9,24 +9,16 @@ import { useParams } from 'next/navigation';
 import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
 import WatchVideoAnimation from '@/lib/ui-component/WatchVideoAnimation';
 
-interface VideoPlayerProps {
-  src: string;
-  autoPlay?: boolean;
-  controls?: boolean;
-  loop?: boolean;
-  muted?: boolean;
-  className?: string;
-}
+// interface VideoPlayerProps {
+//   src: string;
+//   autoPlay?: boolean;
+//   controls?: boolean;
+//   loop?: boolean;
+//   muted?: boolean;
+//   className?: string;
+// }
 
-function WatchVideo({
-  src,
-  autoPlay = false,
-  controls = true,
-  loop = false,
-  muted = false,
-  className = "",
-  ...props
-}: VideoPlayerProps) {
+function WatchVideo() {
   const [videoDetails, setVideoDetails] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const videoId = useParams<any>();
@@ -35,7 +27,6 @@ function WatchVideo({
   useLayoutEffect(() => {
     handleGetAVideo(videoId?.watch, user?._id)
       .then((res) => {
-        console.log("rs:", res?.data[0])
         setVideoDetails(res?.data[0])
         setIsLoading(false)
       })
@@ -52,14 +43,14 @@ function WatchVideo({
             <div className='w-full h-[70%] bg-black flex justify-center items-center overflow-hidden'>
               <video
                 src={videoDetails?.videoFile}
-                autoPlay={autoPlay}
-                controls={controls}
+                autoPlay={false}
+                controls={true}
                 height={400}
                 width={600}
                 poster={videoDetails?.thumbnail}
                 className='z-5 object-contain'
-                loop={loop}
-                muted={muted}
+                loop={false}
+                muted={false}
               />
             </div>
             <h1 className='my-2 font-bold'>{videoDetails?.description}</h1>

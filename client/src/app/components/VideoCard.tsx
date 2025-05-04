@@ -1,5 +1,5 @@
 'use client';
-import React, { useLayoutEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from 'javascript-time-ago'
@@ -20,7 +20,6 @@ const VideoCard = ({ card }: any) => {
     if (user) {
       createHistoryAndViewsApi(id)
         .then((res) => {
-          console.log("history api before dispatch: ", res.data)
           dispatch(videoHistory(card))
         })
         .catch(err => console.log(err))
@@ -28,8 +27,6 @@ const VideoCard = ({ card }: any) => {
 
   }
 
-
-  console.log('video card: ', card)
   return (
     <Link className=" lg:max-h-[310px]"
       href={`/videos/watch/${card._id}`}

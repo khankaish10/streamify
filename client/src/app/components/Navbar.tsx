@@ -44,7 +44,6 @@ const Navbar = () => {
   //   };
   // }, []);
 
-  console.log("user", user);
 
   return (
     <nav className="flex items-center p-1 justify-between w-full

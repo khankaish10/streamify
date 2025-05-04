@@ -35,7 +35,6 @@ const Profile = () => {
         handleGetProfile()
             .then(response => {
                 setUser(response.data[0])
-                console.log("Profile data:", response.data); // Log the profile data to verify it's correct
                 setIsLoading(false)
             })
             .catch((error) => {
@@ -48,7 +47,6 @@ const Profile = () => {
         handleGetProfile()
             .then(response => {
                 setUser(response.data[0])
-                console.log("Profile data:", response.data); // Log the profile data to verify it's correct
                 setIsLoading(false)
             })
             .catch((error) => {
@@ -57,7 +55,6 @@ const Profile = () => {
             });
 
     }, [])
-    console.log("User data:", user); // Log the user data to verify it's correct
     return (
         isLoading ? <ProfilePageAnimation /> : (
 

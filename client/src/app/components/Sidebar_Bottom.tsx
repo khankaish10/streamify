@@ -30,7 +30,6 @@ const Sidebar_Bottom = () => {
             });
     };
 
-    console.log("user sidebar bottom : ", user);
     return (
         <div className='fixed bottom-0 left-0 sm:hidden bottom-0 z-5
                         flex justify-around items-center w-full bg-white
