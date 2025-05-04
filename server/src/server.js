@@ -6,10 +6,6 @@ import cookieParser from 'cookie-parser'
 
 app.use(cookieParser())
 
-app.get("/", (req, res) => {
-    res.send(req.cookies.accessToken)
-    
-})
 
 
 // enable cors
@@ -22,6 +18,10 @@ app.use(cors({
 }));
 // app.options("*", cors())
 
+app.get("/", (req, res) => {
+    res.send(req.cookies.accessToken)
+    
+})
 
 // middleware for parsing
 

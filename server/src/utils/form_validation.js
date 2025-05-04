@@ -22,7 +22,7 @@ export const signupValidationSchema = z.object({
         .trim(),
     fullName: z.string()
         .min(1, { message: "fullname must not be empty." }),
-    // avatar: z
-    //     .any()
-    //     .refine((file) => file !== null && file !== undefined, { message: "Avatar is required." }),
+    avatar: z
+        .any()
+        .refine((file) => file !== null && file !== undefined, { message: "Avatar is required." }),
 })

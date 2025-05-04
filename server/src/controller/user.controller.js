@@ -14,7 +14,12 @@ const signUp = asyncHandler(async (req, res) => {
   if (
     [fullName, email, userName, password].some((field) => field?.trim() === "")
   ) {
-    throw errorResponse(res, "All fields are required", 404);
+    throw errorResponse(res, "All fields are required", 404, {
+      email: "Email is required.",
+      fullName: "Fullname is required.",
+      password: "Password is required.",
+      userName: "Username is required.",
+    });
   }
 
   const existedUser = await User.findOne({
@@ -22,17 +27,24 @@ const signUp = asyncHandler(async (req, res) => {
   });
 
 
-  if (existedUser) throw errorResponse(res, "User already exist");
-
+  if (existedUser) throw errorResponse(res, "User already exist", 404, {
+    email:"Email/Username already exists.",
+    userName: "Email/Username already exists",
+  });
+  console.log("files: ", req.files)
   const avatarLocalPath = req.files?.avatar[0]?.path;
   if (!avatarLocalPath)
-    throw errorResponse(res, "Avatar file is required", 404);
+    throw errorResponse(res, "Avatar file is required", 404, {
+      avatar: "Profile pic is required."
+  });
 
   // upload avatar to cloudinary
   const avatarUploadResult = await uploadToCloudinary(avatarLocalPath);
   if (!avatarUploadResult) {
     fs.unlinkSync(avatarLocalPath);
-    throw errorResponse(res, "Failed to upload avatar");
+    throw errorResponse(res, "Failed to upload avatar", 500, {
+      avatar: "Failed to upload profile picture."
+    });
   }
 
   //upload cover Image if available
@@ -86,19 +98,26 @@ const signUp = asyncHandler(async (req, res) => {
 
 const login = asyncHandler(async (req, res) => {
   const { userName, email, password } = req.body;
+
   if (userName == "" || email == "") {
-    throw errorResponse(res, "userName or email must be entered", 400);
+    throw errorResponse(res, "userName or email must be entered", 400, {
+      email: "userName or email must be entered",
+    });
   }
   const existedUser = await User.findOne({
     $or: [{ email }, { userName }],
   });
 
   if (!existedUser) {
-    throw errorResponse(res, "User doesnot exist", 400);
+    throw errorResponse(res, "User doesnot exist", 400, {
+      email: "User doesnot exist."
+    } );
   }
 
   const isPasswordValid = await existedUser.isPasswordCorrect(password);
-  if (!isPasswordValid) throw errorResponse(res, "Incorrect credentials");
+  if (!isPasswordValid) throw errorResponse(res, "Incorrect credentials", 404, {
+    email: "Incorrect credentials"
+  });
 
   const accessToken = await existedUser.generateAccessToken();
   const refreshToken = await existedUser.generateRefreshToken();
