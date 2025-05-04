@@ -73,6 +73,8 @@ const signUp = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "none",
+    path: "/"
   };
 
   res
@@ -126,7 +128,9 @@ const login = asyncHandler(async (req, res) => {
   await existedUser.save({ validateBeforeSave: false });
   const options = {
     httpOnly: true,
-    secure: false,
+    secure: true,
+    sameSite: "none",
+    path: "/"
   };
   res
     .cookie("accessToken", accessToken, options)

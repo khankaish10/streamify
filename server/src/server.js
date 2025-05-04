@@ -12,7 +12,7 @@ app.use(cookieParser())
 app.use(cors({
     // origin: ["http://localhost:3000", "http://192.168.0.119:3000", "http://192.168.235.40:3000/"],
     // origin: ["*"],
-    origin: true,
+    origin: "https://streamify-8xh94pffi-kaish-mohammad-khans-projects.vercel.app",
     credentials: true,
 
 }));
