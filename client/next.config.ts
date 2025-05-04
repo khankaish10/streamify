@@ -1,11 +1,11 @@
-;
+
 
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [     
+    remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
@@ -14,7 +14,7 @@ const nextConfig = {
         search: '',
       },
     ],
-    
+
   },
   // experimental: {
   //   allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev','*'],
