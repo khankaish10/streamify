@@ -21,8 +21,9 @@ const nextConfig: NextConfig = {
 
   /* config options here */
 };
-// module.exports = {
-//   allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev'],
-// }
+module.exports = {
+  // allowedDevOrigins: ["*"],
+  allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev'],
+}
 
 export default nextConfig;

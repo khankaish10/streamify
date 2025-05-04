@@ -45,7 +45,7 @@ const LoginForm = () => {
                     setTimeout(() => (
                         setErrors({})
                     ), 2000)
-                })
+                }).finally(() => setIsLoading(false))
 
         }
     }

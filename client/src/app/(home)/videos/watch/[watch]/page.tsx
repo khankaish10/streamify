@@ -1,12 +1,13 @@
 'use client'
 import React, { use, useLayoutEffect, useState } from 'react'
-import { cards } from '@/Constants/Constants';
+// import { cards } from '@/Constants/Constants';
 import Image from 'next/image';
 import { useAppSelector } from '@/lib/hooks';
 import { handleGetAVideo } from "@/api";
 import { subscribeApi } from '@/api';
 import { useParams } from 'next/navigation';
 import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
+import WatchVideoAnimation from '@/lib/ui-component/WatchVideoAnimation';
 
 
 interface VideoPlayerProps {
@@ -88,7 +89,7 @@ const WatchVideo: React.FC<VideoPlayerProps> = ({
             xl:max-w-[1600px] "
         >
             {
-                isLoading ? "Loading..." : (
+                isLoading ? <WatchVideoAnimation />: (
                     <div className='lg:w-[70%] h-full'>
                         {/* video container */}
                         <div className='w-full h-[70%] bg-black

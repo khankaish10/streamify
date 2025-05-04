@@ -10,11 +10,11 @@ app.use(cookieParser())
 
 // enable cors
 app.use(cors({
-    origin: ["http://localhost:3000", "http://192.168.0.116:3000", "http://192.168.235.40:3000/"],
-    // origin: "*",
+    // origin: ["http://localhost:3000", "http://192.168.0.119:3000", "http://192.168.235.40:3000/"],
+    // origin: ["*"],
+    origin: true,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], 
+
 }));
 // app.options("*", cors())
 
