@@ -37,7 +37,7 @@ const Navbar = () => {
   //       setProfileModal(false); // Close the modal
   //     }
   //   };
-    
+
   //   document.addEventListener("mousedown", handleClickOutside);
   //   return () => {
   //     document.removeEventListener("mousedown", handleClickOutside);
@@ -55,7 +55,7 @@ const Navbar = () => {
         <div className="inline-block w-0 h-0 border-solid lg:hidden
           rotate-90 border-t-0 border-r-[15px] border-l-[15px] ml-1
           border-b-[26px] border-l-transparent border-r-transparent 
-          border-t-transparent border-b-[#f73b3b]"></div>
+          border-t-transparent border-b-[#f73b3b] "></div>
         <Link href={"/"} className="hidden lg:block">
           <Image
             src="/logo.svg"
@@ -96,10 +96,10 @@ const Navbar = () => {
               </Link>
               <div className="cursor-pointer hover:bg-gray-100 
                           hover:border-b-1 p-1 "
-                          onClick={() => dispatch(openModal())} >Upload Video</div>
+                onClick={() => dispatch(openModal())} >Upload Video</div>
               <div className="cursor-pointer hover:bg-gray-100 
                           hover:border-b-1 p-1 rounded-b-lg"
-                          onClick={()=> handleSubmit()} >Logout</div>
+                onClick={() => handleSubmit()} >Logout</div>
             </div>
 
           )
@@ -107,15 +107,16 @@ const Navbar = () => {
         {
           user && (
             <div
-            id="profileDiv"
-            ref={profileRef}
+              id="profileDiv"
+              ref={profileRef}
               className="border-1 border-gray-300 h-8 
                         w-8 rounded-full flex justify-center 
                         items-center overflow-hidden mr-1 
                         hidden sm:block cursor-pointer ml-5"
               onClick={(e) => {
-                if(e.currentTarget.id !== 'profileDiv') {}
-                setProfileModal(!profileModal)}}
+                if (e.currentTarget.id !== 'profileDiv') { }
+                setProfileModal(!profileModal)
+              }}
             >
               <Image
                 src={user?.avatar || "/default-avatar.png"}

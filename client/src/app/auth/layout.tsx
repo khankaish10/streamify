@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: Readonly<{
         Streamify
       </div>
       <div className='.right-form flex flex-col flex-1 justify-center items-center
-        h-full border'>
+        h-full'>
         {children}
       </div>
     </div>

@@ -62,46 +62,88 @@ const SignupForm = () => {
     }
 
     return (
-        isLoading ? <div className="flex justify-center items-center h-screen"><div className="loader">Loading...</div></div> : (
-            <div>
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                        <input type="email" id="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            name="email" required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">Username</label>
-                        <input type="text" id="userName" value={formData.userName} onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
-                            name="userName" required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                        <input type="password" id="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            name="password" required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
+        <div className=' shadow p-4  rounded-lg flex flex-col items-center'>
+            <form onClick={(e) => handleSubmit(e)}
+                className='max-w-[350px] w-[300px] rounded-lg flex flex-col items-center'>
+                <div className='text-2xl mb-7'>Create your account</div>
+                <div className='mb-4 w-full'>
+                    <label htmlFor="email" className="block text-gray-700 text-xs">
+                        Email<span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="email"
+                        id='email'
+                        value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className='p-2 outline-none shadow mb-1 w-full'
+                        placeholder='Email'
+                    />
+                    <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>Email already registered.</p>
+                </div>
+                <div className='mb-4 w-full'>
+                    <label htmlFor="userName" className="block text-gray-700 text-xs">
+                        Username<span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id='userName'
+                        value={formData.userName} onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
+                        className='p-2 outline-none shadow mb-1 w-full'
+                        placeholder='Username'
+                    />
+                    <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>username already registered</p>
+                </div>
+                <div className='mb-4 w-full'>
+                    <label htmlFor="password" className="block text-gray-700 text-xs">
+                        pasword<span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        className='p-2 outline-none shadow mb-2 w-full'
+                        placeholder='Password'
+                    />
+                    <p className='text-[#CB356B] text-xs w-[90%] break-normal '>Password must be more than 8 character.</p>
+                </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="fullname" className="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-                        <input type="text" id="fullName" value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                            name="fullName" required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
-                    {/* avatar */}
-                    <div className="mb-4">
-                        <label htmlFor="avatar" className="block text-gray-700 text-sm font-bold mb-2">Avatar</label>
-                        <input type="file" id="avatar" onChange={(e) => setAvatar(e.target.files ? e.target.files[0] : null)}
-                            name="avatar" accept="image/*" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
-                    {/* coverimaghe */}
-                    <div className="mb-4">
-                        <label htmlFor="coverimage" className="block text-gray-700 text-sm font-bold mb-2">Cover Image</label>
-                        <input type="file" id="coverimage" onChange={(e) => setCoverImage(e.target.files ? e.target.files[0] : null)}
-                            name="coverImage" accept="image/*" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                    </div>
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sign Up</button>
-                    <p className='mt-4'>Already have an account? <Link href="/auth/login" className='text-blue-500'>Log In</Link></p>
-                </form>
-            </div>)
+                <div className='mb-4 w-full'>
+                    <label htmlFor="fullName" className="block text-gray-700 text-xs">
+                        Fullname<span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        className='p-2 outline-none shadow mb-1 w-full'
+                        placeholder='Fullname'
+                    />
+                    <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>Fullname error</p>
+                </div>
+                {/* avatar */}
+                <div className="mb-4">
+                    <label htmlFor="avatar" className="block text-gray-700 text-xs">
+                        Profile pic<span className="text-red-500">*</span>
+                    </label>
+                    <input type="file" id="avatar" onChange={(e) => setAvatar(e.target.files ? e.target.files[0] : null)}
+                        name="avatar" accept="image/*" className="shadow appearance-none border rounded w-full py-0.5 px-0.5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                </div>
+                {/* coverimaghe */}
+                <div className="mb-4">
+                    <label htmlFor="coverimage" className="block text-gray-700 text-xs">
+                        cover image
+                    </label>
+                    <input type="file" id="coverimage" onChange={(e) => setCoverImage(e.target.files ? e.target.files[0] : null)}
+                        name="coverImage" accept="image/*" className="shadow appearance-none border rounded w-full py-0.5 px-0.5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                </div>
+                <div
+                    className=' w-[60%] rounded-2xl border bg-linear-to-r from-[#CB356B] to-[#93291E] 
+                        text-center p-1 text-[#bbbbbb]'>
+                    Sign up
+                </div>
+                {/* <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sign Up</button> */}
+                <p className='mt-2'>Already have an account? <Link href="/auth/login" className='text-blue-500'>Log In</Link></p>
+            </form>
+        </div>
     )
 }
 

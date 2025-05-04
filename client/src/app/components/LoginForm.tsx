@@ -32,8 +32,11 @@ const LoginForm = () => {
         <div className=' shadow p-5 rounded-lg flex flex-col items-center'>
             <form onClick={e => handleSubmit(e)}
                 className='max-w-[350px] w-[300px] rounded-lg flex flex-col items-center'>
-            <div className='text-2xl mb-7'>Welcome Back</div>
+                <div className='text-2xl mb-7'>Welcome Back</div>
                 <div className='mb-5 w-full'>
+                    <label htmlFor="email" className="block text-gray-700 text-xs">
+                        Email<span className="text-red-500">*</span>
+                    </label>
                     <input
                         type="email"
                         id='email'
@@ -41,9 +44,12 @@ const LoginForm = () => {
                         className='p-2 outline-none shadow mb-1 w-full'
                         placeholder='Email or Username'
                     />
-                    <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>Incorrect username or password</p>
+                    <p className='text-[#CB356B] text-xs w-[90%] break-normal   '>Incorrect username or email</p>
                 </div>
                 <div className='mb-5 w-full'>
+                    <label htmlFor="password" className="block text-gray-700 text-xs">
+                        pasword<span className="text-red-500">*</span>
+                    </label>
                     <input
                         type="password"
                         id='password'
