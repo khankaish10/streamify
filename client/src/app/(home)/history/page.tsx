@@ -21,7 +21,8 @@ const Page = () => {
     const handleDeleteHistory = (id: string, index: number) => {
         deleteHistoryApi(id)
             .then(res => {
-                dispatch(deleteHistory({ videoId: res?.data._id, index }))
+
+                dispatch(deleteHistory({ videoId: id , index }))
             })
             .catch(error => console.log("error deleting", error))
     }
@@ -35,7 +36,7 @@ const Page = () => {
             }
             )
             .catch(err => console.log("Error getting history: ", err))
-    }, [dispatch])
+    }, [])
 
 
     return (

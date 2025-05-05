@@ -35,7 +35,6 @@ api.interceptors.request.use(
 
             config.headers = config.headers || {};
             config.headers.Authorization = `Bearer ${token}`;
-            console.log("autho: ",config.headers.Authorization )
         }
         return config;
     },

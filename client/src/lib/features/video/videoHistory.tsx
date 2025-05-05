@@ -35,7 +35,8 @@ const VideoHistorySlice = createSlice({
             // return state.filter((video: VideoHistoryDetails, _id: number) => !(video.videoId === id && _id === index))
 
             const { videoId, index } = action.payload
-            return state.filter((video: VideoHistoryDetails, i: number) => !(video._id === videoId && i === index))
+            console.log("id:", videoId, index)
+            return state.filter((video: VideoHistoryDetails, i: number) => !(videoId === videoId && i === index))
         }
     }
 })
