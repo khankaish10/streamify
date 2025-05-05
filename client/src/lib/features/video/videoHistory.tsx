@@ -31,15 +31,11 @@ const VideoHistorySlice = createSlice({
             return action.payload
         },
         deleteHistory: (state: any, action: { payload: any }) => {
-            // const { id, index } = action.payload;
-            // return state.filter((video: VideoHistoryDetails, _id: number) => !(video.videoId === id && _id === index))
-
             const { videoId, index } = action.payload
-            console.log("id:", videoId, index)
             return state.filter((video: VideoHistoryDetails, i: number) => !(videoId === videoId && i === index))
         },
         clearHistory: (state: any) => {
-            state = [] 
+            return []
         }
     }
 })

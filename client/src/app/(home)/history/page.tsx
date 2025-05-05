@@ -63,7 +63,7 @@ const Page = () => {
                     <p className='text-3xl font-bold my-5'>Watch history</p>
                     <div className='flex flex-col lg:flex-row-reverse w-full'>
                         <div className='mb-5 lg:mb-0  w-[50%] md:w-[30%] lg:w-[30%]'>
-                            <div className=' flex gap-2 p-2 border' onClick={handleClearWatchHistory}>
+                            <div className=' flex gap-2 p-2 border place-items-center cursor-pointer' onClick={handleClearWatchHistory}>
                                 <Trash2 size={24} />
                                 <p className='text-sm lg:text-xs'>Clear all watch history</p>
                             </div>

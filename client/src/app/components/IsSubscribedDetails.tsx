@@ -57,14 +57,14 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 
     const handleLikes = () => {
         likeVideoApi(videoidparams.watch)
-        .then(res => {
-            setLike(res?.data.likes)
-        })
+            .then(res => {
+                setLike(res?.data.likes)
+            })
     }
 
     return (
         <>
-            <div className='flex items-center '>
+            <div className='flex items-center mr-5 '>
                 <div className="profilePic flex items-center 
                                             justify-center border-1 border-gray-200 rounded-full
                                             mr-2 w-10 h-10 overflow-hidden">
@@ -86,10 +86,23 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 
             </div>
 
+            <div className='flex justify-center items-center rounded-3xl  border-1 border-gray-200 bg-gray-100 
+                    m-2 sm:m-0 overflow-hidden'>
+                <div className={`flex items-center gap-2 border-r-1 cursor-pointer h-full w-full 
+                            rounded-l-3xl hover:bg-gray-200 py-1 px-4 `}
+                    onClick={handleLikes}>
+                    <ThumbsUp size={20} />
+                    <p className='text-sm'>{like?.length}</p>
+                </div>
+                <div className='py-1 flex items-center px-4 cursor-pointer h-full w-full rounded-r-3xl hover:bg-gray-200'>
+                    <ThumbsDown size={20} />
+                </div>
+            </div>
+
 
 
             {
-                user && <div className='flex flex-col items-center mx-10'>
+                user && <div className='flex flex-col items-center  sm:mx-10'>
                     <button className='bg-black text-white px-4 py-2 rounded-full
                                 cursor-pointer hover:bg-black-300
                                 hover:opacity-70 text-sm'
@@ -113,17 +126,11 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                 </div>
             }
 
-            <div className='flex justify-center items-center rounded-3xl  border-1 border-gray-200 bg-gray-100 overflow-hidden'>
-                <div className={`flex gap-2 border-r-1 cursor-pointer h-full w-full 
-                            rounded-l-3xl hover:bg-gray-200 py-1 px-4 `}
-                    onClick={handleLikes}>
-                    <ThumbsUp size={20} />
-                    <p className='text-sm'>{like?.length}</p>
-                </div>
-                <div className='py-1 px-4 cursor-pointer h-full w-full rounded-r-3xl hover:bg-gray-200'>
-                    <ThumbsDown size={20}/>
-                </div>
-            </div>
+            
+
+
+
+
 
         </>
 

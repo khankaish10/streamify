@@ -59,8 +59,10 @@ function WatchVideo() {
             </div>
             <h1 className='my-2 font-bold'>{videoDetails?.description}</h1>
 
-            <div className='w-full h-full flex flex-col'>
-              <div className='w-full flex items-center mb-5'>
+            <div className='w-full h-full flex flex-col '>
+{/* ---------------------------------------------------------------------------------------------- */}
+              <div className='w-full flex items-center flex-wrap mb-5 gap-2
+                p-1'>
                 <IsSubscribedDetails
                   avatar={videoDetails?.owner?.avatar || ""}
                   userName={videoDetails?.owner?.userName || ""}
@@ -70,7 +72,7 @@ function WatchVideo() {
                   likeCount={videoDetails?.likes || []}
                 />
               </div>
-
+{/* ------------------------------------------------------------------------=------------------ */}
               <div>
                 <h1 className='text-2xl font-bold'>Comments</h1>
               </div>
