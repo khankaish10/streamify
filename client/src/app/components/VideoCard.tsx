@@ -5,16 +5,19 @@ import Link from "next/link";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 
-
+import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi } from "@/api";
+import { createHistoryAndViewsApi, getUserChannelApi } from "@/api";
+import { getChannel } from "@/lib/features/userChannelSlice";
+
 
 const VideoCard = ({ card }: any) => {
   TimeAgo.addLocale(en);
   const user = useAppSelector(state => state.user)
   const timeAgo = new TimeAgo('en')
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const handleClick = (id: string) => {
     if (user) {
@@ -27,20 +30,27 @@ const VideoCard = ({ card }: any) => {
 
   }
 
+  const handleGetUserChannel = () => {
+    getUserChannelApi(card?.owner._id)
+    .then(res => {
+      console.log("res: ", res?.data[0])
+      dispatch(getChannel(res.data[0]))
+      router.push(`/profile/${res.data[0]._id}`)
+    })
+  }
   return (
-    <Link className=" lg:max-h-[310px]"
-      href={`/videos/watch/${card._id}`}
-      onClick={() => handleClick(card._id)} >
+    <div className=" lg:max-h-[310px]"
+    >
       <div className="font-poppins 
       overflow-hidden p-2 flex flex-col
       justify-between cursor-pointer 
       ">
 
         {/* video thumbnail */}
-        <div className="overflow-hidden 
-        h-60 sm:h-60 relative
-        
-        ">
+        <Link className="overflow-hidden 
+        h-60 sm:h-60 relative "
+          href={`/videos/watch/${card._id}`}
+          onClick={() => handleClick(card._id)}>
           <Image
             src={card?.thumbnail}
             fill
@@ -53,15 +63,16 @@ const VideoCard = ({ card }: any) => {
             <p className="text-white text-sm">{`${card?.duration.toString().split('.')[0]}.${card.duration.toString().split(".")[1].slice(0, 2)}`}</p>
 
           </div>
-        </div>
+        </Link>
 
         {/* profile pic and title with username and views */}
         <div className="flex py-1 mt-2 ">
           {/* profile pic */}
           <div className="w-11 h-11 overflow-hidden 
-                       
+                          cursor-pointer
                           rounded-full flex justify-center 
-                          items-center">
+                          items-center"
+            onClick={handleGetUserChannel}>
             <Image src={card.owner.avatar}
               height={32}
               width={32}
@@ -80,7 +91,7 @@ const VideoCard = ({ card }: any) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

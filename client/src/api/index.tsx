@@ -3,8 +3,8 @@ import { API_URL } from "../Constants/Constants";
 import { jwtDecode } from "jwt-decode";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    // baseURL: API_URL,
+    // baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: API_URL,
 });
 
 
@@ -234,6 +234,14 @@ export const likeVideoApi = async (videoid: string) => {
 export const clearWatchHistoryApi = async () => {
     try {
         const response = await api.delete(`/videos/history`)
+        return response.data
+    } catch (error) {
+        console.log("clearing watch history failed: ", error)
+    }
+}
+export const getUserChannelApi = async (channelid: any) => {
+    try {
+        const response = await api.get<any>(`/users/profile/${channelid}`)
         return response.data
     } catch (error) {
         console.log("clearing watch history failed: ", error)

@@ -42,5 +42,5 @@ router.route("/history").post(verifyJwt, deleteWatchHistory)
 router.route("/history/:videoId").post(verifyJwt, addToWatchHistory)
 
 
-router.route("/:id").get(verifyJwt, getUserProfile);
+router.route("/profile/:channelid").get(verifyJwt, getUserProfile);
 export default router;

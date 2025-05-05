@@ -253,70 +253,108 @@ const getMyProfile = async (req, res) => {
 };
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  console.log("getUserProfile -- id: ", id);
-  if(!id) throw errorResponse(res, "Invalid user Id", 404)
+  const { channelid } = req.params;
+
   const userDetails = await User.aggregate([
-    { $match: { _id: new mongoose.Types.ObjectId(id) } },
+    { $match: { _id: new mongoose.Types.ObjectId(channelid) } },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "_id",
+        foreignField: "owner",
+        as: "allvideos"
+      }
+    }, 
     {
       $lookup: {
         from: "subscriptions",
         localField: "_id",
         foreignField: "subscribeTo",
-        as: "subscriber",
-      },
-    },
-    {
-      $lookup: {
-        from: "subscriptions",
-        localField: "_id",
-        foreignField: "subscriber",
-        as: "subscribedTo",
-      },
+        as:"subscription",
+      }
     },
     {
       $addFields: {
-        subscriberCount: { $size: "$subscriber" },
-        subscribedToCount: { $size: "$subscribedTo" },
-        isSubscribed: {
-          $cond: {
-            if: {
-              $in: [
-                req.user._id,
-                {
-                  $map: { input: "$subscriber", as: "s", in: "$$s.subscriber" },
-                },
-              ],
-            },
-            then: true,
-            else: false,
-          },
-        },
-        // isSubscribed: {
-        //   $gt: [
-        //     {
-        //       $size: {
-        //         $filter: {
-        //           input: "$subscriber",
-        //           as: "sub",
-        //           cond: { $eq: ["$$sub.subscriber", req.user._id] },
-        //         },
-        //       },
-        //     },
-        //     0,
-        //   ],
-        // },
-      },
+        subscriberCount: {
+          $size: "$subscription"
+        }
+      }
     },
     {
       $project: {
         password: 0,
-        refreshToken: 0,
         watchHistory: 0,
-        subscribedTo: 0,
-      },
-    },
-  ]);
+        refreshToken: 0,
+        __v: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        subscription: 0
+      }
+    }
+  ])
+  // console.log("getUserProfile -- id: ", id);
+  // if(!id) throw errorResponse(res, "Invalid user Id", 404)
+  // const userDetails = await User.aggregate([
+  //   { $match: { _id: new mongoose.Types.ObjectId(id) } },
+  //   {
+  //     $lookup: {
+  //       from: "subscriptions",
+  //       localField: "_id",
+  //       foreignField: "subscribeTo",
+  //       as: "subscriber",
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "subscriptions",
+  //       localField: "_id",
+  //       foreignField: "subscriber",
+  //       as: "subscribedTo",
+  //     },
+  //   },
+  //   {
+  //     $addFields: {
+  //       subscriberCount: { $size: "$subscriber" },
+  //       subscribedToCount: { $size: "$subscribedTo" },
+  //       isSubscribed: {
+  //         $cond: {
+  //           if: {
+  //             $in: [
+  //               req.user._id,
+  //               {
+  //                 $map: { input: "$subscriber", as: "s", in: "$$s.subscriber" },
+  //               },
+  //             ],
+  //           },
+  //           then: true,
+  //           else: false,
+  //         },
+  //       },
+  //       // isSubscribed: {
+  //       //   $gt: [
+  //       //     {
+  //       //       $size: {
+  //       //         $filter: {
+  //       //           input: "$subscriber",
+  //       //           as: "sub",
+  //       //           cond: { $eq: ["$$sub.subscriber", req.user._id] },
+  //       //         },
+  //       //       },
+  //       //     },
+  //       //     0,
+  //       //   ],
+  //       // },
+  //     },
+  //   },
+  //   {
+  //     $project: {
+  //       password: 0,
+  //       refreshToken: 0,
+  //       watchHistory: 0,
+  //       subscribedTo: 0,
+  //     },
+  //   },
+  // ]);
 
   if (!userDetails) {
     return errorResponse(res, "User not found", 404);

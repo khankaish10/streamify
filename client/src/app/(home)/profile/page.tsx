@@ -35,7 +35,7 @@ const Profile = () => {
         setIsLoading(true)
         handleGetProfile()
             .then(response => {
-                console.log(response)
+                console.log(response.data[0])
                 setUser(response.data[0])
                 setIsLoading(false)
             })
