@@ -6,8 +6,6 @@ const verifyJwt = async (req, res, next) => {
   try {
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
-    console.log("token server: ", token)
-
     if (!token) throw errorResponse(res, "Unauthorized access!", 401);
     // console.log("token: ", token)
     const decodedToken = jwt.verify(

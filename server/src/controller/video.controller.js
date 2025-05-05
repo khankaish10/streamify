@@ -17,11 +17,6 @@ const uploadAVideo = asyncHandler(async (req, res) => {
         throw errorResponse(res, "Video file is required", 400);
     }
 
-    // console.log("title: ", title)
-    // console.log("description: ", description)
-    // console.log("duration: ", duration)
-    // console.log("tags: ", tags)
-
     const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
     const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
 
@@ -201,9 +196,7 @@ const createHistoryAndViews = asyncHandler(async (req, res) => {
     if (!videoid) throw errorResponse(res, "Invalid videoId", 400);
 
     const alreadyWatched = await WatchHistory.find({ userId, videoId: videoid })
-    console.log("before: ", alreadyWatched)
     if (!alreadyWatched.length) {
-        console.log("afater: ", alreadyWatched)
         
         await Video.findByIdAndUpdate(
             videoid,
@@ -287,7 +280,6 @@ const getWatchHistory = asyncHandler(async (req, res) => {
 const deleteHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const { videoid } = req.params
-
     if (!videoid) return errorResponse(res, "Invalid videoId", 404)
 
     const deletedHistory = await WatchHistory.findOneAndDelete({
