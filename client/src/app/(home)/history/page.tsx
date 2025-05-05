@@ -81,7 +81,7 @@ const Page = () => {
 
 
 
-                                                <Link href={`/videos/watch/${history.videoId}`} className='flex' >
+                                                <Link href={`/videos/watch/${history.videoId}`} className='flex w-full' >
                                                     {/* delete history - cross at top right corner */}
 
 

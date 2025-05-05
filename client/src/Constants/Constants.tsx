@@ -31,12 +31,12 @@ export const sideBarMenuAndPath: sideBarMenuAndPathDetail[] = [
         iconSize: 24,
         path: "/profile"
     },
-    {
-        name: "Profile",
-        Icon: User,
-        iconSize: 24,
-        path: "/profile"
-    }
+    // {
+    //     name: "Profile",
+    //     Icon: User,
+    //     iconSize: 24,
+    //     path: "/profile"
+    // }
     
 ]
 
