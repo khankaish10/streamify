@@ -58,7 +58,7 @@ const Page = () => {
             lg:pl-[200px] 
             xl:max-w-[1300px]
             '>
-            {(isLoading && user) ? <WatchHistoryAnimation /> : (
+            {(user && isLoading) ? <WatchHistoryAnimation /> : (
                 <div className='flex flex-col p-5 pb-16'>
                     <p className='text-3xl font-bold my-5'>Watch history</p>
                     <div className='flex flex-col lg:flex-row-reverse w-full'>
