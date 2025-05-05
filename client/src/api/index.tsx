@@ -5,50 +5,37 @@ import { jwtDecode } from "jwt-decode";
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     // baseURL: API_URL,
-    withCredentials: true,
-    // headers: {
-    //     Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}").accessToken}`, 
-    // },
 });
 
-
-
-const getCookie = (cookieName: string) => {
-    const cookies = document.cookie.split("; ");
-    const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
-    return cookie ? cookie.split("=")[1] : null;
-};
 
 api.interceptors.request.use(
     (config) => {
         if (config.url === "/users/login" || config.url === "/users/signup") {
             return config
         }
-        let localStorageToken = null
+        let token;
         const user = localStorage.getItem("user");
-        if (user) {
-            localStorageToken = JSON.parse(user).accessToken;
+        if(user) {
+            token = JSON.parse(user)?.accessToken
         }
 
-        const token = getCookie("accessToken")
-
-        if (token || localStorageToken) {
+        if (token) {
             if (!config.headers) {
                 config.headers = {};
             }
 
-            const decoded: { exp: number } = jwtDecode(token || localStorageToken); // Decode the token
+            const decoded: { exp: number } = jwtDecode(token); // Decode the token
             const currentTime = Date.now() / 1000; // Current time in seconds
 
             if (decoded.exp < currentTime) {
                 localStorage.removeItem("user");
-                document.cookie = `accessToken="";`
                 window.location.href = "/auth/login"
                 alert("Token expired. Pleae login again.")
             }
 
             config.headers = config.headers || {};
-            config.headers.Authorization = `Bearer ${token || localStorageToken}`;
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log("autho: ",config.headers.Authorization )
         }
         return config;
     },

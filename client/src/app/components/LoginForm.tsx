@@ -7,7 +7,7 @@ import { login } from '@/lib/features/users/userSlice'
 import Link from 'next/link'
 import Image from 'next/image'
 import { loginValidationSchema } from '@/lib/formValidation/form_validation'
-import { error } from 'console'
+
 
 const LoginForm = () => {
     const [email, setEmail] = React.useState('')
