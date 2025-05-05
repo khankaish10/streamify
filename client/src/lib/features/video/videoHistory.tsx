@@ -37,9 +37,12 @@ const VideoHistorySlice = createSlice({
             const { videoId, index } = action.payload
             console.log("id:", videoId, index)
             return state.filter((video: VideoHistoryDetails, i: number) => !(videoId === videoId && i === index))
+        },
+        clearHistory: (state: any) => {
+            state = [] 
         }
     }
 })
 
-export const { videoHistory, deleteHistory } = VideoHistorySlice.actions
+export const { videoHistory, deleteHistory, clearHistory } = VideoHistorySlice.actions
 export default VideoHistorySlice.reducer

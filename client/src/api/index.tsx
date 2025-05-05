@@ -231,3 +231,14 @@ export const likeVideoApi = async (videoid: string) => {
         console.log("like video failed: ", error)
     }
 }
+export const clearWatchHistoryApi = async () => {
+    try {
+        const response = await api.delete(`/videos/history`)
+        return response.data
+    } catch (error) {
+        console.log("clearing watch history failed: ", error)
+    }
+}
+
+
+

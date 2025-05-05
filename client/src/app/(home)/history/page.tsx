@@ -3,10 +3,10 @@
 import React, { useLayoutEffect, useState } from 'react'
 import Image from 'next/image'
 import { useAppSelector, useAppDispatch } from '@/lib/hooks'
-import { deleteHistory, videoHistory } from '@/lib/features/video/videoHistory'
+import { clearHistory, deleteHistory, videoHistory } from '@/lib/features/video/videoHistory'
 import Link from 'next/link'
-import { deleteHistoryApi, getAllHistoryApi } from '@/api'
-import { User } from "lucide-react";
+import { deleteHistoryApi, getAllHistoryApi, clearWatchHistoryApi } from '@/api'
+import { User, Trash2 } from "lucide-react";
 import WatchHistoryAnimation from '@/lib/ui-component/watchHistoryAnimation'
 
 
@@ -22,10 +22,19 @@ const Page = () => {
         deleteHistoryApi(id)
             .then(res => {
 
-                dispatch(deleteHistory({ videoId: id , index }))
+                dispatch(deleteHistory({ videoId: id, index }))
             })
             .catch(error => console.log("error deleting", error))
     }
+
+    const handleClearWatchHistory = () => {
+        clearWatchHistoryApi()
+            .then((res) => {
+                console.log("watch history cleared.")
+                dispatch(clearHistory())
+            })
+    }
+
 
     useLayoutEffect(() => {
         setIsLoading(true)
@@ -37,6 +46,8 @@ const Page = () => {
             )
             .catch(err => console.log("Error getting history: ", err))
     }, [])
+
+
 
 
     return (
@@ -51,11 +62,14 @@ const Page = () => {
                 <div className='flex flex-col p-5 pb-16'>
                     <p className='text-3xl font-bold my-5'>Watch history</p>
                     <div className='flex flex-col lg:flex-row-reverse w-full'>
-                        <div className='mb-5 lg:mb-0'>
-                            fixed ______ need to add clear history
+                        <div className='mb-5 lg:mb-0  w-[50%] md:w-[30%] lg:w-[30%]'>
+                            <div className=' flex gap-2 p-2 border' onClick={handleClearWatchHistory}>
+                                <Trash2 size={24} />
+                                <p className='text-sm lg:text-xs'>Clear all watch history</p>
+                            </div>
                         </div>
                         <div className={`flex flex-col videolist
-                                w-full  
+                                w-full   
                                     ${!user ?
                                 'justify-center items-center' :
                                 ""

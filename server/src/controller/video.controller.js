@@ -314,6 +314,19 @@ const likeVideo = asyncHandler(async (req, res) => {
     return successResponse(res, "video liked.", video, 200)
 })
 
+const clearWatchHistory = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+   await WatchHistory.deleteMany({
+        userId
+    })
+
+    return successResponse(res, "Watch history cleared.", {}, 200)
+
+
+
+})
+
 
 export {
     uploadAVideo,
@@ -324,5 +337,6 @@ export {
     createHistoryAndViews,
     getWatchHistory,
     deleteHistory,
-    likeVideo
+    likeVideo,
+    clearWatchHistory
 }

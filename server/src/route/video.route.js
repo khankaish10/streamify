@@ -3,7 +3,7 @@ import {
   uploadAVideo, getvideo, getAllVideos, 
   subscribeChannel, unSubscribeChannel, 
   createHistoryAndViews, getWatchHistory, deleteHistory, 
-  likeVideo
+  likeVideo, clearWatchHistory
 } from "../controller/video.controller.js";
 import upload from "../middleware/multer.middleware.js";
 import verifyJwt from "../middleware/auth.middleware.js";
@@ -32,6 +32,7 @@ router.route("/unsubscribe").post(verifyJwt, unSubscribeChannel)
 router.route("/history/:videoid").post(verifyJwt, createHistoryAndViews)
 router.route("/history/:videoid").delete(verifyJwt, deleteHistory)
 router.route("/history").get(verifyJwt, getWatchHistory)
+router.route("/history").delete(verifyJwt, clearWatchHistory)
 
 
 export default router;
