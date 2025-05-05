@@ -3,8 +3,8 @@ import { API_URL } from "../Constants/Constants";
 import { jwtDecode } from "jwt-decode";
 
 const api = axios.create({
-    // baseURL: process.env.NEXT_PUBLIC_API_URL,
-    baseURL: API_URL,
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    // baseURL: API_URL,
 });
 
 
