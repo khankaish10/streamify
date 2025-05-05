@@ -34,8 +34,8 @@ const VideoCard = ({ card }: any) => {
     getUserChannelApi(card?.owner._id)
     .then(res => {
       console.log("res: ", res?.data[0])
-      dispatch(getChannel(res.data[0]))
-      router.push(`/profile/${res.data[0]._id}`)
+      dispatch(getChannel(res?.data[0]))
+      router.push(`/profile/${res?.data[0]._id}`)
     })
   }
   return (
