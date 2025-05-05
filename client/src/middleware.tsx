@@ -5,8 +5,8 @@ import { NextURL } from "next/dist/server/web/next-url";
 export default function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     // check if route is protected
-    const token = request.cookies.get("accessToken")?.value || request.headers.get("Authorization")?.replace("Bearer ", "");;
-
+    const token = request.cookies.get("accessToken")?.value;
+    console.log("token : ", request.cookies.get("accessToken"))
     if(!token) {
         if (pathname !== "/auth/login" && pathname !== "/auth/register") {
             return NextResponse.redirect(new URL('/auth/login', request.url))

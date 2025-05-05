@@ -21,9 +21,7 @@ const getCookie = (cookieName: string) => {
 
 api.interceptors.request.use(
     (config) => {
-        if (config.url === "/users/login" || config.url === "/users/signup"
-
-        ) {
+        if (config.url === "/users/login" || config.url === "/users/signup") {
             return config
         }
         let localStorageToken = null

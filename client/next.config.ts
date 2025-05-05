@@ -20,10 +20,10 @@ const nextConfig = {
   //   allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev','*'],
   // }
 
-  // allowedDevOrigins: [
-  //   "http://localhost:3000", // Localhost
-  //   "http://192.168.0.119:3000", // Mobile device IP
-  // ]
+  allowedDevOrigins: [
+    "http://localhost:3000", // Localhost
+    "http://192.168.0.119:3000", // Mobile device IP
+  ]
   // devServer: {
   //   Proxy: {
   //     "/": {

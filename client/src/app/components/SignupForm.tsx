@@ -66,8 +66,8 @@ const SignupForm = () => {
                     setIsLoading(false)
                 })
                 .catch((err) => {
-                    console.error("Signup error:", err.response.data.err);
-                    setErrors(err.response.data.err)
+                    console.error("Signup error:", err?.response?.data?.err);
+                    setErrors(err?.response?.data?.err)
                     setIsLoading(false)
                     setTimeout(() => (
                         setErrors({})
