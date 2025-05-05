@@ -67,6 +67,7 @@ function WatchVideo() {
                   subsCount={videoDetails?.subscriberCount || 0}
                   ownerId={videoDetails?.owner?._id || ""}
                   isSubsd={videoDetails?.isSubscribed || false}
+                  likeCount={videoDetails?.likes || []}
                 />
               </div>
 

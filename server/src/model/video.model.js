@@ -16,7 +16,7 @@ const videoSchema = new Schema(
       type: [String],
       default: [],
       index: true, // Useful for searching videos by tags
-    },  
+    },
     thumbnail: {
       type: String, //cloudinary url
       required: true,
@@ -29,6 +29,11 @@ const videoSchema = new Schema(
       type: Number,
       required: true,
     },
+    likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: []
+    }],
     views: {
       type: Number,
       default: 0,

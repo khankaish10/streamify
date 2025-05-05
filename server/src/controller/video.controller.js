@@ -197,13 +197,13 @@ const createHistoryAndViews = asyncHandler(async (req, res) => {
 
     const alreadyWatched = await WatchHistory.find({ userId, videoId: videoid })
     if (!alreadyWatched.length) {
-        
+
         await Video.findByIdAndUpdate(
             videoid,
             { $inc: { views: 1 } },
             { new: true }
         )
-        
+
     }
     const watchHistory = new WatchHistory({
         userId,
@@ -291,6 +291,29 @@ const deleteHistory = asyncHandler(async (req, res) => {
 
 })
 
+const likeVideo = asyncHandler(async (req, res) => {
+    const { videoid } = req.params;
+    const userId = req.user._id;
+
+    if (!videoid) throw errorResponse(res, "Invalid video id.", 404, {})
+
+    const video = await Video.findById(new mongoose.Types.ObjectId(videoid))
+
+    if (!video) throw errorResponse(res, "Video not found.", 404, {})
+
+    const hasLiked = video.likes.includes(userId);
+    if (hasLiked) {
+        video.likes = video.likes.filter(like => like.toString() !== userId.toString())
+    } else {
+        video.likes.push(userId)
+    }
+
+    await video.save();
+
+
+    return successResponse(res, "video liked.", video, 200)
+})
+
 
 export {
     uploadAVideo,
@@ -300,5 +323,6 @@ export {
     unSubscribeChannel,
     createHistoryAndViews,
     getWatchHistory,
-    deleteHistory
+    deleteHistory,
+    likeVideo
 }

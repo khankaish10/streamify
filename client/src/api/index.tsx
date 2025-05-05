@@ -216,3 +216,18 @@ export const getAllHistoryApi = async () => {
         console.log("Error fetching history", error)
     }
 }
+
+interface likeVideoDetails {
+    data: {
+        likes: [string]
+    }
+}
+
+export const likeVideoApi = async (videoid: string) => {
+    try {
+        const response = await api.post<likeVideoDetails | any>(`/videos/like/${videoid}`)
+        return response.data
+    } catch (error) {
+        console.log("like video failed: ", error)
+    }
+}
