@@ -70,16 +70,16 @@ const signUp = asyncHandler(async (req, res) => {
 
   const accessToken = await newUser.generateAccessToken();
 
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    path: "/"
-  };
+  // const options = {
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === "production",
+  //   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  //   path: "/"
+  // };
 
-  res
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options);
+  // res
+  //   .cookie("accessToken", accessToken, options)
+  //   .cookie("refreshToken", refreshToken, options);
 
   return successResponse(
     res,
@@ -126,16 +126,16 @@ const login = asyncHandler(async (req, res) => {
 
   existedUser.refreshToken = refreshToken;
   await existedUser.save({ validateBeforeSave: false });
-  const options = {
-    httpOnly: true,
-    secure: true,
-    // secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    path: "/"
-  };
-  res
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options);
+  // const options = {
+  //   httpOnly: true,
+  //   secure: true,
+  //   // secure: process.env.NODE_ENV === "production",
+  //   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  //   path: "/"
+  // };
+  // res
+  //   .cookie("accessToken", accessToken, options)
+  //   .cookie("refreshToken", refreshToken, options);
 
   return successResponse(
     res,
@@ -161,16 +161,16 @@ const logout = asyncHandler(async (req, res) => {
       refreshToken: 1,
     },
   });
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    path: "/"
-  };
+  // const options = {
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === "production",
+  //   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  //   path: "/"
+  // };
 
-  res
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options);
+  // res
+  //   .clearCookie("accessToken", options)
+  //   .clearCookie("refreshToken", options);
 
   return successResponse(res, "success logout", {}, 200);
 });
@@ -190,10 +190,10 @@ const generateRefreshAccessToken = async (req, res) => {
 
   const accessToken = await user.generateAccessToken();
 
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: true,
-  });
+  // res.cookie("accessToken", accessToken, {
+  //   httpOnly: true,
+  //   secure: true,
+  // });
 
   return successResponse(
     res,

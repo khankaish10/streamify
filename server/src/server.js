@@ -1,10 +1,10 @@
 import express, { urlencoded } from "express";
 import cors from 'cors'
 const app = express();
-import cookieParser from 'cookie-parser'
+// import cookieParser from 'cookie-parser'
 // import errorHandler from './utils/errorHandler.js'
 
-app.use(cookieParser())
+// app.use(cookieParser())
 
 
 
@@ -13,7 +13,6 @@ app.use(cors({
     // origin: ["http://localhost:3000", "http://192.168.0.119:3000", "http://192.168.235.40:3000/"],
     // origin: true,
     origin: ["https://streamify-sepia-one.vercel.app", "http://localhost:3000",  "http://192.168.0.119:3000"],
-    credentials: true,
 
 }));
 // app.options("*", cors())
