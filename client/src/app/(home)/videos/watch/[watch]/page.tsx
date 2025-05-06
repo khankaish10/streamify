@@ -111,7 +111,7 @@ function WatchVideo() {
 
               {/* ------------------------------------------------------------------------------------------ */}
               <div className='flex flex-col'>
-                <h1 className='my-2 font-bold'>330 comments</h1>
+                <h1 className='my-2 font-bold'>{`${comments?.length} comments`}</h1>
 
 
                 <div className='flex gap-2'>
