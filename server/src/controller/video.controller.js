@@ -2,6 +2,7 @@ import asyncHandler from '../utils/asyncHandler.js'
 import { errorResponse, successResponse } from '../utils/apiResponse.js'
 import uploadToCloudinary from '../utils/cloudinary.config.js'
 import Video from '../model/video.model.js'
+import Comment from '../model/comment.js'
 import mongoose from 'mongoose'
 import Subscription from '../model/subscription.model.js'
 import WatchHistory from '../model/watchHistory.model.js'
@@ -59,12 +60,49 @@ const getvideo = asyncHandler(async (req, res) => {
                 localField: 'owner._id',
                 foreignField: 'subscribeTo',
                 as: 'subscriptions'
-            }
+            },
+
         },
         {
             $addFields: {
                 subscriberCount: { $size: "$subscriptions" } // Count total subscribers
             }
+        },
+        {
+            $lookup: {
+                from: 'comments',
+                localField: '_id',
+                foreignField: 'video',
+                as: 'comments',
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: 'users',
+                            localField: 'owner',
+                            foreignField: '_id',
+                            as: 'commentowner'
+                        }
+                    },
+                    {$unwind: "$commentowner"},
+                    {
+                        $project: {
+                            "commentowner.password":0,
+                            "commentowner.coverImage":0,
+                            "commentowner.email":0,
+                            "commentowner.fullName":0,
+                            "commentowner.refreshToken":0,
+                            "commentowner.watchHistory":0,
+                            "commentowner.__v":0,
+                        }
+                    },
+                    {
+                        $sort: {
+                            createdAt: -1
+                        }
+                    }
+                ]
+            },
+            
         },
         {
             $project: {
@@ -74,7 +112,8 @@ const getvideo = asyncHandler(async (req, res) => {
                 "owner.__v": 0,
                 "owner.createdAt": 0,
                 "owner.updatedAt": 0,
-                "subscriptions": 0 // Exclude the subscriptions array
+                "subscriptions": 0 ,
+                "comments.owner": 0
             }
         }
     ];
@@ -113,7 +152,6 @@ const getvideo = asyncHandler(async (req, res) => {
             }
         });
     }
-
     const video = await Video.aggregate(pipeline)
     if (!video) {
         return errorResponse(res, "video not found", 404)
@@ -317,16 +355,27 @@ const likeVideo = asyncHandler(async (req, res) => {
 const clearWatchHistory = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
-   await WatchHistory.deleteMany({
+    await WatchHistory.deleteMany({
         userId
     })
 
     return successResponse(res, "Watch history cleared.", {}, 200)
-
-
-
 })
 
+const createComment = asyncHandler(async (req, res) => {
+    const { comment, videoId } = req.body;
+    const userId = req.user._id;
+
+
+    const commented = await Comment.create({
+        comment,
+        owner: userId,
+        video: videoId
+    })
+
+    return successResponse(res, "comment created on video", commented, 200)
+
+})
 
 export {
     uploadAVideo,
@@ -338,5 +387,6 @@ export {
     getWatchHistory,
     deleteHistory,
     likeVideo,
-    clearWatchHistory
+    clearWatchHistory,
+    createComment
 }

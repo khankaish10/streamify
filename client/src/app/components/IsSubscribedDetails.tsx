@@ -16,7 +16,7 @@ interface IsSubscribedDetailsProps {
     subsCount: number;
     ownerId: string;
     isSubsd: boolean;
-    likeCount: [];
+    likeCount: string[];
 }
 
 const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
@@ -24,7 +24,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 ) => {
 
     const [subscriberCount, setSubscriberCount] = useState(0);
-    const [like, setLike] = useState([])
+    const [like, setLike] = useState<string[]>([])
     const [isSubscribed, setIsSubscribed] = useState(false)
     const user = useAppSelector(state => state.user)
     const videoidparams = useParams<any>();

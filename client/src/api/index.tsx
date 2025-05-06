@@ -109,17 +109,10 @@ export const handleGetProfile = async () => {
     }
 }
 
-interface getAVideoType {
-    data: [
-        {
-            _id: string
-        }
-    ]
-}
 
 export const handleGetAVideo = async (videoid: string, currentUserId: string | null) => {
     try {
-        const response = await api.post<getAVideoType>(`/videos/watch/${videoid}`, { currentUserId }, {
+        const response = await api.post<any>(`/videos/watch/${videoid}`, { currentUserId }, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -245,6 +238,18 @@ export const getUserChannelApi = async (channelid: any) => {
         return response.data
     } catch (error) {
         console.log("clearing watch history failed: ", error)
+    }
+}
+export const createCommentApi = async (comment: any) => {
+    try {
+        const response = await api.post<any>(`/videos/comment`, comment,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log("creating comment failed: ", error)
     }
 }
 
