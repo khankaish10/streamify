@@ -57,7 +57,7 @@ const Sidebar_Bottom = () => {
                 <div className='flex items-center my-1 
                 '>
                     {
-                        user && (
+                        user ? (
                             <div className='relative flex flex-col items-center justify-center'>
 
                                 <div className={`absolute top-[-120px] left-[-100px] 
@@ -94,6 +94,13 @@ const Sidebar_Bottom = () => {
                                 </div>
                                 <p className='lg:block text-sm mt-[1]'>Profile</p>
                             </div>
+                        ) : (
+                            <Link href="/auth/login" className='lg:mr-4 flex flex-col items-center 
+                                                justify-center'>
+
+                                <User size={24} />
+                                <p className='lg:block text-sm mt-[1]'>Sign in</p>
+                            </Link>
                         )
                     }
 

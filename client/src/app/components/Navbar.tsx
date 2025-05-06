@@ -135,10 +135,11 @@ const Navbar = () => {
           !user && (
             <Link
               href={"/auth/login"}
-              className="flex justify-center items-center p-1 md:border-1 md:border-gray-300 rounded-[50px]"
+              className="md:flex justify-center items-center p-1 
+                  hidden md:border-1 md:border-gray-300 rounded-[50px]"
             >
               <User size={20} />
-              <p className="text-[16px] hidden lg:block">Sign in</p>
+              <p className="text-[16px] hidden md:block">Sign in</p>
             </Link>
           )
         }

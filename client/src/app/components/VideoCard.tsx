@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
 import { createHistoryAndViewsApi, getUserChannelApi } from "@/api";
-import { getChannel } from "@/lib/features/userChannelSlice";
+
 
 
 const VideoCard = ({ card }: any) => {
@@ -31,12 +31,7 @@ const VideoCard = ({ card }: any) => {
   }
 
   const handleGetUserChannel = () => {
-    getUserChannelApi(card?.owner._id)
-    .then(res => {
-      console.log("res: ", res?.data[0])
-      dispatch(getChannel(res?.data[0]))
-      router.push(`/profile/${res?.data[0]._id}`)
-    })
+    router.push(`/profile/${card?.owner._id}`)
   }
   return (
     <div className=" lg:max-h-[310px]"

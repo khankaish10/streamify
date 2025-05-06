@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+import { handleGetProfile } from '@/api'
+import React, { useLayoutEffect, useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,15 +8,23 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { useAppDispatch } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi } from "@/api";
+import { createHistoryAndViewsApi, getUserChannelApi } from "@/api";
+import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
+import { useParams } from 'next/navigation'
+import { channel } from 'diagnostics_channel'
+
 TimeAgo.addLocale(en);
 
 
-const ChannelProfile = () => {
+const Profile = () => {
     const timeAgo = new TimeAgo('en')
-    const user = useAppSelector(state => state.channel)
+    const [user, setUser] = useState<any>(null)
+    const [isLoading, setIsLoading] = React.useState(true)
+    const reload = useAppSelector((state) => state.modal.reload)
     const dispatch = useAppDispatch()
+    const params = useParams()
 
+    console.log("channel id : ", params.channelid)
 
     const handleClick = (video: { _id: string }) => {
         createHistoryAndViewsApi(video._id)
@@ -25,8 +34,37 @@ const ChannelProfile = () => {
             .catch(err => console.log(err))
     }
 
+
+    useEffect(() => {
+        setIsLoading(true)
+        getUserChannelApi(params?.channelid)
+        .then(res => {
+            setUser(res?.data[0])
+            setIsLoading(false)
+        })
+        .catch((error) => {
+            setIsLoading(false)
+        });
+    }, [reload])
+
+    useLayoutEffect(() => {
+        setIsLoading(true)
+
+            getUserChannelApi(params?.channelid)
+            .then(res => {
+                setUser(res?.data[0])
+                setIsLoading(false)
+            })
+            .catch((error) => {
+                setIsLoading(false)
+            });
+
+    }, [])
     return (
-        <>
+
+
+        isLoading ? <ProfilePageAnimation /> : (
+
             <div className='w-full lg:max-w-[1200px] ml-0 mt-10
             m-0 h-screen box-border
             sm:pl-[50px]
@@ -59,7 +97,7 @@ const ChannelProfile = () => {
                                     {user?.subscriberCount > 1 ? (`${user.subscriberCount} subscribers.`) : (`${user?.subscriberCount} subscriber.`)}
                                 </p>
                                 <p className='text-gray-500'>
-                                    {user?.allvideos.length > 1 ? (` ${user?.allvideos.length} videos`) : (` ${user?.allvideos.length} video`)}
+                                    {user?.allvideos?.length > 1 ? (` ${user?.allvideos?.length} videos`) : (` ${user?.allvideos?.length} video`)}
                                     { }
                                 </p>
                             </div>
@@ -129,10 +167,10 @@ const ChannelProfile = () => {
 
                 </div>
             </div>
+        )
+        // <div>Login </div>
 
-
-        </>
     )
 }
 
-export default ChannelProfile
+export default Profile
