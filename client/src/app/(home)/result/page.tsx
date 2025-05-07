@@ -5,7 +5,7 @@ import { useAppSelector } from '@/lib/hooks'
 
 const Result = () => {
     const searchedVideo = useAppSelector(state => state.search)
-
+    
 
 
     return (
