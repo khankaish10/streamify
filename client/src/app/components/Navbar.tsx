@@ -4,17 +4,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search, User } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { handleLogout } from "@/api";
+import { handleLogout, searchVideoApi } from "@/api";
 import { logout } from "@/lib/features/users/userSlice";
 import { useRouter as userRouter } from "next/navigation";
 import { openModal } from "@/lib/features/globalModalslice";
+import {setSearchedVideo} from "@/lib/features/video/searchVideoSlice";
 
 const Navbar = () => {
-  const user = useAppSelector((state:any) => state.user);
+  const user = useAppSelector((state: any) => state.user);
   const [profileModal, setProfileModal] = useState(false);
   const dispatch = useAppDispatch();
   const router = userRouter()
   const profileRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState("")
 
   const handleSubmit = () => {
     handleLogout()
@@ -27,8 +29,6 @@ const Navbar = () => {
       .catch((error) => {
         console.error("Logout error:", error);
       });
-
-
   };
 
   // useEffect(() => {
@@ -44,6 +44,15 @@ const Navbar = () => {
   //   };
   // }, []);
 
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    router.push(`/result/?search=${encodeURIComponent(searchQuery)}`)
+    searchVideoApi(searchQuery)
+      .then(res => {
+        dispatch(setSearchedVideo(res?.data))
+        console.log("search response: ", res.data)
+      })
+  }
 
   return (
     <nav className="flex items-center p-1 justify-between w-full
@@ -67,17 +76,26 @@ const Navbar = () => {
 
 
       {/* Search input----------- */}
-      <div className="h-full ml-3 w-[90%] md:max-w-[50%] lg:max-w-[40%]">
-        <div className="flex justify-center items-center  rounded-[50px] 
-            p-1 h-full border-1 border-gray-300 ">
+      <div className="h-full ml-3 w-[90%] md:max-w-[50%] lg:max-w-[40%] border flex rounded-[50px] 
+            border-1 border-gray-300">
+        <form onSubmit={(e) => handleSearch(e)} className="flex justify-center items-center flex-1 rounded-[50px] 
+            p-1 h-full ">
           <Search color="#333333" className="md:block" />
           <input
             type="text"
             name="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search"
             className="p-1 w-full mx-2  outline-0"
           />
-        </div>
+        </form>
+        {
+          searchQuery?.length > 0 && (
+            <button onClick={() => setSearchQuery("")} className="cursor-pointer px-2">X</button>
+          )
+        }
+
       </div>
 
       {/* Profile-------------- */}

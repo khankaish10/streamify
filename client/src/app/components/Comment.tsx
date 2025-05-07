@@ -23,7 +23,7 @@ const Comment = ({ avatar, userName, createdAt, comment }: commentsDetailsType) 
   return (
     <div className='flex gap-2 mb-2 relative'>
       {/* ======================================= profile pic*/}
-      <div className='h-10 max-w-10 overflow-hidden rounded-full '>
+      <div className='h-10 w-10 max-w-10 overflow-hidden rounded-full '>
         <Image
           src={avatar}
           height={50}

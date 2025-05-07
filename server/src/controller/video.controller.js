@@ -83,16 +83,16 @@ const getvideo = asyncHandler(async (req, res) => {
                             as: 'commentowner'
                         }
                     },
-                    {$unwind: "$commentowner"},
+                    { $unwind: "$commentowner" },
                     {
                         $project: {
-                            "commentowner.password":0,
-                            "commentowner.coverImage":0,
-                            "commentowner.email":0,
-                            "commentowner.fullName":0,
-                            "commentowner.refreshToken":0,
-                            "commentowner.watchHistory":0,
-                            "commentowner.__v":0,
+                            "commentowner.password": 0,
+                            "commentowner.coverImage": 0,
+                            "commentowner.email": 0,
+                            "commentowner.fullName": 0,
+                            "commentowner.refreshToken": 0,
+                            "commentowner.watchHistory": 0,
+                            "commentowner.__v": 0,
                         }
                     },
                     {
@@ -102,7 +102,7 @@ const getvideo = asyncHandler(async (req, res) => {
                     }
                 ]
             },
-            
+
         },
         {
             $project: {
@@ -112,7 +112,7 @@ const getvideo = asyncHandler(async (req, res) => {
                 "owner.__v": 0,
                 "owner.createdAt": 0,
                 "owner.updatedAt": 0,
-                "subscriptions": 0 ,
+                "subscriptions": 0,
                 "comments.owner": 0
             }
         }
@@ -377,6 +377,20 @@ const createComment = asyncHandler(async (req, res) => {
 
 })
 
+const searchVideo = asyncHandler(async (req, res) => {
+    const { query } = req.query
+    if (!query) throw errorResponse(res, "search query could not be empty.", 404, {})
+
+    const video = await Video.find({
+        $or: [
+            { title: { $regex: query, $options: 'i' } },
+            { description: { $regex: query, $options: 'i' }},
+        ]
+    })
+
+    return successResponse(res, "search complete", video, 200)
+})
+
 export {
     uploadAVideo,
     getvideo,
@@ -388,5 +402,6 @@ export {
     deleteHistory,
     likeVideo,
     clearWatchHistory,
-    createComment
+    createComment,
+    searchVideo
 }

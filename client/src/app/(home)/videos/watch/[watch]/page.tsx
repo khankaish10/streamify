@@ -67,7 +67,7 @@ function WatchVideo() {
   }
 
   return (
-    <div className="w-full  p-1 ml-0 mt-12 border
+    <div className="w-full  p-1 ml-0 mt-12 
      sm:pl-[50px] lg:pl-[200px] lg:[w-90vw] xl:max-w-[1600px]">
       {
         isLoading ? <WatchVideoAnimation /> : (

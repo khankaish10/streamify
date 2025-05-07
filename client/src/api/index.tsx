@@ -3,8 +3,8 @@ import { API_URL } from "../Constants/Constants";
 import { jwtDecode } from "jwt-decode";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    // baseURL: API_URL,
+    // baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: API_URL,
 });
 
 
@@ -250,6 +250,14 @@ export const createCommentApi = async (comment: any) => {
         return response.data
     } catch (error) {
         console.log("creating comment failed: ", error)
+    }
+}
+export const searchVideoApi = async (searchQuery:string) => {
+    try {
+        const response = await api.get<any>(`/videos/search?query=${searchQuery}`)
+        return response.data
+    } catch (error) {
+        console.log("search failed: ", error)
     }
 }
 

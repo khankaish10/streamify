@@ -5,6 +5,7 @@ import videoSlice from './features/video/videoSlice'
 import globalModalSlice from './features/globalModalslice'
 import userChannelSlice from './features/userChannelSlice'
 import commentSlice from './features/commentSlice'
+import searchVideoSlice from './features/video/searchVideoSlice'
 
 export const makeStore = () => {
   return configureStore({
@@ -14,7 +15,8 @@ export const makeStore = () => {
       modal: globalModalSlice,
       history: VideoHistorySlice,
       channel: userChannelSlice,
-      comment: commentSlice
+      comment: commentSlice,
+      search: searchVideoSlice
     }
   })
 }
