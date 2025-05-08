@@ -10,7 +10,7 @@ import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
 import WatchVideoAnimation from '@/lib/ui-component/WatchVideoAnimation';
 import Comment from '@/app/components/Comment'
 import { createComment } from '@/lib/features/commentSlice';
-
+import formatDuration from '@/util/formatDuration';
 
 // interface VideoPlayerProps {
 //   src: string;

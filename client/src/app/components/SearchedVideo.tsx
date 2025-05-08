@@ -4,6 +4,8 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 TimeAgo.addLocale(en);
 
+import formatDuration from '@/util/formatDuration';
+
 interface searchedVideoType {
     thumbnail: string;
     duration: number;
@@ -35,7 +37,7 @@ const SearchedVideo = ({
                     className='h-full w-full object-contain '
                 />
                 <div className='absolute bottom-2 right-2 p-1 bg-red text-white text-xs' style={{ background: 'rgb(0,0,0,0.5)' }}>
-                    {duration}
+                    {formatDuration(duration)}
                 </div>
             </div>
 
@@ -46,7 +48,8 @@ const SearchedVideo = ({
                     <p>{timeAgo.format(new Date(createdAt))}</p>
                 </div>
                 <div className='flex mb-2 text-gray-500' >
-                    <div className='min-h-5 min-w-5 h-5 w-5 overflow-hidden rounded-xl mr-4 flex justify-center items-center'>
+                    <div className='min-h-5 min-w-5 h-5 w-5 overflow-hidden 
+                                rounded-xl mr-2 flex justify-center items-center'>
                         <Image
                             src={"https://res.cloudinary.com/dnlrrhbsl/image/upload/v1746093228/wqlnwxtny5y77eqxnmti.jpg"}
                             height={40}

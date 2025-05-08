@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import formatDuration from "@/util/formatDuration";
+
 
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -30,6 +32,8 @@ const VideoCard = ({ card }: any) => {
 
   }
 
+ 
+
   const handleGetUserChannel = () => {
     router.push(`/profile/${card?.owner._id}`)
   }
@@ -55,7 +59,8 @@ const VideoCard = ({ card }: any) => {
           />
           <div className=" absolute bottom-2 right-2 p-0.5"
             style={{ background: "rgb(0,0,0,0.5)" }}>
-            <p className="text-white text-sm">{`${card?.duration.toString().split('.')[0]}.${card.duration.toString().split(".")[1].slice(0, 2)}`}</p>
+            <p className="text-white text-sm">{formatDuration(card?.duration)}</p>
+            {/* <p className="text-white text-sm">{`${card?.duration.toString().split('.')[0]}`}</p> */}
 
           </div>
         </Link>
