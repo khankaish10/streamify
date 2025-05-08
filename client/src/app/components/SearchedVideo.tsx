@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import TimeAgo from 'javascript-time-ago'
+import Link from 'next/link'
 import en from 'javascript-time-ago/locale/en'
 TimeAgo.addLocale(en);
 
@@ -21,10 +22,12 @@ const SearchedVideo = ({
     thumbnail, duration, description, owner, title, views, id, createdAt
 }: searchedVideoType) => {
     const timeAgo = new TimeAgo('en')
-
+    
     return (
         <div className='flex gap-3'>
-            <div className='bg-black overflow-hidden rounded-xl relative
+            <Link 
+                href={`/videos/watch/${id}`}
+                className='bg-black overflow-hidden rounded-xl relative
             h-35 w-60 
             sm:h-40 sm:w-70
             md:h-40 md:w-85
@@ -39,7 +42,7 @@ const SearchedVideo = ({
                 <div className='absolute bottom-2 right-2 p-1 bg-red text-white text-xs' style={{ background: 'rgb(0,0,0,0.5)' }}>
                     {formatDuration(duration)}
                 </div>
-            </div>
+            </Link>
 
             <div className='md:p-3'>
                 <h1 className='font-bold text-sm'>{title}</h1>
@@ -57,6 +60,7 @@ const SearchedVideo = ({
                             alt='video thumbnail'
                             className='h-full w-full object-cover rounded-xl'
                         />
+                  
                     </div>
                     <p className='text-xs'>Coders's gyan</p>
                 </div>

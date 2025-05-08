@@ -8,7 +8,7 @@ import { handleLogout, searchVideoApi } from "@/api";
 import { logout } from "@/lib/features/users/userSlice";
 import { useRouter as userRouter } from "next/navigation";
 import { openModal } from "@/lib/features/globalModalslice";
-import {setSearchedVideo} from "@/lib/features/video/searchVideoSlice";
+import { setSearchedVideo } from "@/lib/features/video/searchVideoSlice";
 
 const Navbar = () => {
   const user = useAppSelector((state: any) => state.user);
@@ -46,12 +46,15 @@ const Navbar = () => {
 
   const handleSearch = (e: any) => {
     e.preventDefault();
-    router.push(`/result/?search=${encodeURIComponent(searchQuery)}`)
-    searchVideoApi(searchQuery)
-      .then(res => {
-        dispatch(setSearchedVideo(res?.data))
-        console.log("search response: ", res.data)
-      })
+    if (searchQuery) {
+      router.push(`/result/?search=${encodeURIComponent(searchQuery)}`)
+      searchVideoApi(searchQuery)
+        .then(res => {
+          dispatch(setSearchedVideo(res?.data))
+          console.log("search response: ", res.data)
+        })
+    }
+
   }
 
   return (
