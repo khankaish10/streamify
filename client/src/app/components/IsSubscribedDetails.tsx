@@ -27,7 +27,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
     const [like, setLike] = useState<string[]>([])
     const [isLiked, setIsLiked] = useState(false)
     const [isSubscribed, setIsSubscribed] = useState(false)
-    const user = useAppSelector(state => state.user)
+    const user = useAppSelector<any>(state => state.user)
     const videoidparams = useParams<any>();
 
 
@@ -63,7 +63,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                 setLike(res?.data.likes)
             })
     }
-
+    console.log("user: ", user)
     useEffect(() => {
         if (like?.find(id => id === user?._id)) {
             setIsLiked(true)
