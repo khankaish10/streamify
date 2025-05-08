@@ -25,6 +25,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 
     const [subscriberCount, setSubscriberCount] = useState(0);
     const [like, setLike] = useState<string[]>([])
+    const [isLiked, setIsLiked] = useState(false)
     const [isSubscribed, setIsSubscribed] = useState(false)
     const user = useAppSelector(state => state.user)
     const videoidparams = useParams<any>();
@@ -42,6 +43,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                 .then(res => {
                     setSubscriberCount((prevCount) => prevCount - 1);
                     setIsSubscribed(prev => !prev)
+
                 })
 
         } else {
@@ -61,6 +63,14 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                 setLike(res?.data.likes)
             })
     }
+
+    useEffect(() => {
+        if (like?.find(id => id === user?._id)) {
+            setIsLiked(true)
+        } else {
+            setIsLiked(false)
+        }
+    }, [like])
 
     return (
         <>
@@ -91,7 +101,12 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                 <div className={`flex items-center gap-2 border-r-1 cursor-pointer h-full w-full 
                             rounded-l-3xl hover:bg-gray-200 py-1 px-4 `}
                     onClick={handleLikes}>
-                    <ThumbsUp size={20} />
+
+                    {
+                        isLiked ? (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="black" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-thumbs-up-icon lucide-thumbs-up"><path d="M7 10v12" /><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" /></svg>)
+                            : <ThumbsUp size={20} />
+                    }
+
                     <p className='text-sm'>{like?.length}</p>
                 </div>
                 <div className='py-1 flex items-center px-4 cursor-pointer h-full w-full rounded-r-3xl hover:bg-gray-200'>
@@ -126,7 +141,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                 </div>
             }
 
-            
+
 
 
 

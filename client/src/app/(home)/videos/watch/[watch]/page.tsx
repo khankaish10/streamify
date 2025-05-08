@@ -139,7 +139,7 @@ function WatchVideo() {
                       className='p-2 outline-none w-full border-b-1 no scroll'
                       placeholder='Add a comment'
                     />
-                    <div className=' flex justify-self-end'>
+                    <div className=' flex justify-self-end hover:bg-gray-100 rounded-3xl'>
                       <button
                         onClick={handleCommentCreate}
                         className='rounded-3xl border p-1 cursor-pointer'
