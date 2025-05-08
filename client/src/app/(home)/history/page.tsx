@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useAppSelector, useAppDispatch } from '@/lib/hooks'
 import { clearHistory, deleteHistory, videoHistory } from '@/lib/features/video/videoHistory'
 import Link from 'next/link'
-import { deleteHistoryApi, getAllHistoryApi, clearWatchHistoryApi } from '@/api'
+import { deleteHistoryApi, getAllHistoryApi, clearWatchHistoryApi } from '@/api/videoApi'
 import { User, Trash2 } from "lucide-react";
 import WatchHistoryAnimation from '@/lib/ui-component/watchHistoryAnimation'
 

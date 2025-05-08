@@ -85,6 +85,7 @@ const signUp = asyncHandler(async (req, res) => {
     res,
     "success",
     {
+      refreshToken,
       accessToken,
       _id: newUser._id,
       userName: newUser.userName,
@@ -141,6 +142,7 @@ const login = asyncHandler(async (req, res) => {
     res,
     "success",
     {
+      refreshToken,
       accessToken,
       _id: existedUser._id,
       userName: existedUser.userName,
@@ -176,19 +178,24 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const generateRefreshAccessToken = async (req, res) => {
-  const refreshToken = req.cookie("refreshToken"); // gpt suggested to req.cookies.refreshToken instead, will check later
+  const {refreshToken} = req.body
   if (!refreshToken) throw errorResponse(res, "Invalid refresh token");
 
-  const decodedRefreshToken = await jwt.verify(
-    refreshToken,
-    process.env.REFRESHTOKEN_SECRET
-  );
-  if (!decodedRefreshToken) throw errorResponse(res, "Invalid refresh Token");
+  console.log("refresh: ", req.body)
+  // const decodedRefreshToken = await jwt.verify(
+  //   refreshToken,
+  //   process.env.REFRESHTOKEN_SECRET
+  // );
+  // if (!decodedRefreshToken) throw errorResponse(res, "Invalid refresh Token");
 
-  const user = await User.findById(decodedRefreshToken.id).select("-password");
-  if (!user) throw errorResponse(res, "User doesn't exist or expired token");
+  // const user = await User.findById(decodedRefreshToken.id).select("-password");
+  // if (!user) throw errorResponse(res, "User doesn't exist or expired token");
 
-  const accessToken = await user.generateAccessToken();
+  // const newAccessToken = await user.generateAccessToken();
+  // const newRefreshToken = await user.generateRefreshToken();
+
+  // user.refreshToken = newRefreshToken;
+  // await user.save();
 
   // res.cookie("accessToken", accessToken, {
   //   httpOnly: true,
@@ -199,7 +206,8 @@ const generateRefreshAccessToken = async (req, res) => {
     res,
     "success",
     {
-      accessToken,
+      // newAccessToken,
+      // newRefreshToken,
     },
     200
   );

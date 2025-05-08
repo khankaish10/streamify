@@ -1,5 +1,5 @@
 'use client'
-import { handleLogin } from '@/api'
+import { handleLogin } from '@/api/userApi'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'

@@ -10,7 +10,8 @@ import formatDuration from "@/util/formatDuration";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi, getUserChannelApi } from "@/api";
+import { createHistoryAndViewsApi} from "@/api/videoApi";
+import { getUserChannelApi } from "@/api/userApi";
 
 
 

@@ -1,5 +1,5 @@
 'use client'
-import { handleGetProfile } from '@/api'
+import { handleGetProfile } from '@/api/userApi'
 import React, { useLayoutEffect, useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
@@ -8,7 +8,7 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { useAppDispatch } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi } from "@/api";
+import { createHistoryAndViewsApi } from "@/api/videoApi";
 import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
 import ProtectedRoutes from '@/app/components/ProtectedRoutes'
 TimeAgo.addLocale(en);
@@ -70,7 +70,7 @@ const Profile = () => {
                         {/* font-[poppins]'> */}
 
 
-                        <div className="container flex flex-col sm:pl-10 sm:pt-10 h-screen  p-1 sm:p-0 border">
+                        <div className="container flex flex-col sm:pl-10 sm:pt-10 h-screen  p-1 sm:p-0 ">
                             <div className='flex flex-col sm:flex-row items-center justify-center sm:justify-start p-3 '>
                                 {/* profile pic, update password */}
                                 <div className='h-35 w-35 overflow-hidden 

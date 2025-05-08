@@ -3,7 +3,7 @@
 import { useLayoutEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
 import { allVideos } from "@/lib/features/video/videoSlice";
-import { handleGetAllVideos } from "@/api";
+import { handleGetAllVideos } from "@/api/videoApi";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import HomePageAnimation from "@/lib/ui-component/HomePageAnimation";
 

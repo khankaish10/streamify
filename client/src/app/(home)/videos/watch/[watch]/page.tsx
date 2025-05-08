@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 import React, { useLayoutEffect, useState } from 'react'
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { createCommentApi, handleGetAVideo } from "@/api";
+import { createCommentApi, handleGetAVideo } from "@/api/videoApi";
 import { useParams } from 'next/navigation';
 import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
 import WatchVideoAnimation from '@/lib/ui-component/WatchVideoAnimation';
