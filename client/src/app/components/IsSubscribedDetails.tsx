@@ -58,12 +58,17 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
     }
 
     const handleLikes = () => {
-        likeVideoApi(videoidparams.watch)
-            .then(res => {
-                setLike(res?.data.likes)
-            })
+        if (user?._id) {
+
+            likeVideoApi(videoidparams.watch)
+                .then(res => {
+                    setLike(res?.data.likes)
+                })
+                
+        } else {
+            alert("Please login to like video")
+        }
     }
-    console.log("user: ", user)
     useEffect(() => {
         if (like?.find(id => id === user?._id)) {
             setIsLiked(true)
