@@ -1,25 +1,32 @@
 'use client'
 
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
 import { allVideos } from "@/lib/features/video/videoSlice";
 import { handleGetAllVideos } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import HomePageAnimation from "@/lib/ui-component/HomePageAnimation";
 
+// -----------temporary card videos
+// import { cards } from "@/Constants/data";
+// -------------temporary card videos
+
 
 function Home() {
   const dispatch = useAppDispatch()
   const cards = useAppSelector((state) => state.video)
-  const [isLoading, setIsLoading] = useState(false)
-  useLayoutEffect(() => {
-    setIsLoading(true)
+  const [isLoading, setIsLoading] = useState(true)
+
+  console.log("cards", cards)
+  useEffect(() => {
+    // setIsLoading(true)
     handleGetAllVideos()
       .then((res) => {
         dispatch(allVideos(res.data))
         setIsLoading(false)
       })
       .catch(err => console.log(err))
+      .finally(() => setIsLoading(false))
 
   }, [])
 

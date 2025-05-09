@@ -86,6 +86,7 @@ const signUp = asyncHandler(async (req, res) => {
     "success",
     {
       accessToken,
+      refreshToken,
       _id: newUser._id,
       userName: newUser.userName,
       email: newUser.email,
@@ -142,6 +143,7 @@ const login = asyncHandler(async (req, res) => {
     "success",
     {
       accessToken,
+      refreshToken,
       _id: existedUser._id,
       userName: existedUser.userName,
       email: existedUser.email,
@@ -176,30 +178,30 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const generateRefreshAccessToken = async (req, res) => {
-  const refreshToken = req.cookie("refreshToken"); // gpt suggested to req.cookies.refreshToken instead, will check later
+  const {refreshToken} = req.body
   if (!refreshToken) throw errorResponse(res, "Invalid refresh token");
-
+  
   const decodedRefreshToken = await jwt.verify(
     refreshToken,
     process.env.REFRESHTOKEN_SECRET
   );
+  
   if (!decodedRefreshToken) throw errorResponse(res, "Invalid refresh Token");
-
+  
   const user = await User.findById(decodedRefreshToken.id).select("-password");
   if (!user) throw errorResponse(res, "User doesn't exist or expired token");
-
-  const accessToken = await user.generateAccessToken();
-
-  // res.cookie("accessToken", accessToken, {
-  //   httpOnly: true,
-  //   secure: true,
-  // });
+  
+  const newAccessToken = await user.generateAccessToken();
+  const newRefreshToken = refreshToken;
+  
+  await user.save();
 
   return successResponse(
     res,
     "success",
     {
-      accessToken,
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken
     },
     200
   );

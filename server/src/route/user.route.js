@@ -32,7 +32,7 @@ router.route("/signup").post(
 );
 router.route("/login").post(login);
 router.route("/logout").post(verifyJwt, logout);
-router.route("/refresh-token").get(verifyJwt, generateRefreshAccessToken);
+router.route("/refresh-token").post(generateRefreshAccessToken);
 router.route("/profile").get(verifyJwt, getMyProfile);
 router.route("/update-profile").patch(verifyJwt, updateMyProfile);
 router.route("/subscription").get(verifyJwt, getMySubscriber)
