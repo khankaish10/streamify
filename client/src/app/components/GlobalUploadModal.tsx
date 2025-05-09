@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { closeModal } from '@/lib/features/globalModalslice';
 import Image from 'next/image';
-import { handleUploadVideoApi } from '@/api';
+import { handleUploadVideoApi } from '@/api/videoApi';
 import { X } from 'lucide-react';
 
 

@@ -1,5 +1,5 @@
 'use client'
-import { handleGetProfile } from '@/api'
+import { handleGetProfile } from '@/api/userApi'
 import React, { useLayoutEffect, useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
@@ -8,10 +8,12 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { useAppDispatch } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi, getUserChannelApi } from "@/api";
+import { createHistoryAndViewsApi} from "@/api/videoApi";
+import { getUserChannelApi } from '@/api/userApi'
 import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
 import { useParams } from 'next/navigation'
-import { channel } from 'diagnostics_channel'
+import { getUserChannel } from '@/app/types/userRequest'
+import { getProfileResponsePayload } from '@/app/types/userResponse'
 
 TimeAgo.addLocale(en);
 
@@ -22,7 +24,7 @@ const Profile = () => {
     const [isLoading, setIsLoading] = React.useState(true)
     const reload = useAppSelector((state) => state.modal.reload)
     const dispatch = useAppDispatch()
-    const params = useParams()
+    const params = useParams<{channelid: string}>()
 
     console.log("channel id : ", params.channelid)
 
@@ -38,7 +40,8 @@ const Profile = () => {
     useEffect(() => {
         setIsLoading(true)
         getUserChannelApi(params?.channelid)
-        .then(res => {
+        .then((res: any) => {
+            // console.log("userChannel : ", res)
             setUser(res?.data[0])
             setIsLoading(false)
         })
@@ -51,7 +54,7 @@ const Profile = () => {
         setIsLoading(true)
 
             getUserChannelApi(params?.channelid)
-            .then(res => {
+            .then((res: any) => {
                 setUser(res?.data[0])
                 setIsLoading(false)
             })

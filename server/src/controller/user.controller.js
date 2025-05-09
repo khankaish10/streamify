@@ -85,6 +85,7 @@ const signUp = asyncHandler(async (req, res) => {
     res,
     "success",
     {
+      refreshToken,
       accessToken,
       refreshToken,
       _id: newUser._id,
@@ -142,6 +143,7 @@ const login = asyncHandler(async (req, res) => {
     res,
     "success",
     {
+      refreshToken,
       accessToken,
       refreshToken,
       _id: existedUser._id,

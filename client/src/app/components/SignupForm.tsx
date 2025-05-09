@@ -1,19 +1,12 @@
 'use client'
 import React, { useState } from 'react'
-import { handleSignup } from '@/api/index';
+import { handleSignup } from '@/api/userApi';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/lib/hooks';
 import { signUp } from '../../lib/features/users/userSlice'
 import Link from 'next/link';
 import { signupValidationSchema } from '@/lib/formValidation/form_validation';
-
-type FormData = {
-    userName: string;
-    email: string;
-    password: string;
-    fullName: string;
-}
-
+import { signup } from '../types/userRequest';
 
 const SignupForm = () => {
     const router = useRouter();
@@ -21,11 +14,11 @@ const SignupForm = () => {
     const [errors, setErrors] = useState<{ [key: string]: string[] } | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const [formData, setFormData] = useState<FormData>({
-        userName: '' as string,
-        email: '' as string,
-        password: '' as string,
-        fullName: '' as string,
+    const [formData, setFormData] = useState<signup>({
+        userName: '' ,
+        email: '' ,
+        password: '',
+        fullName: '',
     });
     const [avatar, setAvatar] = useState<File | null>(null);
     const [coverImage, setCoverImage] = useState<File | null>(null);

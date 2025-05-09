@@ -5,7 +5,7 @@ import { House, History, FileVideo, User } from 'lucide-react'
 import Image from "next/image";
 import { sideBarMenuAndPath } from '@/Constants/Constants';
 import { openModal } from "@/lib/features/globalModalslice";
-import { handleLogout } from "@/api";
+import { handleLogout } from "@/api/userApi";
 import { logout } from "@/lib/features/users/userSlice";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { useRouter as userRouter } from "next/navigation";

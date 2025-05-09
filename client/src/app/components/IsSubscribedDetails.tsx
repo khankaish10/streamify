@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { subscribeApi, unSubscribeApi, likeVideoApi } from '@/api/index'
+import { subscribeApi, unSubscribeApi, likeVideoApi } from '@/api/videoApi'
 import { UserPlus, UserMinus } from 'lucide-react';
 import { useAppSelector } from '@/lib/hooks';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';

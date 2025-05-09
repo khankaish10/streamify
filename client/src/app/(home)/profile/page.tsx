@@ -1,5 +1,5 @@
 'use client'
-import { handleGetProfile } from '@/api'
+import { handleGetProfile } from '@/api/userApi'
 import React, { useLayoutEffect, useEffect, useState } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
@@ -8,7 +8,7 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { useAppDispatch } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi } from "@/api";
+import { createHistoryAndViewsApi } from "@/api/videoApi";
 import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
 import ProtectedRoutes from '@/app/components/ProtectedRoutes'
 TimeAgo.addLocale(en);
