@@ -38,6 +38,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
         setLike(likeCount)
     }, [])
 
+
     const handleSubsCount = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (isSubscribed) {
             unSubscribeApi(ownerId)

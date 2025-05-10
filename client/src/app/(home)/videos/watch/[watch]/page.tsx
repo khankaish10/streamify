@@ -1,7 +1,7 @@
 'use client'
 export const dynamic = 'force-dynamic'
 
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useEffect, useState } from 'react'
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { createCommentApi, deleteCommentApi, handleGetAVideo } from "@/api/videoApi";
@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { createComment } from '@/lib/features/commentSlice';
 import formatDuration from '@/util/formatDuration';
 import { User } from 'lucide-react';
+import useAuthUser from '@/hooks/useAuthUse';
 
 // interface VideoPlayerProps {
 //   src: string;
@@ -28,13 +29,15 @@ function WatchVideo() {
   const [isLoading, setIsLoading] = useState(false)
   const videoId = useParams<any>();
   const user = useAppSelector((state: any) => state.user)
+  const userId = useAuthUser();
   const dispatch = useAppDispatch()
   const [commentInput, setCommentInput] = useState("")
   // const comments = useAppSelector(state => state.comment)
   const [comments, setComments] = useState<any>([])
 
-  useLayoutEffect(() => {
-    handleGetAVideo(videoId?.watch, user?._id)
+  console.log("userid: ", userId)
+  useEffect(() => {
+    handleGetAVideo(videoId?.watch, userId)
       .then((res) => {
         setVideoDetails(res?.data[0])
         setComments(res?.data[0]?.comments)
@@ -110,7 +113,7 @@ function WatchVideo() {
                     userName={videoDetails?.owner?.userName || ""}
                     subsCount={videoDetails?.subscriberCount || 0}
                     ownerId={videoDetails?.owner?._id || ""}
-                    isSubsd={videoDetails?.isSubscribed || false}
+                    isSubsd={videoDetails?.isSubscribed}
                     likeCount={videoDetails?.likes || []}
                   />
                 )}

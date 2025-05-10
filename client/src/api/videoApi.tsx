@@ -10,6 +10,7 @@ interface authresponseDetails {
 
 export const handleGetAVideo = async (videoid: string, currentUserId: string | null) => {
     try {
+        console.log("userId: ", currentUserId)
         const response = await api.post<any>(`/videos/watch/${videoid}`, { currentUserId }, {
             headers: {
                 "Content-Type": "application/json"

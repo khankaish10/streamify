@@ -126,6 +126,7 @@ const getvideo = asyncHandler(async (req, res) => {
     ];
 
     // Add isSubscribed logic only if currentUserId exists
+    // console.log("current Userid: ", currentUserId)
     if (currentUserId) {
         pipeline.splice(4, 0, {
             $lookup: {
@@ -160,6 +161,8 @@ const getvideo = asyncHandler(async (req, res) => {
         });
     }
     const video = await Video.aggregate(pipeline)
+
+    console.log("video: ", video)
     if (!video) {
         return errorResponse(res, "video not found", 404)
     }
