@@ -5,7 +5,7 @@ import { closeModal } from '@/lib/features/globalModalslice';
 import Image from 'next/image';
 import { handleUploadVideoApi } from '@/api/videoApi';
 import { X } from 'lucide-react';
-
+import { Errors } from '../types/errors';
 
 const GlobalModal = () => {
     const { isOpen } = useAppSelector(state => state.modal)
@@ -14,66 +14,71 @@ const GlobalModal = () => {
     const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
     const [selectedThumbnail, setSelectedThumbnail] = useState<File | null>(null);
     const [videoDuration, setVideoDuration] = useState<number | null>(null);
-    const [title, setTitle] = useState<string | null>(null);
-    const [description, setDescription] = useState<string | null>(null);
-    const [tags, setTags] = useState<string | null>(null);
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [tags, setTags] = useState<string>("");
     const thumbnailRef = useRef<HTMLInputElement | null>(null);
-    const [formData, setFormData] = useState<FormData | null>(null)
     const [isUploadProcessing, setIsUploadProcessing] = useState(false)
+    const [errors, setErrors] = useState<Errors>({})
 
-    const handleUpload = async () => {
-        if (fileRef.current && fileRef.current.files && fileRef.current.files[0] ||
-            thumbnailRef.current && thumbnailRef.current.files && thumbnailRef.current.files[0]
-        ) {
-            const videoFile = fileRef.current?.files?.[0];
-            const thumbnailFile = thumbnailRef?.current?.files?.[0]
-            const form = new FormData();
-
-            if (videoFile) {
-
-                const videoElement = document.createElement("video");
-                videoElement.preload = "metadata";
-
-                videoElement.onloadedmetadata = () => {
-                    window.URL.revokeObjectURL(videoElement.src); // Free memory
-                    const duration = videoElement.duration; // Get duration in seconds
-                    setVideoDuration(duration); // Save duration in state
-                };
-                videoElement.src = URL.createObjectURL(videoFile);
-
-                setSelectedVideo(videoFile);
-                form.append('videoFile', videoFile);
-                form.append('duration', videoDuration !== null ? videoDuration.toString() : '');
-            }
-
-            if (thumbnailFile) {
-                setSelectedThumbnail(thumbnailFile)
-                form.append('thumbnail', thumbnailFile);
-            }
-
-            if (title !== null) form.append("title", title);
-            if (description !== null) form.append("description", description);
-            if (tags !== null) form.append("tags", tags);
-
-            setFormData(form)
+    const handleVideoChange = (e: any) => {
+        if (e.target.files?.[0]) {
+            setSelectedVideo(e.target.files[0])
+            const videoElement = document.createElement("video");
+            videoElement.preload = "metadata";
+            videoElement.onloadedmetadata = () => {
+                window.URL.revokeObjectURL(videoElement.src); // Free memory
+                const duration = videoElement.duration; // Get duration in seconds
+                setVideoDuration(duration); // Save duration in state
+            };
+            videoElement.src = URL.createObjectURL(e.target.files?.[0]);
         }
     }
 
+    const validateFields = (): boolean => {
+        const newErrors: Errors = {}
+        if (!title.trim()) newErrors.title = 'Title is required.'
+        if (!description.trim()) newErrors.description = 'Description is required.'
+        if (!selectedVideo) newErrors.selectedVideo = 'Video is required.'
+        if (!selectedThumbnail) newErrors.thumbnail = 'Thumbnail is required.'
+        setErrors(newErrors)
+        return Object.keys(newErrors).length == 0
+    }
+
+    const resetFormData = () => {
+        setTitle("")
+        setDescription("")
+        setTags("")
+        setVideoDuration(null)
+        setSelectedThumbnail(null)
+        setSelectedVideo(null)
+        setErrors({})
+    }
 
     const handleSubmit = () => {
-        setIsUploadProcessing(true)
-        if (formData) {
-            handleUploadVideoApi(formData)
-                .then(response => {
-                    setIsUploadProcessing(prev => !prev)
-                    dispatch(closeModal())
-                })
-                .catch(err => {
-                    console.log(err)
-                    setIsUploadProcessing(false)
-                })
+        if (!validateFields()) return;
+        const form = new FormData();
 
-        }
+        form.append('videoFile', selectedVideo!);
+        form.append('duration', videoDuration !== null ? videoDuration.toString() : '');
+        if (title !== null) form.append("title", title);
+        if (description !== null) form.append("description", description);
+        if (tags !== null) form.append("tags", tags);
+        form.append('thumbnail', selectedThumbnail!);
+
+        // setFormData(form)
+        setIsUploadProcessing(true)
+        handleUploadVideoApi(form)
+            .then(response => {
+                setIsUploadProcessing(true)
+                resetFormData();
+                dispatch(closeModal())
+            })
+            .catch(err => {
+                console.log(err)
+                setIsUploadProcessing(false)
+            })
+            .finally(() => setIsUploadProcessing(false))
     }
 
     return (
@@ -84,7 +89,7 @@ const GlobalModal = () => {
                             '
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
             >
-                <div className='h-100 w-200 bg-white border border-gray-500 
+                <div className='h-130 w-220 bg-white border border-gray-500 
                                  rounded-lg flex flex-col'>
                     <div className='border-b-1 border-gray-300
                                     p-2 flex justify-between'>
@@ -114,6 +119,7 @@ const GlobalModal = () => {
                                     alt="upload icon"
                                     className="h-full w-full cover p-2"
                                 />
+
                             </div>
                             <div className='mt-5 p-2 rounded-3xl 
                                         bg-[#27548A] text-white '>
@@ -124,7 +130,7 @@ const GlobalModal = () => {
                                 </label>
                                 <input type="file" name="upload" id="upload"
                                     className='hidden' ref={fileRef}
-                                    accept='video/*' onChange={() => handleUpload()} />
+                                    accept='video/*' onChange={(e) => handleVideoChange(e)} />
                             </div>
 
                             {
@@ -145,6 +151,8 @@ const GlobalModal = () => {
                                 )
                             }
 
+                            <p className={`text-[#CB356B] mt-1 text-xs w-[90%] min-h-4 break-normal} `}>{errors?.selectedVideo}</p>
+
 
 
                         </div>
@@ -162,6 +170,7 @@ const GlobalModal = () => {
                                         placeholder='Title'
                                         value={title || ""}
                                         onChange={(e) => setTitle(e.target.value)} />
+                                    <p className={`text-[#CB356B] text-xs w-[90%] min-h-4 break-normal} `}>{errors?.title}</p>
                                 </div>
                                 <div className="mb-4 w-[70%]">
                                     <input type="text" id="tags"
@@ -171,8 +180,9 @@ const GlobalModal = () => {
                                         placeholder='tags'
                                         value={tags || ""}
                                         onChange={(e) => setTags(e.target.value)} />
+
                                 </div>
-                                <div className="mb-4 w-[70%]">
+                                <div className="mb-2 w-[70%]">
                                     <textarea id="description"
                                         name="description" required className="shadow 
                                         rounded w-full py-2 px-3 text-gray-700 leading-tight 
@@ -181,9 +191,10 @@ const GlobalModal = () => {
                                         placeholder='description'
                                         value={description || ""}
                                         onChange={(e) => setDescription(e.target.value)} />
+                                    <p className={`text-[#CB356B] text-xs w-[90%] min-h-4 break-normal} `}>{errors?.description}</p>
                                 </div>
 
-                                <div className="mb-4 flex mr-3 flex justify-center items-center">
+                                <div className="mb-4 flex flex-col mr-3 flex justify-center items-center ">
                                     <button className='cursor-pointer outline-none 
                                                  p-2 shadow'
                                         onClick={() => thumbnailRef.current?.click()}
@@ -193,7 +204,11 @@ const GlobalModal = () => {
                                     <input type="file" id="thumbnail" className='hidden'
                                         placeholder='Thumbnail' required
                                         ref={thumbnailRef}
-                                        onChange={() => handleUpload()} />
+                                        onChange={(e) => {
+                                            if (e.target.files?.[0]) {
+                                                setSelectedThumbnail(e.target.files?.[0])
+                                            }
+                                        }} />
                                     {
                                         selectedThumbnail && (
                                             <div className='cursor-pointer' onClick={() => {
@@ -204,13 +219,14 @@ const GlobalModal = () => {
                                             }}><X /></div>
                                         )
                                     }
+                                     <p className={`text-[#CB356B] mt-1 text-xs w-[90%] min-h-4 break-normal} `}>{errors?.thumbnail}</p>
                                 </div>
 
                                 <button className='bg-indigo-500 text-white rounded-xl 
                                                     p-2 flex'
                                     onClick={() => handleSubmit()}
                                     disabled={isUploadProcessing}
-                                    >
+                                >
                                     {
                                         isUploadProcessing ? (
                                             <>

@@ -18,10 +18,17 @@ const uploadAVideo = asyncHandler(async (req, res) => {
         throw errorResponse(res, "Video file is required", 400);
     }
 
-    const videoUpload = await uploadToCloudinary(req.files.videoFile[0].path);
-    const thumbnailUpload = await uploadToCloudinary(req.files.thumbnail[0].path);
+    let videoUpload;
+    let thumbnailUpload;
+    if (req?.files?.videoFile[0]?.path) {
+       videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path);
+    }
+    if (req?.files && req?.files?.thumbnail && req.files.thumbnail[0]?.path) {
+        thumbnailUpload = await uploadToCloudinary(req?.files?.thumbnail[0]?.path);
+    }
 
-    // Save video to MongoDB
+    // console.log("videoupload: ", videoUpload)
+    // // Save video to MongoDB
     const newVideo = await Video.create({
         title,
         videoFile: videoUpload,
@@ -398,7 +405,7 @@ const searchVideo = asyncHandler(async (req, res) => {
     const video = await Video.find({
         $or: [
             { title: { $regex: query, $options: 'i' } },
-            { description: { $regex: query, $options: 'i' }},
+            { description: { $regex: query, $options: 'i' } },
         ]
     })
 

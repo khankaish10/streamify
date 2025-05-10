@@ -9,25 +9,6 @@ export const api = axios.create({
     // baseURL: API_URL,
 });
 
-const getAccessRefreshToken = async (user: any) => {
-    try {
-        const response = await axios.post<any>("/users/refresh-token", {
-            refreshToken: user?.refreshToken
-        })
-        const newAccessToken = response.data.accessToken
-        console.log("new accesstoken : ", newAccessToken)
-        const newRefreshToken = response.data.refreshToken
-        localStorage.setItem("user", JSON.stringify({ accessToken: newAccessToken, refreshToken: newRefreshToken }))
-
-        return newAccessToken;
-    } catch (error) {
-        localStorage.removeItem("user");
-        window.location.href = "/auth/login"
-        alert("Session expired. Please login again.")
-        return Promise.reject(error)
-    }
-}
-
 
 api.interceptors.request.use(
     async (config: any) => {
