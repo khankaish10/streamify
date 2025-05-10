@@ -1,19 +1,21 @@
 'use client'
 import { handleLogin } from '@/api/userApi'
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'
 import { login } from '@/lib/features/users/userSlice'
 import Link from 'next/link'
 import Image from 'next/image'
 import { loginValidationSchema } from '@/lib/formValidation/form_validation'
+import { startLoading, stopLoading } from '@/lib/features/loadingSlice'
 
 
 const LoginForm = () => {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [userName, setuserName] = React.useState('')
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
+    const isLoading = useAppSelector(state => state.loading)
     const [errors, setErrors] = useState<{ email?: string[]; userName?: string[]; password?: string[] } | undefined>();
     const dispatch = useAppDispatch()
     const router = useRouter()
@@ -29,20 +31,27 @@ const LoginForm = () => {
                 setErrors({})
             ), 2000)
         } else {
-            setIsLoading(true);
+            // setIsLoading(true);
+            dispatch(startLoading())
             handleLogin({ email, password })
                 .then((response) => {
                     dispatch(login(response.data))
                     router.push('/')
-                    setIsLoading(false)
+                    // setIsLoading(false)
+                    dispatch(stopLoading())
 
                 }).catch((error) => {
                     setErrors(error.response.data.err)
-                    setIsLoading(false)
+                    // setIsLoading(false)
+                    dispatch(stopLoading())
                     setTimeout(() => (
                         setErrors({})
                     ), 2000)
-                }).finally(() => setIsLoading(false))
+                }).finally(() => 
+                    dispatch(stopLoading())
+                    // setIsLoading(false)
+            
+            )
 
         }
     }

@@ -21,7 +21,6 @@ const Profile = () => {
     const reload = useAppSelector((state) => state.modal.reload)
     const dispatch = useAppDispatch()
 
-
     const handleClick = (video: { _id: string }) => {
         createHistoryAndViewsApi(video._id)
             .then((res) => {

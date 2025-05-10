@@ -6,6 +6,7 @@ import globalModalSlice from './features/globalModalslice'
 import userChannelSlice from './features/userChannelSlice'
 import commentSlice from './features/commentSlice'
 import searchVideoSlice from './features/video/searchVideoSlice'
+import loadingSlice from './features/loadingSlice'
 
 export const makeStore = () => {
   return configureStore({
@@ -16,7 +17,8 @@ export const makeStore = () => {
       history: VideoHistorySlice,
       channel: userChannelSlice,
       comment: commentSlice,
-      search: searchVideoSlice
+      search: searchVideoSlice,
+      loading: loadingSlice
     }
   })
 }

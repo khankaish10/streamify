@@ -10,6 +10,7 @@ import { logout } from "@/lib/features/users/userSlice";
 import { useRouter as userRouter } from "next/navigation";
 import { openModal } from "@/lib/features/globalModalslice";
 import { setSearchedVideo } from "@/lib/features/video/searchVideoSlice";
+import { startLoading, stopLoading } from "@/lib/features/loadingSlice";
 
 const Navbar = () => {
   const user = useAppSelector((state: any) => state.user);
@@ -32,25 +33,14 @@ const Navbar = () => {
       });
   };
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-  //       setProfileModal(false); // Close the modal
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
-
   const handleSearch = (e: any) => {
     e.preventDefault();
     if (searchQuery) {
+      dispatch(startLoading())
       router.push(`/result/?search=${encodeURIComponent(searchQuery)}`)
       searchVideoApi(searchQuery)
         .then(res => {
+          dispatch(stopLoading())
           dispatch(setSearchedVideo(res?.data))
         })
     }

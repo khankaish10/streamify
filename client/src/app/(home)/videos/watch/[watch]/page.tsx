@@ -98,7 +98,7 @@ function WatchVideo() {
                 muted={false}
               />
             </div>
-            <h1 className='my-2 font-bold'>{videoDetails?.description}</h1>
+            <h1 className='my-2 font-bold'>{videoDetails?.title}</h1>
 
             <div className='w-full pb-20 sm:pb-0 flex flex-col '>
               {/* ---------------------------------------------------------------------------------------------- */}
