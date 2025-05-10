@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Search, User } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { searchVideoApi } from "@/api/videoApi";
-import { handleLogout,  } from "@/api/userApi";
+import { handleLogout, } from "@/api/userApi";
 import { logout } from "@/lib/features/users/userSlice";
 import { useRouter as userRouter } from "next/navigation";
 import { openModal } from "@/lib/features/globalModalslice";
@@ -113,14 +113,20 @@ const Navbar = () => {
                         ${profileModal ? 'block' : 'hidden'}`}>
               <Link href={"/profile"}>
                 <div className="cursor-pointer hover:bg-gray-100 
-                          hover:border-b-1 p-1 " >Profile</div>
+                          hover:border-b-1 p-1 " onClick={() => setProfileModal(false)} >Profile</div>
               </Link>
               <div className="cursor-pointer hover:bg-gray-100 
                           hover:border-b-1 p-1 "
-                onClick={() => dispatch(openModal())} >Upload Video</div>
+                onClick={() => {
+                  setProfileModal(false)
+                  dispatch(openModal())
+                }} >Upload Video</div>
               <div className="cursor-pointer hover:bg-gray-100 
                           hover:border-b-1 p-1 rounded-b-lg"
-                onClick={() => handleSubmit()} >Logout</div>
+                onClick={() => {
+                  setProfileModal(false)
+                  handleSubmit()
+                }} >Logout</div>
             </div>
 
           )
@@ -130,7 +136,7 @@ const Navbar = () => {
             <div
               id="profileDiv"
               ref={profileRef}
-              className="border-1 border-gray-300 h-8 
+              className=" h-8 
                         w-8 rounded-full flex justify-center 
                         items-center overflow-hidden mr-1 
                         hidden sm:block cursor-pointer ml-5"
@@ -140,12 +146,12 @@ const Navbar = () => {
               }}
             >
               <Image
-                src={user?.avatar || "/default-avatar.png"}
+                src={user?.avatar}
                 width={32}
                 height={32}
 
                 alt="profile"
-                className="border-1 border-gray-300 object-cover rounded-full h-full w-full"
+                className="object-cover rounded-full h-full w-full"
               />
 
             </div>

@@ -27,6 +27,7 @@ const verifyJwt = async (req, res, next) => {
     if (error.name === "TokenExpiredError") {
       return next(errorResponse(res, "JWT expired. Please log in again.", 401));
     }
+    console.log("unexpected error from authmiddleware: ", error)
     next(error); // Pass any unexpected errors to error-handling middleware
   }
 };

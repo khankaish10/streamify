@@ -31,34 +31,48 @@ const getAccessRefreshToken = async (user: any) => {
 
 
 api.interceptors.request.use(
-    (config) => {
+    async (config: any) => {
         if (config.url === "/users/login" || config.url === "/users/signup") {
             return config
         }
-        let token;
+        let accessToken;
+        let refreshToken;
         const user = localStorage.getItem("user");
         if (user) {
-            token = JSON.parse(user)?.accessToken
+            accessToken = JSON.parse(user)?.accessToken
+            refreshToken = JSON.parse(user)?.refreshToken
+
         }
-        console.log("token: ", token)
-        if (token) {
+        console.log("refresh token from localstorage: ", refreshToken)
+        if (accessToken) {
             if (!config.headers) {
                 config.headers = {};
             }
 
-            const decoded: { exp: number } = jwtDecode(token); // Decode the token
+            const decoded: { exp: number } = jwtDecode(accessToken); // Decode the token
             const currentTime = Date.now() / 1000; // Current time in seconds
 
             if (decoded.exp < currentTime) {
-                console.log("expired token inside: ", token)
-                const bothToken = JSON.parse(user || "") 
-                getAccessRefreshToken(bothToken)
-                .then(res => console.log("new token: ", res.data.accessToken))
-                console.log("token after expired: ", token)
+
+                    try {
+                        const response = await axios.post<any>(`${API_URL}/users/refresh-token`, {
+                            refreshToken
+                        })
+                        accessToken = response.data.data.accessToken
+                        localStorage.setItem("user", JSON.stringify(response.data.data))
+
+                       
+                    } catch (error) {
+                        localStorage.removeItem("user");
+                        window.location.href = "/auth/login"
+                        alert("Session expired. Please login again.")
+                        return Promise.reject(error)
+                    }
+
             }
 
             config.headers = config.headers || {};
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${accessToken}`;
         }
         return config;
     },

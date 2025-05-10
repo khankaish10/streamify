@@ -28,7 +28,7 @@ const signUp = asyncHandler(async (req, res) => {
 
 
   if (existedUser) throw errorResponse(res, "User already exist", 404, {
-    email:"Email/Username already exists.",
+    email: "Email/Username already exists.",
     userName: "Email/Username already exists",
   });
   console.log("files: ", req.files)
@@ -36,7 +36,7 @@ const signUp = asyncHandler(async (req, res) => {
   if (!avatarLocalPath)
     throw errorResponse(res, "Avatar file is required", 404, {
       avatar: "Profile pic is required."
-  });
+    });
 
   // upload avatar to cloudinary
   const avatarUploadResult = await uploadToCloudinary(avatarLocalPath);
@@ -115,7 +115,7 @@ const login = asyncHandler(async (req, res) => {
   if (!existedUser) {
     throw errorResponse(res, "User doesnot exist", 400, {
       email: "User doesnot exist."
-    } );
+    });
   }
 
   const isPasswordValid = await existedUser.isPasswordCorrect(password);
@@ -180,30 +180,40 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const generateRefreshAccessToken = async (req, res) => {
-  const {refreshToken} = req.body
+  const { refreshToken } = req.body
+  console.log("refresh token recieved: ", refreshToken)
   if (!refreshToken) throw errorResponse(res, "Invalid refresh token");
-  
+
   const decodedRefreshToken = await jwt.verify(
     refreshToken,
     process.env.REFRESHTOKEN_SECRET
   );
-  
+
   if (!decodedRefreshToken) throw errorResponse(res, "Invalid refresh Token");
-  
+
   const user = await User.findById(decodedRefreshToken.id).select("-password");
   if (!user) throw errorResponse(res, "User doesn't exist or expired token");
-  
+
   const newAccessToken = await user.generateAccessToken();
-  const newRefreshToken = refreshToken;
-  
+  const newRefreshToken = await user.generateRefreshToken()
+
+  user.accessToken = newAccessToken;
+  user.refreshToken = newRefreshToken;
   await user.save();
 
   return successResponse(
     res,
     "success",
     {
+      refreshToken: newRefreshToken,
       accessToken: newAccessToken,
-      refreshToken: newRefreshToken
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      coverImage: user.coverImage,
+      createdAt: user.createdAt,
     },
     200
   );
@@ -221,13 +231,13 @@ const getMyProfile = async (req, res) => {
         foreignField: "owner",
         as: "allvideos"
       }
-    }, 
+    },
     {
       $lookup: {
         from: "subscriptions",
         localField: "_id",
         foreignField: "subscribeTo",
-        as:"subscription",
+        as: "subscription",
       }
     },
     {
@@ -268,13 +278,13 @@ const getUserProfile = asyncHandler(async (req, res) => {
         foreignField: "owner",
         as: "allvideos"
       }
-    }, 
+    },
     {
       $lookup: {
         from: "subscriptions",
         localField: "_id",
         foreignField: "subscribeTo",
-        as:"subscription",
+        as: "subscription",
       }
     },
     {

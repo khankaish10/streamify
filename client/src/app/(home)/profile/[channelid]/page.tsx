@@ -81,7 +81,7 @@ const Profile = () => {
                     <div className='flex flex-col sm:flex-row items-center justify-center sm:justify-start p-3 '>
                         {/* profile pic, update password */}
                         <div className='h-35 w-35 overflow-hidden 
-                                            rounded-full border-1 border-gray-500
+                                            rounded-full
                                             '>
                             <Image
                                 src={user?.avatar}

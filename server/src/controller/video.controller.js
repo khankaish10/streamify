@@ -376,6 +376,20 @@ const createComment = asyncHandler(async (req, res) => {
     return successResponse(res, "comment created on video", commented, 200)
 
 })
+const deleteComment = asyncHandler(async (req, res) => {
+    const { id, videoId } = req.body;
+    const userId = req.user._id;
+
+
+    const deletedComment = await Comment.findByIdAndDelete({
+        _id: id,
+        owner: userId,
+        video: videoId
+    })
+
+    return successResponse(res, "comment deleted.", deletedComment, 200)
+
+})
 
 const searchVideo = asyncHandler(async (req, res) => {
     const { query } = req.query
@@ -403,5 +417,6 @@ export {
     likeVideo,
     clearWatchHistory,
     createComment,
+    deleteComment,
     searchVideo
 }

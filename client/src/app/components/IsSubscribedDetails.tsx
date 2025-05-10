@@ -5,7 +5,7 @@ import { subscribeApi, unSubscribeApi, likeVideoApi } from '@/api/videoApi'
 import { UserPlus, UserMinus } from 'lucide-react';
 import { useAppSelector } from '@/lib/hooks';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 
 
@@ -29,6 +29,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
     const [isSubscribed, setIsSubscribed] = useState(false)
     const user = useAppSelector<any>(state => state.user)
     const videoidparams = useParams<any>();
+      const router = useRouter()
 
 
     useEffect(() => {
@@ -76,12 +77,17 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
             setIsLiked(false)
         }
     }, [like])
+    
+    const handleGetUserChannel = () => {
+    router.push(`/profile/${ownerId}`)
+  }
 
     return (
         <>
-            <div className='flex items-center mr-5 '>
+            <div className='flex items-center mr-5 cursor-pointer'
+                onClick={handleGetUserChannel}>
                 <div className="profilePic flex items-center 
-                                            justify-center border-1 border-gray-200 rounded-full
+                                            justify-center border-gray-200 rounded-full
                                             mr-2 w-10 h-10 overflow-hidden">
                     <Image
                         src={avatar}

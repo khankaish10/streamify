@@ -141,6 +141,18 @@ export const createCommentApi = async (comment: any) => {
         console.log("creating comment failed: ", error)
     }
 }
+export const deleteCommentApi = async (comment: any) => {
+    try {
+        const response = await api.post<any>(`/videos/delete-comment`, comment,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log("deleting comment failed: ", error)
+    }
+}
 export const searchVideoApi = async (searchQuery:string) => {
     try {
         const response = await api.get<any>(`/videos/search?query=${searchQuery}`)

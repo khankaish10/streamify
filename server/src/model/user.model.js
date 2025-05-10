@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     avatar: {
-      type: String, // cloudinary
-      required: true,
+      type: String, 
+      default: "/default-avatar.svg"
     },
     coverImage: {
       type: String, // cloudinary

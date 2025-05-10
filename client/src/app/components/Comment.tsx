@@ -1,24 +1,28 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { Ellipsis } from 'lucide-react';
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
-
-
+import { useAppSelector } from '@/lib/hooks';
 
 interface commentsDetailsType {
   avatar: string,
   userName: string,
   createdAt: string,
   comment: string,
+  owner: string;
+  videoId: string
+  id: string
+  onDeleteComment: (id: string) => any
   // handleCommentCreate(): any
 }
 
-const Comment = ({ avatar, userName, createdAt, comment }: commentsDetailsType) => {
+const Comment = ({ avatar, userName, createdAt, comment, owner, id, onDeleteComment }: commentsDetailsType) => {
   TimeAgo.addLocale(en);
   const timeAgo = new TimeAgo('en')
+  const user = useAppSelector<any>(state => state.user)
+  const [deleteModal, setDeleteModal] = useState(false)
 
-  // const [commentInput, setCommentInput] = useState()
 
   return (
     <div className='flex gap-2 mb-2 relative'>
@@ -45,9 +49,25 @@ const Comment = ({ avatar, userName, createdAt, comment }: commentsDetailsType) 
         </div>
       </div>
 
-      <div className='absolute top-0 right-0 cursor-pointer'>
-        <Ellipsis />
-      </div>
+      {
+        user?._id === owner && (
+          <>
+            <div
+              onClick={() => setDeleteModal(!deleteModal)}
+              className='absolute top-0 right-0 cursor-pointer'>
+              <Ellipsis />
+            </div>
+            <div 
+              onClick={() => onDeleteComment(id)}
+              className={`absolute bottom-[-20px] right-[20px] cursor-pointer hover:bg-gray-200 p-1 border-gray-400 bg-gray-100 ${deleteModal ? "block" : "hidden"}`}>
+              Delete
+            </div>
+          </>
+        )
+      }
+
+
+
     </div>
   )
 }

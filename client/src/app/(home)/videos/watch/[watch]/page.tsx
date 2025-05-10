@@ -4,13 +4,15 @@ export const dynamic = 'force-dynamic'
 import React, { useLayoutEffect, useState } from 'react'
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { createCommentApi, handleGetAVideo } from "@/api/videoApi";
+import { createCommentApi, deleteCommentApi, handleGetAVideo } from "@/api/videoApi";
 import { useParams } from 'next/navigation';
 import IsSubscribedDetails from '@/app/components/IsSubscribedDetails';
 import WatchVideoAnimation from '@/lib/ui-component/WatchVideoAnimation';
 import Comment from '@/app/components/Comment'
+import Link from 'next/link';
 import { createComment } from '@/lib/features/commentSlice';
 import formatDuration from '@/util/formatDuration';
+import { User } from 'lucide-react';
 
 // interface VideoPlayerProps {
 //   src: string;
@@ -43,7 +45,9 @@ function WatchVideo() {
       });
   }, [])
 
+  console.log("video details: ", videoDetails)
   const handleCommentCreate = () => {
+    console.log("comment: ",)
 
     createCommentApi({ comment: commentInput, videoId: videoDetails?._id })
       .then(res => {
@@ -55,7 +59,7 @@ function WatchVideo() {
             updatedAt: user?.updatedAt,
             userName: user?.userName,
             _id: user?._id
-          } ,
+          },
           createdAt: res?.data?.createdAt,
           updatedAt: res?.data?.updatedAt,
           video: res?.data?.video,
@@ -65,6 +69,15 @@ function WatchVideo() {
         setCommentInput("")
       })
   }
+
+  const handleDeleteComment = (id: string) => {
+    deleteCommentApi({ id, videoId: videoDetails?._id })
+      .then(res => {
+        const commentAfterDeletion = comments.filter((com: any) => com._id != id)
+        setComments(commentAfterDeletion)
+      })
+  }
+
 
   return (
     <div className="w-full  p-1 ml-0 mt-12 
@@ -114,17 +127,25 @@ function WatchVideo() {
                 <h1 className='my-2 font-bold'>{`${comments?.length} comments`}</h1>
 
 
-                <div className='flex gap-2'>
-                  <div className='h-10 w-10 max-w-10 overflow-hidden rounded-full'>
+                <div className='flex gap-2 '>
+                  <div className='h-10 flex justify-center items-center w-10 max-w-10 overflow-hidden rounded-full'>
                     {
-                      videoDetails && (
+                      user?._id ? (
                         <Image
-                          src={videoDetails?.owner?.avatar}
+                          src={user?.avatar}
                           height={50}
                           width={50}
                           alt='profile pic'
                           className='h-full w-full rounded-full object-cover'
                         />
+                      ) : (
+                        <Link
+                          href={"/auth/login"}
+                          className="flex justify-center items-center p-1 
+                            cursor-pointer rounded-[50px]"
+                        >
+                          <User size={24} />
+                        </Link>
                       )
                     }
                   </div>
@@ -134,15 +155,17 @@ function WatchVideo() {
 
                     <textarea
                       id='text'
-                      value={commentInput}
+                      disabled={user?._id ? false : true}
+                      value={user?._id ? commentInput : "Login to add comment"}
                       onChange={(e) => setCommentInput(e.target.value)}
                       className='p-2 outline-none w-full border-b-1 no scroll'
                       placeholder='Add a comment'
                     />
                     <div className=' flex justify-self-end hover:bg-gray-100 rounded-3xl'>
                       <button
+                        disabled={user?._id ? false : true}
                         onClick={handleCommentCreate}
-                        className='rounded-3xl border p-1 cursor-pointer'
+                        className={`rounded-3xl border p-1 ${user?._id && "cursor-pointer"}`}
                       >Comment</button>
                     </div>
                   </div>
@@ -151,13 +174,17 @@ function WatchVideo() {
 
                 <div className='comment-container flex flex-col gap-2 '>
                   {
-                    comments?.map((comment: any, index: any) => (
+                    comments?.map((comment: any) => (
                       <Comment
                         key={comment._id}
+                        owner={comment?.commentowner?._id}
+                        id={comment?._id}
+                        videoId={videoDetails?._id}
                         avatar={comment?.commentowner?.avatar}
                         userName={comment?.commentowner?.userName}
                         createdAt={comment?.createdAt}
                         comment={comment?.comment}
+                        onDeleteComment={handleDeleteComment}
                       />
                     ))
                   }
