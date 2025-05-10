@@ -52,7 +52,6 @@ const Navbar = () => {
       searchVideoApi(searchQuery)
         .then(res => {
           dispatch(setSearchedVideo(res?.data))
-          console.log("search response: ", res.data)
         })
     }
 

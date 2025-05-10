@@ -26,8 +26,6 @@ const Profile = () => {
     const dispatch = useAppDispatch()
     const params = useParams<{channelid: string}>()
 
-    console.log("channel id : ", params.channelid)
-
     const handleClick = (video: { _id: string }) => {
         createHistoryAndViewsApi(video._id)
             .then((res) => {

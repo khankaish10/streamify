@@ -30,7 +30,6 @@ const Page = () => {
     const handleClearWatchHistory = () => {
         clearWatchHistoryApi()
             .then((res) => {
-                console.log("watch history cleared.")
                 dispatch(clearHistory())
             })
     }

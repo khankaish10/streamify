@@ -61,7 +61,7 @@ export const getUserChannelApi = async (channelid: getUserChannel) => {
         const response = await api.get<userResponse<getProfileResponsePayload[]>>(`/users/profile/${channelid}`)
         return response.data
     } catch (error) {
-        console.log("clearing watch history failed: ", error)
+        console.error("clearing watch history failed: ", error)
     }
 }
 

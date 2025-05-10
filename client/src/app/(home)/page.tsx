@@ -17,7 +17,6 @@ function Home() {
   const cards = useAppSelector((state) => state.video)
   const [isLoading, setIsLoading] = useState(true)
 
-  console.log("cards", cards)
   useEffect(() => {
     // setIsLoading(true)
     handleGetAllVideos()

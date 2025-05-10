@@ -5,12 +5,11 @@ import { jwtDecode } from "jwt-decode";
 
 
 export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    // baseURL: API_URL,
+    // baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: API_URL,
 });
 
 const getAccessRefreshToken = async (user: any) => {
-    console.log("check: ", user)
     try {
         const response = await axios.post<any>("/users/refresh-token", {
             refreshToken: user?.refreshToken
@@ -43,7 +42,6 @@ api.interceptors.request.use(
             refreshToken = JSON.parse(user)?.refreshToken
 
         }
-        console.log("refresh token from localstorage: ", refreshToken)
         if (accessToken) {
             if (!config.headers) {
                 config.headers = {};

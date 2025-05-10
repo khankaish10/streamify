@@ -75,8 +75,8 @@ const VideoCard = ({ card }: any) => {
                           items-center"
             onClick={handleGetUserChannel}>
             <Image src={card.owner.avatar}
-              height={32}
-              width={32}
+              height={50}
+              width={50}
               alt='profile pic'
               className="h-full w-full rounded-full object-cover"
             />

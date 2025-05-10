@@ -10,7 +10,6 @@ const commentSlice = createSlice({
     initialState,
     reducers: {
         createComment: (state, action) => {
-            console.log("coment slice : ", action.payload)
             state.push(action.payload)
         }
     }
