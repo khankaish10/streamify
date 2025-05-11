@@ -27,9 +27,10 @@ const LoginForm = () => {
         })
         if (!validatedFields.success) {
             setErrors(validatedFields.error.flatten().fieldErrors)
-            setTimeout(() => (
+            setTimeout(() => {
                 setErrors({})
-            ), 2000)
+                dispatch(stopLoading())
+            }, 2000)
         } else {
             // setIsLoading(true);
             dispatch(startLoading())
@@ -47,11 +48,11 @@ const LoginForm = () => {
                     setTimeout(() => (
                         setErrors({})
                     ), 2000)
-                }).finally(() => 
+                }).finally(() =>
                     dispatch(stopLoading())
                     // setIsLoading(false)
-            
-            )
+
+                )
 
         }
     }

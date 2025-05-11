@@ -57,7 +57,7 @@ const Page = () => {
             lg:pl-[200px] 
             xl:max-w-[1300px]
             '>
-            {(user && isLoading) ? <WatchHistoryAnimation /> : (
+            {((user._id !== "") && isLoading) ? <WatchHistoryAnimation /> : (
                 <div className='flex flex-col p-5 pb-16'>
                     <p className='text-3xl font-bold my-5'>Watch history</p>
                     <div className='flex flex-col lg:flex-row-reverse w-full'>
@@ -67,15 +67,15 @@ const Page = () => {
                                 <p className='text-sm lg:text-xs'>Clear all watch history</p>
                             </div>
                         </div>
-                        <div className={`flex flex-col videolist
+                        <div className={`flex flex-col videolist 
                                 w-full   
-                                    ${!user ?
+                                    ${(user._id !== "") ?
                                 'justify-center items-center' :
                                 ""
                             } `}>
 
                             {
-                                user ? (!historyDetails.length ? (
+                                user._id !== "" ? (!historyDetails.length ? (
                                     <div> No watch history </div>
                                 ) : (
 
@@ -86,13 +86,11 @@ const Page = () => {
                                             <div key={index} className='flex sm:max-w-130 cursor-pointer
                                         mb-5 relative '>
 
-                                                <button className='absolute top-0 right-0 text-2xl 
+                                                <button className='absolute top-0 right-[-10px] text-2xl 
                                                 text-gray-400 cursor-pointer z-10
                                                 rounded-full hover:bg-gray-200 h-8 w-8'
                                                     onClick={() => handleDeleteHistory(history?.videoId, index)}>
                                                     X</button>
-
-
 
                                                 <Link href={`/videos/watch/${history.videoId}`} className='flex w-full' >
                                                     {/* delete history - cross at top right corner */}
@@ -110,7 +108,7 @@ const Page = () => {
                                                         />
                                                     </div>
                                                     <div className='flex-col md:flex pr-1'>
-                                                        <p className='text-xl'>{history.title}</p>
+                                                        <p className='text-lg mr-5'>{history.title}</p>
                                                         <div className='flex item-center'>
                                                             <p className='mr-2 text-xs'>{history.owner.userName}</p>
                                                             <p className='text-xs'>{history.views > 0 ? `${history.views} views` : `${history.views} view`} </p>

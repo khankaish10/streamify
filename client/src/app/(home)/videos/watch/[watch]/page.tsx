@@ -133,7 +133,7 @@ function WatchVideo() {
                 <div className='flex gap-2 '>
                   <div className='h-10 flex justify-center items-center w-10 max-w-10 overflow-hidden rounded-full'>
                     {
-                      user?._id ? (
+                      user?._id !== "" ? (
                         <Image
                           src={user?.avatar}
                           height={50}
@@ -158,17 +158,17 @@ function WatchVideo() {
 
                     <textarea
                       id='text'
-                      disabled={user?._id ? false : true}
-                      value={user?._id ? commentInput : "Login to add comment"}
+                      disabled={user?._id !== "" ? false : true}
+                      value={user?._id !== "" ? commentInput : "Login to add comment"}
                       onChange={(e) => setCommentInput(e.target.value)}
                       className='p-2 outline-none w-full border-b-1 no scroll'
                       placeholder='Add a comment'
                     />
                     <div className=' flex justify-self-end hover:bg-gray-100 rounded-3xl'>
                       <button
-                        disabled={user?._id ? false : true}
+                        disabled={user?._id !== "" ? false : true}
                         onClick={handleCommentCreate}
-                        className={`rounded-3xl border p-1 ${user?._id && "cursor-pointer"}`}
+                        className={`rounded-3xl border p-1 ${user?._id !== "" && "cursor-pointer"}`}
                       >Comment</button>
                     </div>
                   </div>

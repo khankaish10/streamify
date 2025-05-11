@@ -22,12 +22,15 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       required: true,
-      lowercase: true,
       trim: true,
     },
     avatar: {
       type: String, 
       default: "/default-avatar.svg"
+    },
+    avatarPublicId: {
+      type: String, // cloudinary/
+      default: null
     },
     coverImage: {
       type: String, // cloudinary

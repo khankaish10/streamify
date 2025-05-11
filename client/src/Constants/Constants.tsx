@@ -2,7 +2,7 @@ import { House, History, FileVideo, User } from 'lucide-react'
 
 // export const API_URL = "http://http://192.168.235.40:8000/api/v1"
 // export const API_URL = "http://192.168.0.116:8000/api/v1"
-export const API_URL =  "http://localhost:8000/api/v1"
+export const API_URL =  "http://localhost:7000/api/v1"
 
 interface sideBarMenuAndPathDetail {
     name: string,

@@ -131,7 +131,7 @@ const Profile = () => {
                             user?.allvideos.map((video: any) => {
                                 return (
                                     <Link key={video._id} href={`/videos/watch/${video._id}`} onClick={() => handleClick(video)}>
-                                        <div className="font-poppins 
+                                        <div className="font-poppins max-w-40  
                                                         overflow-hidden p-2 flex flex-col
                                                         justify-between cursor-pointer ">
 
@@ -150,11 +150,11 @@ const Profile = () => {
                                             </div>
 
                                             {/* profile pic and title with username and views */}
-                                            <div className="flex mt-2">
-                                                <div className="text-gray-500 ml-2">
-                                                    <p className="text-black">{video.title}</p>
+                                            <div className="flex mt-2 ">
+                                                <div className="text-gray-500  ">
+                                                    <p className="text-black text-sm">{`${video.title.length > 12 ? video.title.slice(0,12): video.title}...`}</p>
                                                     <div className="flex text-xs text-gray-400">
-                                                        <p className="mr-2">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
+                                                        <p className="mr-1 ">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
                                                         <p>{timeAgo.format(new Date(video.createdAt))}</p>
                                                     </div>
                                                 </div>
@@ -169,7 +169,6 @@ const Profile = () => {
                 </div>
             </div>
         )
-        // <div>Login </div>
 
     )
 }

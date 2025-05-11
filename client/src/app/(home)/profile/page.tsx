@@ -1,6 +1,6 @@
 'use client'
-import { handleGetProfile } from '@/api/userApi'
-import React, { useLayoutEffect, useEffect, useState } from 'react'
+import { handleGetProfile, userProfileEdit } from '@/api/userApi'
+import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,15 +11,22 @@ import { videoHistory } from "@/lib/features/video/videoHistory";
 import { createHistoryAndViewsApi } from "@/api/videoApi";
 import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
 import ProtectedRoutes from '@/app/components/ProtectedRoutes'
+import { Pencil, CircleX } from 'lucide-react';
+import { ProfileVideosAndSubsCount, updateProfile } from '@/lib/features/users/userSlice'
 TimeAgo.addLocale(en);
 
 
 const Profile = () => {
     const timeAgo = new TimeAgo('en')
-    const [user, setUser] = React.useState<any>(null)
+    const profileUser = useAppSelector<any>((state) => state.user)
     const [isLoading, setIsLoading] = React.useState(true)
     const reload = useAppSelector((state) => state.modal.reload)
     const dispatch = useAppDispatch()
+    const avatarRef = useRef<HTMLInputElement>(null)
+    const [avatar, setAvatar] = useState<File | null>()
+    const [fullName, setFullName] = useState<string>("")
+    const [isFullNameEdit, setIsFullNameEdit] = useState<boolean>(false)
+    const [isUpdateButton, setIsUpdateButton] = useState<boolean>(false)
 
     const handleClick = (video: { _id: string }) => {
         createHistoryAndViewsApi(video._id)
@@ -33,8 +40,11 @@ const Profile = () => {
     useEffect(() => {
         setIsLoading(true)
         handleGetProfile()
-            .then((response:any) => {
-                setUser(response.data[0])
+            .then((response: any) => {
+                dispatch(ProfileVideosAndSubsCount({
+                    allvideos: response?.data[0]?.allvideos,
+                    subscriberCount: response.data[0]?.subscriberCount
+                }))
                 setIsLoading(false)
             })
             .catch((error) => {
@@ -45,8 +55,12 @@ const Profile = () => {
     useEffect(() => {
         setIsLoading(true)
         handleGetProfile()
-            .then((response:any )=> {
-                setUser(response.data[0])
+            .then((response: any) => {
+                dispatch(ProfileVideosAndSubsCount({
+                    allvideos: response?.data[0]?.allvideos,
+                    subscriberCount: response.data[0]?.subscriberCount
+                }))
+                console.log("user: ", response.data[0])
                 setIsLoading(false)
             })
             .catch((error) => {
@@ -54,6 +68,34 @@ const Profile = () => {
             });
 
     }, [])
+
+    useEffect(() => {
+        if (avatar || fullName) {
+            setIsUpdateButton(true)
+        } else {
+            setIsUpdateButton(false)
+        }
+    }, [avatar, fullName])
+
+    const handleEdit = () => {
+        const form = new FormData();
+        if (avatar) {
+            form.append("avatar", avatar)
+        }
+        if (fullName) {
+            form.append("fullName", fullName)
+        }
+        userProfileEdit(form)
+            .then((res: any) => {
+                console.log("edit response: ", res)
+                setAvatar(null)
+                setFullName("")
+                setIsFullNameEdit(false)
+                setIsUpdateButton(false)
+                dispatch(updateProfile(res.data))
+            })
+            .catch(err => console.log("edit error: ", err))
+    }
     return (
         <ProtectedRoutes>
             {
@@ -70,12 +112,45 @@ const Profile = () => {
 
                         <div className="container flex flex-col sm:pl-10 sm:pt-10 h-screen  p-1 sm:p-0 ">
                             <div className='flex flex-col sm:flex-row items-center justify-center sm:justify-start p-3 '>
+
                                 {/* profile pic, update password */}
-                                <div className='h-35 w-35 overflow-hidden 
-                                            rounded-full 
+                                <div className='h-35 w-35 
+                                            rounded-full relative border
                                             '>
+
+                                    {
+                                        avatar ? (
+                                            <div
+                                                onClick={() => setAvatar(null)}
+                                                className=' absolute top-0 right-0 cursor-pointer'
+                                            >
+                                                <CircleX size={18} />
+                                            </div>
+                                        ) : (
+                                            <div
+                                                onClick={() => {
+                                                    avatarRef?.current?.click()
+                                                }}
+                                                className=' absolute top-0 right-0 cursor-pointer'
+                                            >
+                                                <Pencil size={18} />
+                                            </div>
+                                        )
+                                    }
+
+                                    <input
+                                        type="file"
+                                        id='avatar'
+                                        className='hidden'
+                                        ref={avatarRef}
+                                        onChange={(e) => {
+                                            if (e.target?.files?.[0]) {
+                                                setAvatar(e.target.files[0])
+                                            }
+                                        }}
+                                    />
                                     <Image
-                                        src={user?.avatar}
+                                        src={profileUser?.avatar}
                                         alt="Profile Picture"
                                         width={120}
                                         height={100}
@@ -84,17 +159,77 @@ const Profile = () => {
                                 </div>
 
                                 <div className='flex flex-col justify-center items-center sm:justify-start sm:items-start ml-5 mt-2 sm:mt-0 '>
-                                    <div className='text-2xl'>{user?.fullName}</div>
-                                    <div className='flex flex-col sm:flex-row sm:w-auto items-center '>
-                                        <p className='font-semibold text-xl'>{`@${user?.userName}. `}</p>
+                                    <div className='text-2xl relative '>
+
+                                        {
+                                            isFullNameEdit ? (
+                                                <input
+                                                    type='text'
+                                                    id='fullName'
+                                                    value={fullName}
+                                                    onChange={(e) => setFullName(e.target.value)}
+                                                    className='outline-none border'
+                                                    placeholder={`${profileUser?.fullName}`}
+                                                />
+                                            ) : (
+                                                profileUser?.fullName
+                                            )
+                                        }
+
+                                        {
+                                            isFullNameEdit ? (
+                                                <div
+                                                    onClick={() => {
+                                                        setFullName("")
+                                                        setIsFullNameEdit(!isFullNameEdit)
+                                                    }}
+                                                    className=' absolute top-[-15px] right-[-15px] cursor-pointer' >
+                                                    <CircleX size={18} />
+                                                </div>
+                                            ) : (
+                                                <div
+                                                    onClick={() => setIsFullNameEdit(!isFullNameEdit)}
+                                                    className=' absolute top-[-15px] right-[-15px] cursor-pointer' >
+                                                    <Pencil size={18} />
+                                                </div>
+                                            )
+                                        }
+
+
+
+
+                                    </div>
+                                    <div className='flex flex-col sm:flex-row sm:w-auto items-center mb-2 '>
+                                        <p className='font-semibold text-xl'>{`@${profileUser?.userName}. `}</p>
                                         <p className='text-gray-500 ml-1 mr-1'>
-                                            {user?.subscriberCount > 1 ? (`${user.subscriberCount} subscribers.`) : (`${user?.subscriberCount} subscriber.`)}
+                                            {profileUser?.subscriberCount > 1 ? (`${profileUser.subscriberCount} subscribers.`) : (`${profileUser?.subscriberCount} subscriber.`)}
                                         </p>
                                         <p className='text-gray-500'>
-                                            {user?.allvideos.length > 1 ? (` ${user?.allvideos.length} videos`) : (` ${user?.allvideos.length} video`)}
+                                            {profileUser?.allvideos?.length > 1 ? (` ${profileUser?.allvideos?.length} videos`) : (` ${profileUser?.allvideos?.length} video`)}
                                             { }
                                         </p>
                                     </div>
+
+
+                                    <button
+                                        onClick={() => handleEdit()}
+                                        className={`border min-h-10 h-10 ${isUpdateButton ? "block" : "invisible"} p-1 bg-linear-to-r from-[#CB356B] to-[#93291E] 
+                                                        rounded-lg text-white`}>
+                                        Update
+                                    </button>
+
+
+                                    {/* {
+                                        isUpdateButton && (
+                                            <button
+                                                onClick={() => handleEdit()}
+                                                className='border min-h-10 h-10 p-1 bg-linear-to-r from-[#CB356B] to-[#93291E] 
+                                                        rounded-lg text-white'>
+                                                Update
+                                            </button>
+                                        )
+                                    } */}
+
                                 </div>
 
                             </div>
@@ -109,7 +244,7 @@ const Profile = () => {
                             </div>
 
                             {
-                                user?.allvideos?.length <= 0 && (
+                                profileUser?.allvideos?.length <= 0 && (
                                     <div className='w-full h-full flex
                                                 items-center justify-center'>
                                         <p className='text-xl'>No videos.</p>
@@ -121,7 +256,7 @@ const Profile = () => {
                             <div className='flex gap-2 overflow-x-scroll scrollbar-none'>
                                 {
 
-                                    user?.allvideos.map((video: any) => {
+                                    profileUser?.allvideos?.map((video: any) => {
                                         return (
                                             <Link key={video._id} href={`/videos/watch/${video._id}`} onClick={() => handleClick(video)}>
                                                 <div className="font-poppins 

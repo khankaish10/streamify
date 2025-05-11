@@ -7,6 +7,7 @@ import WatchHistory from "../model/watchHistory.model.js";
 import mongoose from "mongoose";
 import fs from "fs";
 import jwt from "jsonwebtoken";
+import cloudinary from 'cloudinary'
 
 const signUp = asyncHandler(async (req, res) => {
   const { userName, email, password, fullName } = req.body;
@@ -31,29 +32,30 @@ const signUp = asyncHandler(async (req, res) => {
     email: "Email/Username already exists.",
     userName: "Email/Username already exists",
   });
-  console.log("files: ", req.files)
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  if (!avatarLocalPath)
-    throw errorResponse(res, "Avatar file is required", 404, {
-      avatar: "Profile pic is required."
-    });
+  let avatarLocalPath = "";
+  if ((req?.files && req?.files?.avatar && req?.files?.avatar?.[0]?.path)) {
+    avatarLocalPath = req.files?.avatar[0]?.path;
+  }
+  // throw errorResponse(res, "Avatar file is required", 404, {
+  //   avatar: "Profile pic is required."}
 
   // upload avatar to cloudinary
-  const avatarUploadResult = await uploadToCloudinary(avatarLocalPath);
-  if (!avatarUploadResult) {
-    fs.unlinkSync(avatarLocalPath);
-    throw errorResponse(res, "Failed to upload avatar", 500, {
-      avatar: "Failed to upload profile picture."
-    });
-  }
+  const avatarUploadResult = await uploadToCloudinary(avatarLocalPath, 'avatar');
+  // if (!avatarUploadResult?.secure_url) {
+  //   fs.unlinkSync(avatarLocalPath);
+  //   throw errorResponse(res, "Failed to upload avatar", 500, {
+  //     avatar: "Failed to upload profile picture."
+  //   });
+  // }
 
   //upload cover Image if available
   let coverImageUrl = "";
   if (req.files?.coverImage && req.files?.coverImage[0]?.path) {
     const coverImageUploadResult = await uploadToCloudinary(
-      req.files.coverImage[0].path
+      req.files.coverImage[0].path,
+      'coverimage'
     );
-    coverImageUrl = coverImageUploadResult;
+    coverImageUrl = coverImageUploadResult?.secure_url;
   }
   // create user in db
   const newUser = new User({
@@ -61,7 +63,7 @@ const signUp = asyncHandler(async (req, res) => {
     email,
     fullName,
     password,
-    avatar: avatarUploadResult,
+    avatar: avatarUploadResult?.secure_url,
     coverImage: coverImageUrl,
   });
   const refreshToken = await newUser.generateRefreshToken();
@@ -384,18 +386,33 @@ const updateMyProfile = asyncHandler(async (req, res) => {
   if (!updateMyProfile) throw errorResponse(res, "No updates provided", 400);
 
   if (updateMyProfile.password) {
-    return errorResponse(res, "Cannot update password through this route", 400);
+    return errorResponse(res, "Cannot update password through this route", 400, {});
   }
 
-  const user = await User.findByIdAndUpdate(
+  if (req?.file && req?.file?.path) {
+    // delete previously stored avatar
+    const user = await User.findById(id)
+    if (user.avatarPublicId) {
+      await cloudinary.uploader.destroy(user.avatarPublicId)
+    }
+
+    // upload new avatar
+    const avatarLocalPath = req.file.path;
+    const avatarUploadResult = await uploadToCloudinary(avatarLocalPath, 'avatar')
+    if (avatarUploadResult) {
+      updateMyProfile.avatar = avatarUploadResult?.secure_url;
+      updateMyProfile.avatarPublicId = avatarUploadResult?.public_id
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
     id,
     { $set: updateMyProfile },
     { new: true, runValidators: true }
-  ).select("-password -refreshToken");
+  ).select("-password -refreshToken -avatarPublicId");
 
-  if (!user) throw errorResponse(res, "user not found", 404);
-
-  return successResponse(res, "successfully updated user profile", user, 200);
+  if (!updatedUser) throw errorResponse(res, "user not found", 404);
+  return successResponse(res, "successfully updated user profile", updatedUser, 200);
 });
 
 const subscribeUser = asyncHandler(async (req, res) => {
@@ -525,7 +542,7 @@ export {
   updateMyProfile,
   getMySubscriber,
   subscribeUser,
-  getMyWatchHistory,
+  // getMyWatchHistory,
   addToWatchHistory,
-  deleteWatchHistory,
+  // deleteWatchHistory,
 };

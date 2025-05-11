@@ -95,7 +95,7 @@ const Navbar = () => {
       <div className="flex justify-center 
                       items-center relative">
         {
-          user && (
+          user._id !== "" && (
             <div className={`absolute top-5 left-[-120px] 
                         flex flex-col border border-gray-300
                         bg-white gap-2 rounded-lg overflow-hidden
@@ -121,7 +121,7 @@ const Navbar = () => {
           )
         }
         {
-          user && (
+          user._id !== ""  && (
             <div
               id="profileDiv"
               ref={profileRef}
@@ -149,7 +149,7 @@ const Navbar = () => {
 
 
         {
-          !user && (
+          user._id == "" && (
             <Link
               href={"/auth/login"}
               className="md:flex justify-center items-center p-1 

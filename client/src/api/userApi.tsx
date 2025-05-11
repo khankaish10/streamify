@@ -64,5 +64,17 @@ export const getUserChannelApi = async (channelid: getUserChannel) => {
         console.error("clearing watch history failed: ", error)
     }
 }
+export const userProfileEdit = async (profileToEdit: FormData) => {
+    try {
+        const response = await api.patch('/users/update-profile', profileToEdit, {
+            headers :{
+                "Content-Type": "multipart/form-data"
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.error("Failed to edit profile: ", error)
+    }
+}
 
 

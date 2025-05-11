@@ -60,7 +60,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
     }
 
     const handleLikes = () => {
-        if (user?._id) {
+        if (user?._id !== "") {
 
             likeVideoApi(videoidparams.watch)
                 .then(res => {
@@ -135,7 +135,7 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
 
 
             {
-                user && <div className='flex flex-col items-center  sm:mx-10'>
+                user?._id !== "" && <div className='flex flex-col items-center  sm:mx-10'>
                     <button className='bg-black text-white px-4 py-2 rounded-full
                                 cursor-pointer hover:bg-black-300
                                 hover:opacity-70 text-sm'
@@ -158,12 +158,6 @@ const IsSubscribedDetails: React.FC<IsSubscribedDetailsProps> = (
                     </button>
                 </div>
             }
-
-
-
-
-
-
 
         </>
 

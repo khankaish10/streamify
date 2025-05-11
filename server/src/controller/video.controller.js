@@ -21,18 +21,18 @@ const uploadAVideo = asyncHandler(async (req, res) => {
     let videoUpload;
     let thumbnailUpload;
     if (req?.files?.videoFile[0]?.path) {
-       videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path);
+       videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path, 'video');
     }
     if (req?.files && req?.files?.thumbnail && req.files.thumbnail[0]?.path) {
-        thumbnailUpload = await uploadToCloudinary(req?.files?.thumbnail[0]?.path);
+        thumbnailUpload = await uploadToCloudinary(req?.files?.thumbnail[0]?.path, 'thumbnail');
     }
 
     // console.log("videoupload: ", videoUpload)
     // // Save video to MongoDB
     const newVideo = await Video.create({
         title,
-        videoFile: videoUpload,
-        thumbnail: thumbnailUpload,
+        videoFile: videoUpload?.secure_url,
+        thumbnail: thumbnailUpload?.secure_url,
         description,
         duration,
         tags: tags ? tags.split(",") : [],

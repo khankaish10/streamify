@@ -15,8 +15,8 @@ const SignupForm = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [formData, setFormData] = useState<signup>({
-        userName: '' ,
-        email: '' ,
+        userName: '',
+        email: '',
         password: '',
         fullName: '',
     });
@@ -28,9 +28,10 @@ const SignupForm = () => {
         const validatedFields = signupValidationSchema.safeParse(formData)
         if (!validatedFields.success) {
             setErrors(validatedFields.error.flatten().fieldErrors)
-            setTimeout(() => (
-                setErrors({})
-            ), 2000)
+            setTimeout(() => {
+                setErrors({});
+                setIsLoading(false);
+            }, 2000);
         } else {
 
             const data = new FormData();
@@ -47,9 +48,10 @@ const SignupForm = () => {
 
             if (!avatar) {
                 setErrors({ avatar: ["Profile pic is required."] })
-                setTimeout(() => (
-                    setErrors({})
-                ), 2000)
+                setTimeout(() => {
+                    setErrors({});
+                    setIsLoading(false)
+                }, 2000)
             }
             setIsLoading(true);
             handleSignup(data)
@@ -62,9 +64,10 @@ const SignupForm = () => {
                     console.error("Signup error:", err?.response?.data?.err);
                     setErrors(err?.response?.data?.err)
                     setIsLoading(false)
-                    setTimeout(() => (
-                        setErrors({})
-                    ), 2000)
+                    setTimeout(() => {
+                        setErrors({});
+                        setIsLoading(false)
+                    }, 2000)
                 })
                 .finally(() => setIsLoading(false))
 

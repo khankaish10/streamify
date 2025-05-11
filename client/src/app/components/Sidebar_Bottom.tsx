@@ -57,7 +57,7 @@ const Sidebar_Bottom = () => {
                 <div className='flex items-center my-1 
                 '>
                     {
-                        user ? (
+                        user?._id !== "" ? (
                             <div className='relative flex flex-col items-center justify-center'>
 
                                 <div className={`absolute top-[-120px] left-[-100px] 
