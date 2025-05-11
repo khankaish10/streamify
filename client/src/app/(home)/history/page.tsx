@@ -68,8 +68,8 @@ const Page = () => {
                             </div>
                         </div>
                         <div className={`flex flex-col videolist 
-                                w-full   
-                                    ${(user._id !== "") ?
+                                w-full
+                                    ${(user._id == "") ?
                                 'justify-center items-center' :
                                 ""
                             } `}>
