@@ -97,7 +97,7 @@ const Page = () => {
 
 
                                                     {/*  */}
-                                                    <div className='h-30 w-[45%] lg:min-w-[200px] max-w-[200px] overflow-hidden 
+                                                    <div className='h-30 min-w-[40%] lg:min-w-[200px] max-w-[200px] overflow-hidden 
                                                                     rounded-lg mr-5 bg-black'>
                                                         <Image
                                                             src={history?.thumbnail}
