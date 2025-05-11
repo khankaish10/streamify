@@ -158,19 +158,23 @@ const Profile = () => {
                                     />
                                 </div>
 
-                                <div className='flex flex-col justify-center items-center sm:justify-start sm:items-start ml-5 mt-2 sm:mt-0 '>
+                                <div className='flex flex-col justify-center items-center 
+                                        sm:justify-start sm:items-start ml-5 mt-2 sm:mt-0 max-w-[80%]'>
                                     <div className='text-2xl relative '>
 
                                         {
                                             isFullNameEdit ? (
-                                                <input
-                                                    type='text'
-                                                    id='fullName'
-                                                    value={fullName}
-                                                    onChange={(e) => setFullName(e.target.value)}
-                                                    className='outline-none border'
-                                                    placeholder={`${profileUser?.fullName}`}
-                                                />
+                                                <div>
+                                                    <input
+                                                        type='text'
+                                                        id='fullName'
+                                                        value={fullName}
+                                                        onChange={(e) => setFullName(e.target.value)}
+                                                        className='outline-none border w-full'
+                                                        placeholder={`${profileUser?.fullName}`}
+                                                    />
+                                                </div>
+
                                             ) : (
                                                 profileUser?.fullName
                                             )
@@ -217,18 +221,6 @@ const Profile = () => {
                                                         rounded-lg text-white`}>
                                         Update
                                     </button>
-
-
-                                    {/* {
-                                        isUpdateButton && (
-                                            <button
-                                                onClick={() => handleEdit()}
-                                                className='border min-h-10 h-10 p-1 bg-linear-to-r from-[#CB356B] to-[#93291E] 
-                                                        rounded-lg text-white'>
-                                                Update
-                                            </button>
-                                        )
-                                    } */}
 
                                 </div>
 
@@ -297,7 +289,7 @@ const Profile = () => {
                         </div>
                     </div>
                 )}
-        // <div>Login </div>
+            {/* // <div>Login </div> */}
         </ProtectedRoutes>
     )
 }
