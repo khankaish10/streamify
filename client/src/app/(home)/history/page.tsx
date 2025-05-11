@@ -97,7 +97,7 @@ const Page = () => {
 
 
                                                     {/*  */}
-                                                    <div className='h-30 min-w-[40%] lg:min-w-[200px] max-w-[200px] overflow-hidden 
+                                                    <div className='h-30 w-[30%] min-w-[150px] lg:min-w-[200px] max-w-[200px] overflow-hidden 
                                                                     rounded-lg mr-5 bg-black'>
                                                         <Image
                                                             src={history?.thumbnail}
@@ -108,14 +108,16 @@ const Page = () => {
                                                         />
                                                     </div>
                                                     <div className='flex-col md:flex pr-1'>
-                                                        <p className='text-lg mr-5'>{history.title}</p>
+                                                        <p className='text-[12px] pr-4'>{history?.title.length > 10 ? `${history?.title?.slice(0,10)}...` : history?.title}</p>
                                                         <div className='flex item-center'>
                                                             <p className='mr-2 text-xs'>{history.owner.userName}</p>
                                                             <p className='text-xs'>{history.views > 0 ? `${history.views} views` : `${history.views} view`} </p>
                                                         </div>
                                                         <p className='text-gray-400 w-full
-                                                break-words text-sm 
-                                                overflow-hidden'>{history.description.length > 45 ? `${history?.description?.slice(0, 35)}...` : history.description}</p>
+                                                                        break-words text-xs 
+                                                                        overflow-hidden'>
+                                                            {history.description.length > 30 ? `${history?.description?.slice(0, 20)}...` : history.description}
+                                                        </p>
                                                     </div>
                                                 </Link>
                                             </div>
