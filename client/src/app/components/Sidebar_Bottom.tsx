@@ -31,7 +31,7 @@ const Sidebar_Bottom = () => {
     };
 
     return (
-        <div className='fixed bottom-0 left-0 sm:hidden bottom-0 z-5
+        <div className='fixed bottom-0 left-0 sm:hidden bottom-0 z-10
                         flex justify-around items-center w-full bg-white
                         p-1'>
 
@@ -66,14 +66,20 @@ const Sidebar_Bottom = () => {
                             ${profileModal ? 'block' : 'hidden'}`}>
                                     <Link href={'/profile'}>
                                         <div className="cursor-pointer hover:bg-gray-100 
-                                     hover:border-b-1 p-1 " >Profile</div>
+                                     hover:border-b-1 p-1 " onClick={() => setProfileModal(false)}>Profile</div>
                                     </Link>
                                     <div className="cursor-pointer hover:bg-gray-100 
                             hover:border-b-1 p-1 "
-                                        onClick={() => dispatch(openModal())} >Upload Video</div>
+                                        onClick={() => {
+                                            setProfileModal(false)
+                                            dispatch(openModal())
+                                        }} >Upload Video</div>
                                     <div className="cursor-pointer hover:bg-gray-100 
                              hover:border-b-1 p-1 rounded-b-lg"
-                                        onClick={() => handleSubmit()} >Logout</div>
+                                        onClick={() => {
+                                            setProfileModal(false)
+                                            handleSubmit()
+                                        }} >Logout</div>
                                 </div>
 
                                 <div className='h-8 w-8 rounded-full 
