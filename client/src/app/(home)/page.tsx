@@ -21,6 +21,7 @@ function Home() {
     // setIsLoading(true)
     handleGetAllVideos()
       .then((res) => {
+        console.log("videos: ", res.data)
         dispatch(allVideos(res.data))
         setIsLoading(false)
       })
@@ -28,6 +29,8 @@ function Home() {
       .finally(() => setIsLoading(false))
 
   }, [])
+
+  console.log("cards: ", cards)
 
   return (
 

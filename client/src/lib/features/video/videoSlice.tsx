@@ -28,11 +28,14 @@ const videoslice = createSlice({
             // state.push(action.payload)
             return action.payload
         },
+        updateVideoListAfterUpload: (state: any, action: {payload: any}) => {
+            return [...state, {...action.payload}]
+        }
 
     }
 
 })
 
 
-export const { allVideos } = videoslice.actions
+export const { allVideos, updateVideoListAfterUpload } = videoslice.actions
 export default videoslice.reducer

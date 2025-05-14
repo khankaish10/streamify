@@ -21,13 +21,12 @@ const uploadAVideo = asyncHandler(async (req, res) => {
     let videoUpload;
     let thumbnailUpload;
     if (req?.files?.videoFile[0]?.path) {
-       videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path, 'video');
+        videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path, 'video');
     }
     if (req?.files && req?.files?.thumbnail && req.files.thumbnail[0]?.path) {
         thumbnailUpload = await uploadToCloudinary(req?.files?.thumbnail[0]?.path, 'thumbnail');
     }
 
-    // console.log("videoupload: ", videoUpload)
     // // Save video to MongoDB
     const newVideo = await Video.create({
         title,
@@ -39,7 +38,34 @@ const uploadAVideo = asyncHandler(async (req, res) => {
         owner: userId,
     });
 
-    return successResponse(res, "video uploaded", newVideo, 200)
+    const videoWithOwner =  await Video.aggregate([
+        {$match: {_id: new mongoose.Types.ObjectId(newVideo?._id)}},
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'owner',
+                foreignField: '_id',
+                as: 'owner'
+            }
+        },
+        {
+            $unwind: "$owner"
+        },
+        {
+            $project: {
+                "owner.password": 0,
+                "owner.watchHistory": 0,
+                "owner.refreshToken": 0,
+                "owner.__v": 0,
+                "owner.createdAt": 0,
+                "owner.updatedAt": 0,
+            }
+        }
+
+    ])
+
+
+    return successResponse(res, "video uploaded", videoWithOwner, 200)
 })
 
 const getvideo = asyncHandler(async (req, res) => {

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { handleUploadVideoApi } from '@/api/videoApi';
 import { X } from 'lucide-react';
 import { Errors } from '../types/errors';
+import { allVideos, updateVideoListAfterUpload } from '@/lib/features/video/videoSlice';
 
 const GlobalModal = () => {
     const { isOpen } = useAppSelector(state => state.modal)
@@ -69,10 +70,11 @@ const GlobalModal = () => {
         // setFormData(form)
         setIsUploadProcessing(true)
         handleUploadVideoApi(form)
-            .then(response => {
+            .then((response: any) => {
                 setIsUploadProcessing(true)
                 resetFormData();
                 dispatch(closeModal())
+                dispatch(updateVideoListAfterUpload(response?.data?.[0]))
             })
             .catch(err => {
                 console.log(err)
@@ -119,7 +121,6 @@ const GlobalModal = () => {
                                     alt="upload icon"
                                     className="h-full w-full cover p-2"
                                 />
-
                             </div>
                             <div className='mt-5 p-2 rounded-3xl 
                                         bg-[#27548A] text-white '>
@@ -152,9 +153,6 @@ const GlobalModal = () => {
                             }
 
                             <p className={`text-[#CB356B] mt-1 text-xs w-[90%] min-h-4 break-normal} `}>{errors?.selectedVideo}</p>
-
-
-
                         </div>
 
                         <div className='w-full'>
@@ -219,7 +217,7 @@ const GlobalModal = () => {
                                             }}><X /></div>
                                         )
                                     }
-                                     <p className={`text-[#CB356B] mt-1 text-xs w-[90%] min-h-4 break-normal} `}>{errors?.thumbnail}</p>
+                                    <p className={`text-[#CB356B] mt-1 text-xs w-[90%] min-h-4 break-normal} `}>{errors?.thumbnail}</p>
                                 </div>
 
                                 <button className='bg-indigo-500 text-white rounded-xl 
