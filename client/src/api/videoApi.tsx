@@ -40,13 +40,13 @@ export const handleGetAllVideos = async () => {
     }
 }
 
-export const handleUploadVideoApi = async (formData: FormData) => {
+export const handleUploadVideoApi = async (formData: any) => {
     try {
         const response = await api.post('/videos/upload-video',
             formData,
             {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "application/json"
                 }
             }
         )
@@ -132,7 +132,7 @@ export const clearWatchHistoryApi = async () => {
 
 export const createCommentApi = async (comment: any) => {
     try {
-        const response = await api.post<any>(`/videos/comment`, comment,{
+        const response = await api.post<any>(`/videos/comment`, comment, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -144,7 +144,7 @@ export const createCommentApi = async (comment: any) => {
 }
 export const deleteCommentApi = async (comment: any) => {
     try {
-        const response = await api.post<any>(`/videos/delete-comment`, comment,{
+        const response = await api.post<any>(`/videos/delete-comment`, comment, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -154,7 +154,7 @@ export const deleteCommentApi = async (comment: any) => {
         console.log("deleting comment failed: ", error)
     }
 }
-export const searchVideoApi = async (searchQuery:string) => {
+export const searchVideoApi = async (searchQuery: string) => {
     try {
         const response = await api.get<any>(`/videos/search?query=${searchQuery}`)
         return response.data
@@ -163,5 +163,13 @@ export const searchVideoApi = async (searchQuery:string) => {
     }
 }
 
+export const getCloudinarySignatureApi = async () => {
+    try {
+        const response = await api.get(`/videos/upload/signature`)
+        return response;
+    } catch (error) {
+        console.log("getting cloudinary signature failed", error)
+    }
+}
 
 

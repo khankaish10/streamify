@@ -3,10 +3,11 @@ import React, { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { closeModal } from '@/lib/features/globalModalslice';
 import Image from 'next/image';
-import { handleUploadVideoApi } from '@/api/videoApi';
+import { getCloudinarySignatureApi, handleUploadVideoApi } from '@/api/videoApi';
 import { X } from 'lucide-react';
 import { Errors } from '../types/errors';
 import { allVideos, updateVideoListAfterUpload } from '@/lib/features/video/videoSlice';
+import uploadToCloudinary from '@/util/uploadToCloudinary';
 
 const GlobalModal = () => {
     const { isOpen } = useAppSelector(state => state.modal)
@@ -58,29 +59,55 @@ const GlobalModal = () => {
 
     const handleSubmit = () => {
         if (!validateFields()) return;
-        const form = new FormData();
 
-        form.append('videoFile', selectedVideo!);
-        form.append('duration', videoDuration !== null ? videoDuration.toString() : '');
-        if (title !== null) form.append("title", title);
-        if (description !== null) form.append("description", description);
-        if (tags !== null) form.append("tags", tags);
-        form.append('thumbnail', selectedThumbnail!);
+        let videoUrl;
+        let thumbnailUrl
 
-        // setFormData(form)
+
         setIsUploadProcessing(true)
-        handleUploadVideoApi(form)
-            .then((response: any) => {
-                setIsUploadProcessing(true)
-                resetFormData();
-                dispatch(closeModal())
-                dispatch(updateVideoListAfterUpload(response?.data?.[0]))
+        getCloudinarySignatureApi()
+            .then(async (res: any) => {
+                videoUrl = await uploadToCloudinary(selectedVideo, 'video', 'video', res?.data?.data.videoSign)
+                thumbnailUrl = await uploadToCloudinary(selectedThumbnail, 'thumbnail', 'image', res?.data?.data.thumbnailSign)
+
+                const form = {
+                    videoFile: videoUrl,
+                    thumbnail: thumbnailUrl,
+                    tags,
+                    duration: videoDuration,
+                    description,
+                    title
+                }
+
+                handleUploadVideoApi(form)
+                    .then((response: any) => {
+                        setIsUploadProcessing(true)
+                        resetFormData();
+                        dispatch(closeModal())
+                        dispatch(updateVideoListAfterUpload(response?.data?.[0]))
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        setIsUploadProcessing(false)
+                    })
+                    .finally(() => setIsUploadProcessing(false))
             })
-            .catch(err => {
-                console.log(err)
-                setIsUploadProcessing(false)
-            })
-            .finally(() => setIsUploadProcessing(false))
+            .catch(err => console.log("cloudinary video upload: ", err))
+
+
+
+
+        // const form = new FormData();
+        // // form.append('videoFile', selectedVideo!);
+        // form.append('videoFile', videoUrl!)
+        // form.append('duration', videoDuration !== null ? videoDuration.toString() : '');
+        // if (title !== null) form.append("title", title);
+        // if (description !== null) form.append("description", description);
+        // if (tags !== null) form.append("tags", tags);
+        // form.append('thumbnail', thumbnailUrl!)
+        // // form.append('thumbnail', selectedThumbnail!); 
+
+
     }
 
     return (

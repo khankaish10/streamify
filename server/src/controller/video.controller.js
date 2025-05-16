@@ -7,39 +7,49 @@ import mongoose from 'mongoose'
 import Subscription from '../model/subscription.model.js'
 import WatchHistory from '../model/watchHistory.model.js'
 import User from '../model/user.model.js'
+import { v2 as cloudinary } from "cloudinary";
 
 
 const uploadAVideo = asyncHandler(async (req, res) => {
-    const { title, description, duration, tags } = req.body;
+    const { title, description, duration, tags, videoFile, thumbnail } = req.body;
     const userId = req.user._id;
 
     // Validate required fields
-    if (!req.files) {
-        throw errorResponse(res, "Video file is required", 400);
-    }
+    // if (!req.files) {
+    //     throw errorResponse(res, "Video file is required", 400);
+    // }
 
-    let videoUpload;
-    let thumbnailUpload;
-    if (req?.files?.videoFile[0]?.path) {
-        videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path, 'video');
-    }
-    if (req?.files && req?.files?.thumbnail && req.files.thumbnail[0]?.path) {
-        thumbnailUpload = await uploadToCloudinary(req?.files?.thumbnail[0]?.path, 'thumbnail');
-    }
+    // let videoUpload;
+    // let thumbnailUpload;
+    // if (req?.files?.videoFile[0]?.path) {
+    //     videoUpload = await uploadToCloudinary(req?.files?.videoFile[0]?.path, 'video');
+    // }
+    // if (req?.files && req?.files?.thumbnail && req.files.thumbnail[0]?.path) {
+    //     thumbnailUpload = await uploadToCloudinary(req?.files?.thumbnail[0]?.path, 'thumbnail');
+    // }
 
     // // Save video to MongoDB
     const newVideo = await Video.create({
         title,
-        videoFile: videoUpload?.secure_url,
-        thumbnail: thumbnailUpload?.secure_url,
+        videoFile,
+        thumbnail,
         description,
         duration,
         tags: tags ? tags.split(",") : [],
         owner: userId,
     });
+    // const newVideo = await Video.create({
+    //     title,
+    //     videoFile: videoUpload?.secure_url,
+    //     thumbnail: thumbnailUpload?.secure_url,
+    //     description,
+    //     duration,
+    //     tags: tags ? tags.split(",") : [],
+    //     owner: userId,
+    // });
 
-    const videoWithOwner =  await Video.aggregate([
-        {$match: {_id: new mongoose.Types.ObjectId(newVideo?._id)}},
+    const videoWithOwner = await Video.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(newVideo?._id) } },
         {
             $lookup: {
                 from: 'users',
@@ -441,6 +451,40 @@ const searchVideo = asyncHandler(async (req, res) => {
     return successResponse(res, "search complete", video, 200)
 })
 
+
+const getCloudinarySignature = asyncHandler(async (req, res) => {
+    //generating video signature
+    const videoTimeStamp = Math.round(Date.now() / 1000);
+    const videoSignature = cloudinary.utils.api_sign_request({
+        timestamp: videoTimeStamp,
+        folder: 'video',
+    }, process.env.CLOUDINARY_API_SECRET)
+
+    //getting thumbnail signature
+    const thumbnailTimeStamp = Math.round(Date.now() / 1000);
+    const thumbnailSignature = cloudinary.utils.api_sign_request({
+        timestamp: thumbnailTimeStamp,
+        folder: 'thumbnail',
+    }, process.env.CLOUDINARY_API_SECRET)
+
+
+
+    return successResponse(res, "cloudinary signature fetched.", {
+        videoSign: {
+            timestamp: videoTimeStamp,
+            signature: videoSignature,
+            cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+            apiKey: process.env.CLOUDINARY_API_KEY
+        },
+        thumbnailSign: {
+            timestamp: thumbnailTimeStamp,
+            signature: thumbnailSignature,
+            cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+            apiKey: process.env.CLOUDINARY_API_KEY
+        }
+    })
+})
+
 export {
     uploadAVideo,
     getvideo,
@@ -454,5 +498,6 @@ export {
     clearWatchHistory,
     createComment,
     deleteComment,
-    searchVideo
+    searchVideo,
+    getCloudinarySignature
 }

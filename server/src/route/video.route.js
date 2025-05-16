@@ -5,7 +5,8 @@ import {
   createHistoryAndViews, getWatchHistory, deleteHistory, 
   likeVideo, clearWatchHistory,
   createComment, searchVideo,
-  deleteComment
+  deleteComment,
+  getCloudinarySignature
 } from "../controller/video.controller.js";
 import upload from "../middleware/multer.middleware.js";
 import verifyJwt from "../middleware/auth.middleware.js";
@@ -13,18 +14,20 @@ const router = Router();
 
 router.route("/upload-video").post(
   verifyJwt,
-  upload.fields([
-    {
-      name: "videoFile",
-      maxCount: 1,
-    },
-    {
-      name: "thumbnail",
-      maxCount: 1,
-    },
-  ]),
+  // upload.fields([
+  //   {
+  //     name: "videoFile",
+  //     maxCount: 1,
+  //   },
+  //   {
+  //     name: "thumbnail",
+  //     maxCount: 1,
+  //   },
+  // ]),
   uploadAVideo
 );
+
+router.route("/upload/signature").get(verifyJwt, getCloudinarySignature)
 
 router.route("/watch/:videoid").post(getvideo);
 router.route("/").get(getAllVideos)

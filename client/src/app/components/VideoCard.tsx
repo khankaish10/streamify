@@ -33,7 +33,6 @@ const VideoCard = ({ card }: any) => {
 
   }
 
- 
 
   const handleGetUserChannel = () => {
     router.push(`/profile/${card?.owner._id}`)
