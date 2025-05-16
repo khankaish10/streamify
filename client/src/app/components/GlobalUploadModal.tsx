@@ -266,7 +266,7 @@ const GlobalModal = () => {
                                                         stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" className="text-gray-900">
                                                     </path>
                                                 </svg> */}
-                                                <p className='ml-2'>{uploadProgress < 100 ? `uploading ${uploadProgress}` : 'Please wait...'}</p></>
+                                                <p className='ml-2'>{uploadProgress < 100 ? `uploading ${uploadProgress}%` : 'Please wait...'}</p></>
                                         ) : (
                                             <p>Upload</p>
                                         )

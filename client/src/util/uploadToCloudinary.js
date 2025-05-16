@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AxiosRequestConfig } from 'axios'
+// import { AxiosRequestConfig } from 'axios'
 
 // interface CloudinaryResponse {
 //     secure_url: string;
@@ -20,7 +20,7 @@ const uploadToCloudinary = async (
     signatureData,
     onProgress,
 )=> {
-    console.log("sign: ", signatureData)
+    // console.log("sign: ", signatureData)
     const formData = new FormData()
     formData.append("file", file);
     formData.append("folder", folder);
@@ -36,7 +36,8 @@ const uploadToCloudinary = async (
             onProgress(percent);
         }
     }
-    const res = await axios.post<CloudinaryResponse>(url, formData, config)
+    const res = await axios.post(url, formData, config)
+    // console.log("res cloudinary: ", res)
     return res.data.secure_url
 }
 
