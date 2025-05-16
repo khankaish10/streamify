@@ -22,6 +22,7 @@ const GlobalModal = () => {
     const thumbnailRef = useRef<HTMLInputElement | null>(null);
     const [isUploadProcessing, setIsUploadProcessing] = useState(false)
     const [errors, setErrors] = useState<Errors>({})
+    const [uploadProgress, setUploadProgress] = useState<number>(0)
 
     const handleVideoChange = (e: any) => {
         if (e.target.files?.[0]) {
@@ -67,8 +68,8 @@ const GlobalModal = () => {
         setIsUploadProcessing(true)
         getCloudinarySignatureApi()
             .then(async (res: any) => {
-                videoUrl = await uploadToCloudinary(selectedVideo, 'video', 'video', res?.data?.data.videoSign)
-                thumbnailUrl = await uploadToCloudinary(selectedThumbnail, 'thumbnail', 'image', res?.data?.data.thumbnailSign)
+                videoUrl = await uploadToCloudinary(selectedVideo, 'video', 'video', res?.data?.data.videoSign, setUploadProgress)
+                thumbnailUrl = await uploadToCloudinary(selectedThumbnail, 'thumbnail', 'image', res?.data?.data.thumbnailSign, setUploadProgress)
 
                 const form = {
                     videoFile: videoUrl,
@@ -265,7 +266,7 @@ const GlobalModal = () => {
                                                         stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" className="text-gray-900">
                                                     </path>
                                                 </svg> */}
-                                                <p className='ml-2'>Processing...</p></>
+                                                <p className='ml-2'>{uploadProgress < 100 ? `uploading ${uploadProgress}` : 'Please wait...'}</p></>
                                         ) : (
                                             <p>Upload</p>
                                         )
