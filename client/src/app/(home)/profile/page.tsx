@@ -11,7 +11,8 @@ import { videoHistory } from "@/lib/features/video/videoHistory";
 import { createHistoryAndViewsApi } from "@/api/videoApi";
 import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
 import ProtectedRoutes from '@/app/components/ProtectedRoutes'
-import { Pencil, CircleX } from 'lucide-react';
+import { Pencil, CircleX, Ellipsis, Trash2, Trash } from 'lucide-react';
+
 import { ProfileVideosAndSubsCount, updateProfile } from '@/lib/features/users/userSlice'
 TimeAgo.addLocale(en);
 
@@ -28,6 +29,7 @@ const Profile = () => {
     const [fullName, setFullName] = useState<string>("")
     const [isFullNameEdit, setIsFullNameEdit] = useState<boolean>(false)
     const [isUpdateButton, setIsUpdateButton] = useState<boolean>(false)
+    const [isDelete, setIsDelete] = useState<boolean>(false)
 
     const handleClick = (video: { _id: string }) => {
         createHistoryAndViewsApi(video._id)
@@ -257,40 +259,58 @@ const Profile = () => {
                             }
 
                             {/* main content - Home(All videos), shorts, playlists, post */}
-                            <div className='flex gap-2 overflow-x-scroll scrollbar-none'>
+                            <div className='flex gap-2 mt-3 overflow-x-scroll scrollbar-none relative'>
+                                <div className={`absolute top-[0px] right-0 
+                                                cursor-pointer rounded-full 
+                                                hover:bg-gray-200 ${isDelete ? 'bg-gray-200' : 'bg-white'} p-2`}
+                                    onClick={() => setIsDelete(!isDelete)} >
+                                    <Trash2 />
+                                </div>
                                 {
 
                                     profileUser?.allvideos?.map((video: any) => {
                                         return (
                                             <Link key={video._id} href={`/videos/watch/${video._id}`} onClick={() => handleClick(video)}>
-                                                <div className="font-poppins 
-                                                        overflow-hidden p-2 flex flex-col
-                                                        justify-between cursor-pointer ">
+                                                <div className="font-poppins max-w-[180px] min-w-[170px]
+                                                        overflow-hidden p-2 flex flex-col items-center
+                                                        justify-between cursor-pointer">
+
 
                                                     {/* video thumbnail */}
                                                     <div className="overflow-hidden 
-                                                        h-40 w-30 relative
-                                                        ">
+                                                        h-40 w-30 relative bg-black">
+
                                                         <Image
                                                             src={video?.thumbnail}
-                                                            height={100}
-                                                            width={100}
+                                                            height={120}
+                                                            width={120}
                                                             alt="video"
-                                                            className="h-full w-full rounded-xl object-cover"
+                                                            className="h-full w-full rounded-xl object-contain"
 
                                                         />
                                                     </div>
 
                                                     {/* profile pic and title with username and views */}
-                                                    <div className="flex mt-2">
-                                                        <div className="text-gray-500 ml-2">
-                                                            <p className="text-black">{video.title}</p>
-                                                            <div className="flex text-xs text-gray-400">
-                                                                <p className="mr-2">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
-                                                                <p>{timeAgo.format(new Date(video.createdAt))}</p>
+                                                    {
+                                                        isDelete ? (
+                                                            <div className='py-1 px-2 bg-red-300
+                                                                        mt-2 text-white flex gap-2
+                                                                        rounded-xl cursor-pointer
+                                                                        items-center hover:bg-red-400'>
+                                                                <Trash size={20} />
+                                                                <p>Delete</p></div>
+                                                        ) : (
+                                                            <div className="flex mt-2">
+                                                                <div className="text-gray-500 ml-2">
+                                                                    <p className="text-black">{`${video.title.length > 12 ? video.title.slice(0, 12) : video.title}...`}</p>
+                                                                    <div className="flex text-xs text-gray-400">
+                                                                        <p className="mr-2">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
+                                                                        <p className='break-normal'>{timeAgo.format(new Date(video.createdAt))}</p>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
+                                                        )
+                                                    }
                                                 </div>
                                             </Link>
                                         )
@@ -298,11 +318,11 @@ const Profile = () => {
                                 }
                             </div>
 
-                        </div>
-                    </div>
+                        </div >
+                    </div >
                 )}
             {/* // <div>Login </div> */}
-        </ProtectedRoutes>
+        </ProtectedRoutes >
     )
 }
 
