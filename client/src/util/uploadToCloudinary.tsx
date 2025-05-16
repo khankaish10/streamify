@@ -1,4 +1,3 @@
-import { uploadToCloudinaryApi } from "@/api/videoApi";
 
 const uploadToCloudinary = async (
     file: any, 
