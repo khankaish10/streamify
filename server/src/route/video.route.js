@@ -6,7 +6,8 @@ import {
   likeVideo, clearWatchHistory,
   createComment, searchVideo,
   deleteComment,
-  getCloudinarySignature
+  getCloudinarySignature,
+  deleteVideo
 } from "../controller/video.controller.js";
 import upload from "../middleware/multer.middleware.js";
 import verifyJwt from "../middleware/auth.middleware.js";
@@ -41,6 +42,7 @@ router.route("/history").delete(verifyJwt, clearWatchHistory)
 router.route("/comment").post(verifyJwt, createComment)
 router.route("/delete-comment").post(verifyJwt, deleteComment)
 router.route("/search").get(searchVideo)
+router.route("/:videoId").delete(verifyJwt, deleteVideo)
 
 
 export default router;

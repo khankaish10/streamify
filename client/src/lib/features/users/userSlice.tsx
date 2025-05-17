@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { allVideos } from '../video/videoSlice';
 
 export interface Usertype {
   accessToken: string,
@@ -49,10 +50,21 @@ const userSlice = createSlice({
     updateProfile: (state, action) => {
       localStorage.setItem('user', JSON.stringify({ ...state, ...action.payload }))
       return { ...state, ...action.payload }
+    },
+    deleteProfileVideo: (state, action) => {
+      const newAllVideos = state.allvideos?.filter((video: any) => video._id !== action.payload) || [];
+      return { ...state, allvideos: newAllVideos };
     }
 
   }
 })
 
-export const { login, logout, signUp, ProfileVideosAndSubsCount, updateProfile } = userSlice.actions
+export const {
+  login,
+  logout,
+  signUp,
+  ProfileVideosAndSubsCount,
+  updateProfile,
+  deleteProfileVideo
+} = userSlice.actions
 export default userSlice.reducer 

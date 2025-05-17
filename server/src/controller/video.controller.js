@@ -485,6 +485,25 @@ const getCloudinarySignature = asyncHandler(async (req, res) => {
     })
 })
 
+const deleteVideo = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+    const userId = req.user._id;
+
+    if (!videoId) throw errorResponse(res, "Invalid video id.", 404, {})
+
+    const video = await Video.findById(new mongoose.Types.ObjectId(videoId))
+
+    if (!video) throw errorResponse(res, "Video not found.", 404, {})
+
+    if (video.owner.toString() !== userId.toString()) {
+        return errorResponse(res, "You are not authorized to delete this video.", 403)
+    }
+
+    await Video.findByIdAndDelete(videoId)
+
+    return successResponse(res, "Video deleted successfully.", {}, 200)
+})
+
 export {
     uploadAVideo,
     getvideo,
@@ -499,5 +518,6 @@ export {
     createComment,
     deleteComment,
     searchVideo,
-    getCloudinarySignature
+    getCloudinarySignature,
+    deleteVideo
 }

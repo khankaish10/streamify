@@ -8,12 +8,11 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import { useAppDispatch } from "@/lib/hooks";
 import { videoHistory } from "@/lib/features/video/videoHistory";
-import { createHistoryAndViewsApi } from "@/api/videoApi";
+import { createHistoryAndViewsApi, deleteVideoApi } from "@/api/videoApi";
 import ProfilePageAnimation from '@/lib/ui-component/ProfilePageAnimation'
 import ProtectedRoutes from '@/app/components/ProtectedRoutes'
 import { Pencil, CircleX, Ellipsis, Trash2, Trash } from 'lucide-react';
-
-import { ProfileVideosAndSubsCount, updateProfile } from '@/lib/features/users/userSlice'
+import { deleteProfileVideo, ProfileVideosAndSubsCount, updateProfile } from '@/lib/features/users/userSlice'
 TimeAgo.addLocale(en);
 
 
@@ -100,17 +99,27 @@ const Profile = () => {
             .catch(err => console.log("edit error: ", err))
             .finally(() => setUpdatingProfile(false))
     }
+
+    const handleDeleteVideo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, videoId: string) => {
+        e.preventDefault()
+        e.stopPropagation();
+        deleteVideoApi(videoId)
+            .then((res: any) => {
+                dispatch(deleteProfileVideo(videoId))
+            })
+            .catch(err => console.log("delete error: ", err))
+    }
     return (
         <ProtectedRoutes>
             {
                 isLoading ? <ProfilePageAnimation /> : (
 
                     <div className='w-full lg:max-w-[1200px] ml-0 mt-10
-            m-0 h-screen box-border
-            sm:pl-[50px]
-            lg:pl-[200px] 
-            xl:max-w-[1300px]
-            '>
+                                    m-0 h-screen box-border
+                                    sm:pl-[50px]
+                                    lg:pl-[200px] 
+                                    xl:max-w-[1300px]
+                    '>
                         {/* font-[poppins]'> */}
 
 
@@ -296,13 +305,14 @@ const Profile = () => {
                                                             <div className='py-1 px-2 bg-red-300
                                                                         mt-2 text-white flex gap-2
                                                                         rounded-xl cursor-pointer
-                                                                        items-center hover:bg-red-400'>
+                                                                        items-center hover:bg-red-400'
+                                                                onClick={(e) => handleDeleteVideo(e, video._id)}>
                                                                 <Trash size={20} />
                                                                 <p>Delete</p></div>
                                                         ) : (
                                                             <div className="flex mt-2">
                                                                 <div className="text-gray-500 ml-2">
-                                                                    <p className="text-black">{`${video.title.length > 12 ? video.title.slice(0, 12) : video.title}...`}</p>
+                                                                    <p className="text-black">{`${video.title.length > 12 ? `${video.title.slice(0, 12)}...` : video.title}`}</p>
                                                                     <div className="flex text-xs text-gray-400">
                                                                         <p className="mr-2">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
                                                                         <p className='break-normal'>{timeAgo.format(new Date(video.createdAt))}</p>

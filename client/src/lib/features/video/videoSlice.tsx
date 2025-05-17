@@ -30,7 +30,8 @@ const videoslice = createSlice({
         },
         updateVideoListAfterUpload: (state: any, action: {payload: any}) => {
             return [...state, {...action.payload}]
-        }
+        },
+       
 
     }
 

@@ -152,7 +152,7 @@ const Profile = () => {
                                             {/* profile pic and title with username and views */}
                                             <div className="flex mt-2 ">
                                                 <div className="text-gray-500  ">
-                                                    <p className="text-black text-sm">{`${video.title.length > 12 ? video.title.slice(0,12): video.title}...`}</p>
+                                                    <p className="text-black text-sm">{`${video.title.length > 12 ? `${video.title.slice(0, 12)}...`: video.title}`}</p>
                                                     <div className="flex text-xs text-gray-400">
                                                         <p className="mr-1 ">{video.views > 0 ? `${video.views} views` : `${video.views} view`}</p>
                                                         <p>{timeAgo.format(new Date(video.createdAt))}</p>

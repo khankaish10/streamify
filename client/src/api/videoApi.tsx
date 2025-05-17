@@ -172,4 +172,13 @@ export const getCloudinarySignatureApi = async () => {
     }
 }
 
+export const deleteVideoApi = async (videoId: string) => {
+    try {
+        const response = await api.delete(`/videos/${videoId}`)
+        return response.data
+    } catch (error) {
+        console.log("deleting video failed: ", error)
+    }
+}
+
 
